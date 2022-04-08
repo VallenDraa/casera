@@ -1,26 +1,32 @@
 import { Link } from 'react-router-dom';
-import { useRef, useState } from 'react';
+import { useReducer, useRef, useState } from 'react';
 import SearchBar from './searchbar/SearchBar';
+import { menuReducer } from '../../context/Reducer';
+import { MENUACTIONS } from '../../context/Actions';
 
 export default function Navbar() {
   const contextMenu = useRef(null);
   const contextBtn = useRef(null);
   const [searchState, setSearchState] = useState(false);
-  const [menuActiveState, setMenuActiveState] = useState(true);
+  const [menuActiveState, dispatch] = useReducer(menuReducer, false);
+
   let menuStyle = {
     transform: menuActiveState ? 'translate(0)' : 'translate(100%)',
   };
 
+  window.onload = () => {
+    return dispatch({ type: MENUACTIONS.close });
+  };
+
   window.addEventListener('resize', () => {
     if (window.innerWidth >= 768) {
-      if (!menuActiveState) {
-        setMenuActiveState(true);
-      }
-    } else {
-      if (menuActiveState) {
-        setMenuActiveState(false);
-      }
+      if (menuActiveState) return;
+      dispatch({ type: MENUACTIONS.open });
     }
+    //  else {
+    //   if (!menuActiveState) return;
+    //   dispatch({ type: MENUACTIONS.close });
+    // }
   });
 
   function handleUserContextMenu() {
@@ -73,7 +79,7 @@ export default function Navbar() {
         </div>
         {/* buttons */}
         <span
-          onClick={() => setMenuActiveState(!menuActiveState)}
+          onClick={() => dispatch({ type: MENUACTIONS.open })}
           className="pl-3 cursor-pointer"
         >
           <i className="fa-solid fa-ellipsis-vertical block md:hidden text-2xl " />
@@ -84,7 +90,7 @@ export default function Navbar() {
         >
           {/* close menu for smaller screen sizes */}
           <div
-            onClick={() => setMenuActiveState(!menuActiveState)}
+            onClick={() => dispatch({ type: MENUACTIONS.close })}
             className="flex md:hidden items-center justify-center py-2 px-2 duration-200 bg-red-100 hover:bg-red-200 active:bg-red-300 hover:rounded gap-x-1 text-red-500 font-normal border-b-2 border-red-200 cursor-pointer"
           >
             <p>Close</p>
@@ -107,7 +113,7 @@ export default function Navbar() {
             className="cursor-pointer py-1 px-2 rounded duration-200 flex items-center justify-center gap-[5px] "
           >
             User{' '}
-            <div className="duration-200 border-t-[10px] border-slate-700 border-x-[6px] border-x-transparent transform scale-75 relative top-[1px] w-fit"></div>
+            <div className="duration-200 border-t-[10px] border-slate-700 border-x-[6px] border-x-transparent transform scale-75 relative top-[1px] w-fit rotate-90"></div>
           </span>
           {/* user context menu */}
           <ul
