@@ -1,32 +1,21 @@
 import { Link } from 'react-router-dom';
-import { useReducer, useRef, useState } from 'react';
+import { useRef, useState } from 'react';
 import SearchBar from './searchbar/SearchBar';
-import { menuReducer } from '../../context/Reducer';
-import { MENUACTIONS } from '../../context/Actions';
 
 export default function Navbar() {
+  const menu = useRef(null);
   const contextMenu = useRef(null);
   const contextBtn = useRef(null);
   const [searchState, setSearchState] = useState(false);
-  const [menuActiveState, dispatch] = useReducer(menuReducer, false);
-
-  let menuStyle = {
-    transform: menuActiveState ? 'translate(0)' : 'translate(100%)',
-  };
-
-  window.onload = () => {
-    return dispatch({ type: MENUACTIONS.close });
-  };
 
   window.addEventListener('resize', () => {
-    if (window.innerWidth >= 768) {
-      if (menuActiveState) return;
-      dispatch({ type: MENUACTIONS.open });
+    try {
+      window.innerWidth >= 768
+        ? (menu.current.style = 'transform:translate(0)')
+        : (menu.current.style = 'transform:translate(100%)');
+    } catch (e) {
+      return;
     }
-    //  else {
-    //   if (!menuActiveState) return;
-    //   dispatch({ type: MENUACTIONS.close });
-    // }
   });
 
   function handleUserContextMenu() {
@@ -79,18 +68,18 @@ export default function Navbar() {
         </div>
         {/* buttons */}
         <span
-          onClick={() => dispatch({ type: MENUACTIONS.open })}
+          onClick={() => (menu.current.style = 'transform:translate(0)')}
           className="pl-3 cursor-pointer"
         >
           <i className="fa-solid fa-ellipsis-vertical block md:hidden text-2xl " />
         </span>
         <div
-          className=" font-roboto top-0 right-0 left-0 sm:left-2/4 h-screen bg-white md:bg-transparent shadow-2xl md:shadow-none md:h-fit fixed md:static md:flex gap-1 font-extralight items-center text-slate-700 z-30"
-          style={menuStyle}
+          ref={menu}
+          className="transform translate-x-full md:translate-x-0 font-roboto top-0 right-0 left-0 sm:left-2/4 h-screen bg-white md:bg-transparent md:h-fit fixed md:static md:flex gap-1 font-extralight items-center text-slate-700 z-30"
         >
-          {/* close menu for smaller screen sizes */}
+          {/* close menu for smaller screen size */}
           <div
-            onClick={() => dispatch({ type: MENUACTIONS.close })}
+            onClick={() => (menu.current.style = 'transform:translate(100%)')}
             className="flex md:hidden items-center justify-center py-2 px-2 duration-200 bg-red-100 hover:bg-red-200 active:bg-red-300 hover:rounded gap-x-1 text-red-500 font-normal border-b-2 border-red-200 cursor-pointer"
           >
             <p>Close</p>
@@ -100,12 +89,6 @@ export default function Navbar() {
             className="flex flex-col-reverse items-center duration-200 hover:bg-slate-100 active:bg-slate-200 py-1 px-2"
           >
             Home
-          </Link>
-          <Link
-            to="/"
-            className="flex flex-col-reverse items-center duration-200 hover:bg-slate-100 active:bg-slate-200 py-1 px-2"
-          >
-            Recipes
           </Link>
           <span
             ref={contextBtn}
@@ -118,10 +101,10 @@ export default function Navbar() {
           {/* user context menu */}
           <ul
             ref={contextMenu}
-            className="w-full md:w-72 absolute border-t-2 md:border-0 bg-white right-0 md:right-3 md:top-10 md:rounded font-normal transform scale-0 origin-top md:origin-top-right duration-300 z-20"
+            className="w-full md:w-72 absolute border-t-2 md:border-0 bg-white right-0 md:right-3 md:top-10 md:rounded font-normal transform scale-0 origin-top md:origin-top-right duration-300 z-20 md:shadow-md"
           >
             <li className="py-2 px-2 duration-200 hover:bg-slate-100 active:bg-slate-200 hover:rounded">
-              <Link to="/" className="inline-block w-full">
+              <Link to="/user/123" className="inline-block w-full">
                 Username
                 <i className="pl-2 fa-solid fa-user" />
               </Link>

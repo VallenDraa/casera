@@ -43,10 +43,10 @@ export default function Home() {
       <main className="relative max-w-screen-xl px-3 mt-10 sm:w-11/12 lg:w-5/6 xl:w-3/4 mx-auto lg:text-left">
         <header className="text-center lg:text-left">
           <h1 className="tracking-wide text-4xl font-ssp first-letter:text-5xl first-letter:font-semibold">
-            Make
+            Home
           </h1>
           <p className="font-ssp text-lg font-light">
-            Your Next <span className="font-semibold">Dish !</span>
+            Make Your Next <span className="font-semibold">Dish !</span>
           </p>
           {/* find by type */}
           <ul className="flex gap-8 text-sm mt-9 mb-6 font-roboto justify-center lg:justify-start">
@@ -71,7 +71,7 @@ export default function Home() {
             )}
           </ul>
         </header>
-        <div className="relative">
+        <div className="relative pb-5">
           {/* aside */}
           <HomeAside />
           <section className="relative flex lg:m-3 xl:m-5 gap-6 lg:gap-12 flex-col-reverse lg:flex-row">
@@ -91,7 +91,7 @@ export default function Home() {
                     <span
                       key={Date.now() + Math.random()}
                       onClick={(e) => handleActiveTagList(e.target.textContent)}
-                      className="inline-block bg-lime-300 py-1 px-2 duration-200 hover:bg-lime-400 active:bg-lime-500 text-lime-800 hover:text-lime-700 active:text-white rounded font-ssp text-xs cursor-pointer ml-1 mb-1"
+                      className="inline-block bg-lime-300 py-1 px-2 duration-200 hover:bg-lime-400 active:bg-lime-500 text-lime-700 hover:text-lime-600 active:text-white rounded font-ssp text-xs cursor-pointer ml-1 mb-1"
                     >
                       {tag}
                     </span>
@@ -109,7 +109,7 @@ export default function Home() {
                 </p>
                 <div
                   className="
-                hidden group-hover:block shadow-xl absolute text-[12px] -left-[130px] top-[-4px] rounded w-fit bg-lime-400 z-10 p-[6px] font-bold"
+                hidden group-hover:block shadow-xl absolute text-[12px] -left-[130px] top-[-4px] rounded bg-lime-400 z-10 p-[6px] font-bold"
                 >
                   <p>Swipe For More !</p>
                 </div>

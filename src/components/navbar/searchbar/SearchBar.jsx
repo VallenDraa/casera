@@ -1,9 +1,19 @@
 import React from 'react';
+import { Route, Redirect } from 'react-router';
 
 export default function SearchBar() {
+  function handleSearch(e) {
+    e.preventDefault();
+    const link = '/search?q=' + e.target.children[0].value;
+    window.location.href = link;
+  }
+
   return (
     <div className="h-screen absolute inset-0 bg-black/50 z-40">
-      <form className="absolute z-20 top-10 rounded bg-white p-1 py-2 font-roboto right-0 left-0 flex items-center justify-between max-w-2xl mx-auto">
+      <form
+        onSubmit={(e) => handleSearch(e)}
+        className="absolute z-20 top-10 rounded bg-white p-1 py-2 font-roboto right-0 left-0 flex items-center justify-between max-w-2xl mx-auto"
+      >
         <input
           type="text"
           id="search-bar"
