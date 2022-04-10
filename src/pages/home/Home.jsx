@@ -1,23 +1,48 @@
 import Navbar from '../../components/navbar/Navbar';
-import { useEffect, useRef, useState } from 'react';
+import { useRef, useState, useEffect } from 'react';
 import HomeAside from '../../components/home/homeAside/HomeAside';
 import Slides from '../../components/home/slides/Slides';
+import { fetchCat, fetchArea, fetchIngredients } from '../../fetch/fetch';
 
 export default function Home() {
   const TYPELIST = ['Categories', 'Area', 'Ingredients'];
   const [activeType, setActiveType] = useState('Categories');
-
-  const tags = [];
-
-  // for testing tags
-  for (let i = 0; i < 30; i++) {
-    const item = ['amet', 'disease', 'food', 'foods', 'pc'];
-    const x = Math.abs(Math.round(Math.random() * 10 - 6));
-    tags.push(item[x]);
-  }
-
+  const [tags, setTags] = useState([]);
   const activeTagList = useRef(null);
   const [activeTag, setActivetag] = useState(tags[0]);
+
+  useEffect(() => {
+    const fetchTags = () => {
+      switch (activeType) {
+        case 'Categories':
+          fetchCat().then((res) => {
+            const tags = [];
+            res.data.meals.forEach((item) => tags.push(item.strCategory));
+            setTags(tags);
+          });
+          break;
+        case 'Area':
+          fetchArea().then((res) => {
+            const tags = [];
+            res.data.meals.forEach((item) => tags.push(item.strArea));
+            setTags(tags);
+          });
+          break;
+        case 'Ingredients':
+          fetchIngredients().then((res) => {
+            const tags = [];
+            for (let i = 0; i < 20; i++) {
+              const tagIndex = Math.round(Math.random() * 573);
+              tags.push(res.data.meals[tagIndex].strIngredient);
+            }
+            setTags(tags);
+          });
+          break;
+      }
+    };
+
+    fetchTags();
+  }, [activeType]);
 
   // handle the lime no bg food type buttons
   function handleTypeList(target) {
@@ -53,7 +78,7 @@ export default function Home() {
             {TYPELIST.map((type) =>
               type === activeType ? (
                 <li
-                  key={Date.now() + Math.random()}
+                  key={type}
                   onClick={(e) => handleTypeList(e.target.textContent)}
                   className=" cursor-pointer rounded-full text-lime-700"
                 >
@@ -61,7 +86,7 @@ export default function Home() {
                 </li>
               ) : (
                 <li
-                  key={Date.now() + Math.random()}
+                  key={type}
                   onClick={(e) => handleTypeList(e.target.textContent)}
                   className=" cursor-pointer rounded-full text-lime-500"
                 >
