@@ -19,6 +19,7 @@ export default function SearchBar() {
           id="search-bar"
           className="focus:outline-none w-full px-1 font-light"
           placeholder="Search For Recipes"
+          autoFocus
         />
         <button type="submit" className="">
           <i className="py-1 px-2 duration-200 text-slate-700  cursor-pointer fa-solid fa-magnifying-glass " />

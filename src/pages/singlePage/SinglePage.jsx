@@ -4,44 +4,65 @@ import Navbar from '../../components/navbar/Navbar';
 import ReactPlayer from 'react-player';
 import handleSave from '../../handleSave/handleSave.js';
 import { Link } from 'react-router-dom';
+import Loading from '../../components/loading/Loading';
 
 export default function SinglePage({ saved }) {
+  const [loading, setLoading] = useState(true);
   const [recipes, setRecipes] = useState([]);
   const [ingredients, setIngredients] = useState([]);
+  const [iframeWidth, setIframeWidth] = useState();
 
   useEffect(() => {
     function getRecipes() {
+      const query = window.location.href.split('=')[1];
+      console.log(
+        `https://www.themealdb.com/api/json/v1/1/lookup.php?i=${query}`
+      );
       return axios.get(
-        'https://www.themealdb.com/api/json/v1/1/search.php?s=arrabiata'
+        `https://www.themealdb.com/api/json/v1/1/lookup.php?i=${query}`
       );
     }
 
-    getRecipes().then((res) => {
-      if (res.data.meals !== null) {
-        const ingredientsTemp = [];
-        for (let i = 0; i < 20; i++) {
-          const ingredient = res.data.meals[0]['strIngredient' + i];
-          const measurement = res.data.meals[0]['strMeasure' + i];
+    getRecipes()
+      .then((res) => {
+        if (res.data.meals !== null) {
+          const ingredientsTemp = [];
+          for (let i = 0; i < 20; i++) {
+            const ingredient = res.data.meals[0]['strIngredient' + i];
+            const measurement = res.data.meals[0]['strMeasure' + i];
 
-          ingredient &&
-            measurement &&
-            ingredientsTemp.push({
-              name: ingredient,
-              amount: measurement,
-            });
+            ingredient &&
+              measurement &&
+              ingredientsTemp.push({
+                name: ingredient,
+                amount: measurement,
+              });
+          }
+
+          // set the recipes state
+          setRecipes(res.data.meals);
+          setIngredients(ingredientsTemp);
+        } else {
+          setRecipes(['n/a']);
         }
-
-        // set the recipes state
-        setRecipes(res.data.meals);
-        setIngredients(ingredientsTemp);
-      } else {
-        setRecipes(['n/a']);
-      }
-    });
+      })
+      .finally(() => setLoading(false));
+    iframeWidthConf();
   }, []);
+
+  // iframe width config
+  window.addEventListener('resize', iframeWidthConf);
+
+  // iframe width config
+  function iframeWidthConf() {
+    window.innerWidth <= 1024
+      ? setIframeWidth((window.innerWidth * 90) / 100)
+      : setIframeWidth(400);
+  }
 
   return (
     <>
+      {loading && <Loading />}
       <header>
         <Navbar />
       </header>
@@ -70,7 +91,7 @@ export default function SinglePage({ saved }) {
                       <div className="w-fit mx-auto">
                         <ReactPlayer
                           height={400}
-                          width={400}
+                          width={iframeWidth}
                           controls={true}
                           url={recipe.strYoutube}
                           title={recipe.strMeal + ' Recipe Instruction Video'}
@@ -92,13 +113,13 @@ export default function SinglePage({ saved }) {
                       </div>
                       {/* sub header */}
                       <div className="text-lg mt-3 flex gap-10 font-roboto tracking-wide text-lime-600">
-                        <Link to="/recipe">
+                        <Link to={`/search?q=${recipe.strCategory}`}>
                           <div className="flex items-center gap-5">
                             <i className="fa-solid fa-bowl-rice relative bottom-1  h-3 w-3" />
                             <p>{recipe.strCategory}</p>
                           </div>
                         </Link>
-                        <Link to="/recipe">
+                        <Link to={`/search?q=${recipe.strArea}`}>
                           <div className="flex items-center gap-5">
                             <i className="fa-solid fa-map-location relative bottom-1 h-3 w-3" />
                             <p>{recipe.strArea}</p>
@@ -109,11 +130,12 @@ export default function SinglePage({ saved }) {
                       <div className="mt-5 text-lg font-ssp text-slate-800/60 border-b-2 border-slate-800/60 pb-5">
                         <p className="mb-1">Tags: </p>
                         <ul className="flex space-x-2">
-                          {recipe.strTags.split(',').map((tag) => (
-                            <li className="bg-lime-300 py-1 px-2 duration-200 hover:bg-lime-400 active:bg-lime-500 text-lime-700 hover:text-lime-600 active:text-white rounded font-ssp text-xs cursor-pointer ">
-                              <Link to="/recipe">{tag}</Link>
-                            </li>
-                          ))}
+                          {recipe.strTags &&
+                            recipe.strTags.split(',').map((tag) => (
+                              <li className="bg-lime-300 py-1 px-2 duration-200 hover:bg-lime-400 active:bg-lime-500 text-lime-700 hover:text-lime-600 active:text-white rounded font-ssp text-xs cursor-pointer ">
+                                <Link to="/recipe">{tag}</Link>
+                              </li>
+                            ))}
                         </ul>
                       </div>
                     </header>
