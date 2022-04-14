@@ -1,5 +1,5 @@
 import axios from 'axios';
-import { removeDupeObjInArrayByKey } from '../utils/utils';
+import { removeDupeObjInArray } from '../utils/utils';
 
 export async function fetchSearchResult(query) {
   const recipes = [];
@@ -22,7 +22,7 @@ export async function fetchSearchResult(query) {
   insertItem(areaRes.data.meals, recipes);
 
   // filter duplicate data
-  const finalRecipes = removeDupeObjInArrayByKey(recipes, 'strMeal');
+  const finalRecipes = removeDupeObjInArray(recipes, 'strMeal');
   return finalRecipes;
 
   function insertItem(items, targetArray) {
