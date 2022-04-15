@@ -6,7 +6,6 @@ export const fetchCat = () => {
     .get('https://www.themealdb.com/api/json/v1/1/list.php?c=list')
     .then((res) => {
       res.data.meals.forEach((item) => tags.push(item.strCategory));
-
       return {
         tags,
         type: 'Category',

@@ -1,7 +1,7 @@
 import axios from 'axios';
 import { removeDupeObjInArrayByKey } from '../utils/utils';
 
-export async function fetchSearchResult(query) {
+export default async function fetchSearchResult(query) {
   const recipes = [];
   const searchRes = await axios.get(
     `https://www.themealdb.com/api/json/v1/1/search.php?s=${query}`

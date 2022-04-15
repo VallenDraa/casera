@@ -1,6 +1,6 @@
 import Navbar from '../../components/navbar/Navbar';
 import HomeAside from '../../components/home/homeAside/HomeAside';
-import Card from '../../components/card/Card';
+import CardWrapper from '../../components/card/CardWrapper';
 
 export default function Saved() {
   return (
@@ -21,18 +21,18 @@ export default function Saved() {
               <HomeAside />
             </section>
             <section className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 xl:grid-cols-4 gap-5 pb-5">
-              <Card saved={true} />
-              <Card saved={true} />
-              <Card saved={true} />
-              <Card saved={true} />
-              <Card saved={true} />
-              <Card saved={true} />
-              <Card saved={true} />
-              <Card saved={true} />
-              <Card saved={true} />
-              <Card saved={true} />
-              <Card saved={true} />
-              <Card saved={true} />
+              <CardWrapper saved={true} />
+              <CardWrapper saved={true} />
+              <CardWrapper saved={true} />
+              <CardWrapper saved={true} />
+              <CardWrapper saved={true} />
+              <CardWrapper saved={true} />
+              <CardWrapper saved={true} />
+              <CardWrapper saved={true} />
+              <CardWrapper saved={true} />
+              <CardWrapper saved={true} />
+              <CardWrapper saved={true} />
+              <CardWrapper saved={true} />
             </section>
           </article>
         </div>

@@ -3,32 +3,36 @@ import { useRef, useState, useEffect } from 'react';
 import HomeAside from '../../components/home/homeAside/HomeAside';
 import Slides from '../../components/home/slides/Slides';
 import { fetchCat, fetchArea, fetchIngredients } from '../../fetch/fetchTags';
-import { fetchRecipesByTypes } from '../../fetch/fetchRecipe';
-import Loading from '../../components/loading/Loading';
+import { fetchRecipesByTypes } from '../../fetch/fetchRecipes';
 
 export default function Home() {
-  const [loading, setLoading] = useState(true);
   const TYPELIST = ['Categories', 'Area', 'Ingredients'];
-  const [activeType, setActiveType] = useState('Categories');
+  const [activeType, setActiveType] = useState(TYPELIST[0]);
   const [tags, setTags] = useState([]);
   const activeTagList = useRef(null);
-  const [activeTag, setActiveTag] = useState(tags[0]);
+  const [activeTag, setActiveTag] = useState(null);
   const [recipes, setRecipes] = useState([]);
 
   useEffect(() => {
-    const fetchTags = async () => {
+    const fetchTagsByType = (fetchFunc) =>
+      fetchFunc().then(({ tags, active }) => {
+        setTags(tags);
+        setActiveTag(active);
+        fetchRecipesByTypes(activeType, active)
+          .then((res) => setRecipes(res))
+          .catch((e) => console.log(e));
+      });
+
+    const fetchTags = () => {
       switch (activeType) {
         case 'Categories':
-          ApplyTagsByType(setTags, setActiveTag, fetchCat);
+          fetchTagsByType(fetchCat);
           break;
         case 'Area':
-          ApplyTagsByType(setTags, setActiveTag, fetchArea);
+          fetchTagsByType(fetchArea);
           break;
         case 'Ingredients':
-          ApplyTagsByType(setTags, setActiveTag, fetchIngredients);
-          break;
-        default:
-          ApplyTagsByType(setTags, setActiveTag, fetchCat);
+          fetchTagsByType(fetchIngredients);
           break;
       }
     };
@@ -36,65 +40,34 @@ export default function Home() {
     fetchTags();
   }, [activeType]);
 
-  const ApplyTagsByType = async (setTags, setActivetag, type = fetchCat) => {
-    setLoading(true);
-
-    const res = await type();
-    setTags(res.tags);
-    setActivetag(res.active);
-    // set recipe after changing the type
-
-    fetchRecipesByTypes(res.type, res.active)
-      .then((rec) => setRecipes(rec))
-      .finally(() => setLoading(false))
-      .catch(() => setLoading(false));
-  };
-
   // handle the lime no bg food type buttons
   function handleTypeList(target) {
-    setLoading(true);
     // check if the clicked target matches one of the items in the list
-    TYPELIST.forEach((type) => type === target && setActiveType(target));
-    setLoading(false);
+    TYPELIST.map((type) => type === target && setActiveType(target));
   }
 
   // handle the lime with bg tags buttons
-  async function handleActiveTagList(target) {
-    setLoading(true);
+  function handleActiveTagList(target) {
     const listItems = Array.from(activeTagList.current.children);
 
     // check if the clicked target matches one of the items in the list
-    listItems.forEach((item) => {
-      item.textContent === target && setActiveTag(target);
-    });
-
-    // refresh the recipe slide
-    fetchRecipesByTypes(activeType, target)
-      .then((rec) => setRecipes(rec))
-      .finally(() => setLoading(false))
-      .catch(() => setLoading(false));
-  }
-
-  // generate random key for tags
-  function genTagKey(tag) {
-    return (
-      tag +
-      '_' +
-      (
-        (Math.random() * 1000 * Math.random() * 1000) /
-        ((Math.random() + 1) * 234)
-      ).toString()
+    listItems.forEach(
+      (item) => item.textContent === target && setActiveTag(target)
     );
+
+    // refetch recipes after new tag is activated
+    fetchRecipesByTypes(activeType, target)
+      .then((res) => setRecipes(res))
+      .catch((e) => console.error(e));
   }
 
   return (
     <>
-      {loading && <Loading />}
       <header>
         <Navbar />
       </header>
-      <main className="bg-slate-100">
-        <section className="relative max-w-screen-xl px-3 mt-10 sm:w-11/12 lg:w-5/6 xl:w-3/4 mx-auto lg:text-left">
+      <main className="bg-slate-100 ">
+        <div className="relative max-w-screen-xl px-3 mt-10 sm:w-11/12 lg:w-5/6 xl:w-3/4 mx-auto lg:text-left">
           <header className="text-center lg:text-left">
             <h1 className="tracking-wide text-4xl font-ssp first-letter:text-5xl first-letter:font-semibold">
               Home
@@ -108,9 +81,7 @@ export default function Home() {
                 type === activeType ? (
                   <li
                     key={type}
-                    onClick={async (e) =>
-                      await handleTypeList(e.target.textContent)
-                    }
+                    onClick={(e) => handleTypeList(e.target.textContent)}
                     className=" cursor-pointer rounded-full text-lime-700"
                   >
                     {type}
@@ -118,9 +89,7 @@ export default function Home() {
                 ) : (
                   <li
                     key={type}
-                    onClick={async (e) =>
-                      await handleTypeList(e.target.textContent)
-                    }
+                    onClick={(e) => handleTypeList(e.target.textContent)}
                     className=" cursor-pointer rounded-full text-lime-500"
                   >
                     {type}
@@ -139,7 +108,7 @@ export default function Home() {
                   {tags.map((tag) =>
                     tag === activeTag ? (
                       <span
-                        key={genTagKey(tag)}
+                        key={tag}
                         onClick={(e) =>
                           handleActiveTagList(e.target.textContent)
                         }
@@ -149,7 +118,7 @@ export default function Home() {
                       </span>
                     ) : (
                       <span
-                        key={genTagKey(tag)}
+                        key={tag}
                         onClick={(e) =>
                           handleActiveTagList(e.target.textContent)
                         }
@@ -164,14 +133,14 @@ export default function Home() {
               {/* food slide show */}
               <article className="lg:basis-9/12 overflow-hidden flex gap-3 items-center">
                 <Slides recipes={recipes} />
-                {/* slide for more pop up*/}
-                <div className="group absolute md:relative right-0 text-2xl ">
-                  <p className="animate-blink-right relative z-20 cursor-default text-lime-500 md:text-lime-700">
+                {/* pop-up */}
+                <div className="group text-2xl text-lime-500 lg:text-lime-700 absolute right-0 lg:relative">
+                  <p className="animate-blink-right relative z-20 cursor-default">
                     &raquo;
                   </p>
                   <div
                     className="
-                hidden group-hover:block shadow-xl absolute text-[12px] -left-[130px] top-[-4px] rounded bg-lime-400 text-lime-700 z-10 p-[6px] font-bold"
+                hidden group-hover:block shadow-xl absolute text-[12px] -left-[130px] top-[-4px] rounded bg-lime-400 z-10 p-[6px] font-bold text-lime-700"
                   >
                     <p>Swipe For More !</p>
                   </div>
@@ -179,7 +148,7 @@ export default function Home() {
               </article>
             </section>
           </div>
-        </section>
+        </div>
       </main>
     </>
   );

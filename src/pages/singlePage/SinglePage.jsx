@@ -4,65 +4,54 @@ import Navbar from '../../components/navbar/Navbar';
 import ReactPlayer from 'react-player';
 import handleSave from '../../handleSave/handleSave.js';
 import { Link } from 'react-router-dom';
-import Loading from '../../components/loading/Loading';
 
 export default function SinglePage({ saved }) {
-  const [loading, setLoading] = useState(true);
   const [recipes, setRecipes] = useState([]);
   const [ingredients, setIngredients] = useState([]);
-  const [iframeWidth, setIframeWidth] = useState();
+  const [iframeWidth, setIframeWidth] = useState(400);
+  const mealId = window.location.href.split('=')[1];
+
+  const iframeWidthChange = () =>
+    window.innerWidth >= 1024
+      ? setIframeWidth(400)
+      : setIframeWidth((window.innerWidth * 90) / 100);
+
+  window.addEventListener('resize', () => iframeWidthChange());
 
   useEffect(() => {
     function getRecipes() {
-      const query = window.location.href.split('=')[1];
-      console.log(
-        `https://www.themealdb.com/api/json/v1/1/lookup.php?i=${query}`
-      );
       return axios.get(
-        `https://www.themealdb.com/api/json/v1/1/lookup.php?i=${query}`
+        `https://www.themealdb.com/api/json/v1/1/lookup.php?i=${mealId}`
       );
     }
 
-    getRecipes()
-      .then((res) => {
-        if (res.data.meals !== null) {
-          const ingredientsTemp = [];
-          for (let i = 0; i < 20; i++) {
-            const ingredient = res.data.meals[0]['strIngredient' + i];
-            const measurement = res.data.meals[0]['strMeasure' + i];
+    getRecipes().then((res) => {
+      if (res.data.meals !== null) {
+        const ingredientsTemp = [];
+        for (let i = 0; i < 20; i++) {
+          const ingredient = res.data.meals[0]['strIngredient' + i];
+          const measurement = res.data.meals[0]['strMeasure' + i];
 
-            ingredient &&
-              measurement &&
-              ingredientsTemp.push({
-                name: ingredient,
-                amount: measurement,
-              });
-          }
-
-          // set the recipes state
-          setRecipes(res.data.meals);
-          setIngredients(ingredientsTemp);
-        } else {
-          setRecipes(['n/a']);
+          ingredient &&
+            measurement &&
+            ingredientsTemp.push({
+              name: ingredient,
+              amount: measurement,
+            });
         }
-      })
-      .finally(() => setLoading(false));
-    iframeWidthConf();
+
+        // set the recipes state
+        setRecipes(res.data.meals);
+        setIngredients(ingredientsTemp);
+      } else {
+        setRecipes(['n/a']);
+      }
+    });
+    iframeWidthChange();
   }, []);
-
-  // iframe width config
-  window.addEventListener('resize', iframeWidthConf);
-
-  // iframe width config
-  function iframeWidthConf() {
-    window.innerWidth <= 1024
-      ? setIframeWidth((window.innerWidth * 90) / 100)
-      : setIframeWidth(400);
-  }
 
   return (
     <>
-      {loading && <Loading />}
       <header>
         <Navbar />
       </header>
@@ -131,11 +120,13 @@ export default function SinglePage({ saved }) {
                         <p className="mb-1">Tags: </p>
                         <ul className="flex space-x-2">
                           {recipe.strTags &&
-                            recipe.strTags.split(',').map((tag) => (
-                              <li className="bg-lime-300 py-1 px-2 duration-200 hover:bg-lime-400 active:bg-lime-500 text-lime-700 hover:text-lime-600 active:text-white rounded font-ssp text-xs cursor-pointer ">
-                                <Link to="/recipe">{tag}</Link>
-                              </li>
-                            ))}
+                            recipe.strTags
+                              .split(',')
+                              .map((tag) => (
+                                <li className="bg-lime-300 py-1 px-2 duration-200 text-lime-700 rounded font-ssp text-xs cursor-pointer ">
+                                  {tag}
+                                </li>
+                              ))}
                         </ul>
                       </div>
                     </header>

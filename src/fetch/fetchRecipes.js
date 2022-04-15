@@ -1,7 +1,6 @@
 import axios from 'axios';
 
 export const fetchRecipesByTypes = (types, tag) => {
-  console.log(types, tag);
   const usedIndex = [];
   const recipes = [];
   let meals, query;
@@ -30,16 +29,9 @@ export const fetchRecipesByTypes = (types, tag) => {
     .get(`https://www.themealdb.com/api/json/v1/1/filter.php?${query}`)
     .then(async (res) => {
       meals = res.data.meals;
-      // console.log(meals);
 
       //   if meals array length is <= 15, then just return the whole data
-      if (!meals) {
-        meals = await (
-          await axios.get(
-            `https://www.themealdb.com/api/json/v1/1/filter.php?${query}`
-          )
-        ).data.meals;
-      }
+      if (!meals) return;
       if (meals.length <= 15) {
         return meals;
       }
@@ -55,8 +47,11 @@ export const fetchRecipesByTypes = (types, tag) => {
         usedIndex.push(tagIndex);
         recipes.push(meals[tagIndex]);
       }
-
-      // console.log(recipes);
       return recipes;
+    })
+    .catch(() => {
+      return {
+        error: true,
+      };
     });
 };
