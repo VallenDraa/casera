@@ -131,13 +131,11 @@ export default function SinglePage({ saved }) {
                         <p className="mb-1">Tags: </p>
                         <ul className="flex space-x-2">
                           {recipe.strTags &&
-                            recipe.strTags
-                              .split(',')
-                              .map((tag) => (
-                                <li className="bg-lime-300 py-1 px-2 duration-200 text-lime-700 rounded font-ssp text-xs ">
-                                  {tag}
-                                </li>
-                              ))}
+                            recipe.strTags.split(',').map((tag) => (
+                              <li className="bg-lime-300 py-1 px-2 duration-200 hover:bg-lime-400 active:bg-lime-500 text-lime-700 hover:text-lime-600 active:text-white rounded font-ssp text-xs cursor-pointer ">
+                                <Link to="/recipe">{tag}</Link>
+                              </li>
+                            ))}
                         </ul>
                       </div>
                     </header>

@@ -1,5 +1,4 @@
 import axios from 'axios';
-import { fetchRecipesByTypes } from './fetchRecipe';
 
 export const fetchCat = () => {
   const tags = [];

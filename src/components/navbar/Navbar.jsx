@@ -40,7 +40,7 @@ export default function Navbar() {
         <div className="max-w-2xl mx-auto font-roboto">
           <span
             onClick={() => setSearchState(!searchState)}
-            className="top-4 p-1 px-2 rounded-t text-red-500 cursor-pointer  z-50 bg-white text-sm flex items-center gap-2 fixed"
+            className="top-4 p-1 px-2 rounded-t text-red-500 cursor-pointer absolute z-50 bg-white text-sm flex items-center gap-2"
           >
             <i className="fa-solid fa-xmark" />
             Close

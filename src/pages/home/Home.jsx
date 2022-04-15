@@ -165,8 +165,8 @@ export default function Home() {
               <article className="lg:basis-9/12 overflow-hidden flex gap-3 items-center">
                 <Slides recipes={recipes} />
                 {/* slide for more pop up*/}
-                <div className="group absolute lg:relative right-0 text-2xl ">
-                  <p className="animate-blink-right relative z-20 cursor-default text-lime-500 lg:text-lime-700">
+                <div className="group absolute md:relative right-0 text-2xl ">
+                  <p className="animate-blink-right relative z-20 cursor-default text-lime-500 md:text-lime-700">
                     &raquo;
                   </p>
                   <div
