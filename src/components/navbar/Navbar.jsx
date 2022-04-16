@@ -37,10 +37,10 @@ export default function Navbar() {
     <nav className="p-3 font-ssp">
       {/* search bar */}
       {searchState && (
-        <div className="max-w-2xl mx-auto font-roboto">
+        <div className=" max-w-2xl mx-auto font-roboto">
           <span
-            onClick={() => setSearchState(!searchState)}
-            className="top-4 p-1 px-2 rounded-t text-red-500 cursor-pointer fixed z-50 bg-white text-sm flex items-center gap-2"
+            onClick={() => setSearchState(false)}
+            className="top-4 py-1 px-2 rounded-t text-red-500 cursor-pointer fixed z-50 bg-white text-sm flex items-center gap-2"
           >
             <i className="fa-solid fa-xmark" />
             Close

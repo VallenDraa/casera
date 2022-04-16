@@ -18,9 +18,33 @@ module.exports = {
             transform: 'translate(-10px)',
           },
         },
+        'green-ball': {
+          '0%': {
+            transform: 'translateX(0px)',
+          },
+          '50%': {
+            transform: 'translateX(80px) scale(0.825)',
+          },
+          '100%': {
+            transform: 'translateX(-20px) scale(1.25)',
+          },
+        },
+        'orange-ball': {
+          '0%': {
+            transform: 'translateX(0px)',
+          },
+          '50%': {
+            transform: 'translateX(-80px) scale(1.25)',
+          },
+          '100%': {
+            transform: 'translateX(20px) scale(0.825)',
+          },
+        },
       },
       animation: {
         'blink-right': 'blink-right 2s ease-in-out infinite',
+        'green-ball': 'green-ball 2s ease-in-out infinite alternate',
+        'orange-ball': 'orange-ball 2s ease-in-out infinite alternate',
       },
     },
   },

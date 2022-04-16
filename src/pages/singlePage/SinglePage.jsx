@@ -4,11 +4,13 @@ import Navbar from '../../components/navbar/Navbar';
 import ReactPlayer from 'react-player';
 import handleSave from '../../handleSave/handleSave.js';
 import { Link } from 'react-router-dom';
+import Loading from '../../components/loading/Loading';
 
 export default function SinglePage({ saved }) {
   const [recipes, setRecipes] = useState([]);
   const [ingredients, setIngredients] = useState([]);
   const [iframeWidth, setIframeWidth] = useState(400);
+  const [loading, setLoading] = useState(true);
   const mealId = window.location.href.split('=')[1];
 
   const iframeWidthChange = () =>
@@ -25,33 +27,36 @@ export default function SinglePage({ saved }) {
       );
     }
 
-    getRecipes().then((res) => {
-      if (res.data.meals !== null) {
-        const ingredientsTemp = [];
-        for (let i = 0; i < 20; i++) {
-          const ingredient = res.data.meals[0]['strIngredient' + i];
-          const measurement = res.data.meals[0]['strMeasure' + i];
+    getRecipes()
+      .then((res) => {
+        if (res.data.meals !== null) {
+          const ingredientsTemp = [];
+          for (let i = 0; i < 20; i++) {
+            const ingredient = res.data.meals[0]['strIngredient' + i];
+            const measurement = res.data.meals[0]['strMeasure' + i];
 
-          ingredient &&
-            measurement &&
-            ingredientsTemp.push({
-              name: ingredient,
-              amount: measurement,
-            });
+            ingredient &&
+              measurement &&
+              ingredientsTemp.push({
+                name: ingredient,
+                amount: measurement,
+              });
+          }
+
+          // set the recipes state
+          setRecipes(res.data.meals);
+          setIngredients(ingredientsTemp);
+        } else {
+          setRecipes(['n/a']);
         }
-
-        // set the recipes state
-        setRecipes(res.data.meals);
-        setIngredients(ingredientsTemp);
-      } else {
-        setRecipes(['n/a']);
-      }
-    });
+      })
+      .finally(() => setLoading(false));
     iframeWidthChange();
   }, []);
 
   return (
     <>
+      {loading && <Loading />}
       <header>
         <Navbar />
       </header>
@@ -120,13 +125,14 @@ export default function SinglePage({ saved }) {
                         <p className="mb-1">Tags: </p>
                         <ul className="flex space-x-2">
                           {recipe.strTags &&
-                            recipe.strTags
-                              .split(',')
-                              .map((tag) => (
-                                <li className="bg-lime-300 py-1 px-2 duration-200 text-lime-700 rounded font-ssp text-xs cursor-pointer ">
-                                  {tag}
-                                </li>
-                              ))}
+                            recipe.strTags.split(',').map((tag) => (
+                              <li
+                                key={tag}
+                                className="bg-lime-300 py-1 px-2 duration-200 text-lime-700 rounded font-ssp text-xs cursor-pointer "
+                              >
+                                {tag}
+                              </li>
+                            ))}
                         </ul>
                       </div>
                     </header>
@@ -139,9 +145,12 @@ export default function SinglePage({ saved }) {
                         </h2>
                         <ol className="list-decimal ml-6 space-y-2">
                           {ingredients.map(
-                            (ingredient) =>
+                            (ingredient, i) =>
                               ingredient && (
-                                <li className="tracking-wide font-roboto">
+                                <li
+                                  key={i}
+                                  className="tracking-wide font-roboto"
+                                >
                                   <span>{ingredient.name}</span>
                                   <span className="italic font-bold">{` (${ingredient.amount})`}</span>
                                 </li>
@@ -155,16 +164,17 @@ export default function SinglePage({ saved }) {
                           Instructions:
                         </h2>
                         <ol className="list-decimal ml-6 space-y-2">
-                          {recipe.strInstructions
-                            .split('.')
-                            .map(
-                              (instruction) =>
-                                instruction !== '' && (
-                                  <li className="tracking-wide font-roboto">
-                                    {instruction}.
-                                  </li>
-                                )
-                            )}
+                          {recipe.strInstructions.split('.').map(
+                            (instruction, i) =>
+                              instruction !== '' && (
+                                <li
+                                  key={i}
+                                  className="tracking-wide font-roboto"
+                                >
+                                  {instruction}.
+                                </li>
+                              )
+                          )}
                         </ol>
                       </div>
                     </main>

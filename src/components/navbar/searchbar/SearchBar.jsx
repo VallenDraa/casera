@@ -11,7 +11,7 @@ export default function SearchBar() {
     <div className="h-screen fixed inset-0 bg-black/50 z-40">
       <form
         onSubmit={(e) => handleSearch(e)}
-        className="absolute z-20 top-10 rounded bg-white p-1 py-2 font-roboto right-0 left-0 flex items-center justify-between max-w-2xl mx-auto"
+        className="absolute z-20 top-10 rounded bg-white px-1 py-2 font-roboto right-0 left-0 flex items-center justify-between max-w-2xl mx-3 md:mx-auto"
       >
         <input
           type="text"

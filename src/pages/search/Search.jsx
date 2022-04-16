@@ -3,15 +3,20 @@ import { useEffect, useState } from 'react';
 import CardWrapper from '../../components/card/CardWrapper';
 
 import fetchSearchResult from '../../fetch/fetchSearchResults';
+import Loading from '../../components/loading/Loading';
 export default function Search() {
   const query = window.location.href.split('=')[1];
   const [recipes, setRecipes] = useState([]);
+  const [loading, setLoading] = useState(true);
   useEffect(() => {
-    fetchSearchResult(query).then((res) => setRecipes(res));
+    fetchSearchResult(query)
+      .then((res) => setRecipes(res))
+      .finally(() => setLoading(false));
   }, []);
 
   return (
     <>
+      {loading && <Loading />}
       <header>
         <Navbar />
       </header>

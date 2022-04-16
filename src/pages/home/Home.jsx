@@ -4,6 +4,7 @@ import HomeAside from '../../components/home/homeAside/HomeAside';
 import Slides from '../../components/home/slides/Slides';
 import { fetchCat, fetchArea, fetchIngredients } from '../../fetch/fetchTags';
 import { fetchRecipesByTypes } from '../../fetch/fetchRecipes';
+import Loading from '../../components/loading/Loading';
 
 export default function Home() {
   const TYPELIST = ['Categories', 'Area', 'Ingredients'];
@@ -12,6 +13,7 @@ export default function Home() {
   const activeTagList = useRef(null);
   const [activeTag, setActiveTag] = useState(null);
   const [recipes, setRecipes] = useState([]);
+  const [loading, setLoading] = useState(true);
 
   useEffect(() => {
     const fetchTagsByType = (fetchFunc) =>
@@ -20,6 +22,7 @@ export default function Home() {
         setActiveTag(active);
         fetchRecipesByTypes(activeType, active)
           .then((res) => setRecipes(res))
+          .finally(() => setLoading(false))
           .catch((e) => console.log(e));
       });
 
@@ -42,12 +45,14 @@ export default function Home() {
 
   // handle the lime no bg food type buttons
   function handleTypeList(target) {
+    setLoading(true);
     // check if the clicked target matches one of the items in the list
     TYPELIST.map((type) => type === target && setActiveType(target));
   }
 
   // handle the lime with bg tags buttons
   function handleActiveTagList(target) {
+    setLoading(true);
     const listItems = Array.from(activeTagList.current.children);
 
     // check if the clicked target matches one of the items in the list
@@ -58,11 +63,13 @@ export default function Home() {
     // refetch recipes after new tag is activated
     fetchRecipesByTypes(activeType, target)
       .then((res) => setRecipes(res))
+      .finally(() => setLoading(false))
       .catch((e) => console.error(e));
   }
 
   return (
     <>
+      {loading && <Loading />}
       <header>
         <Navbar />
       </header>
