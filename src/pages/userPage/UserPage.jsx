@@ -7,6 +7,7 @@ import handleSave from '../../handleSave/handleSave';
 import Navbar from '../../components/navbar/Navbar';
 import Input from '../../components/input/Input';
 import ThreeInput from '../../components/input/ThreeInput';
+import Btn from '../../components/btn/Btn';
 
 export default function UserPage() {
   const [editMode, setEditMode] = useState(false);
@@ -62,35 +63,35 @@ export default function UserPage() {
                 <h1 className="tracking-wide text-4xl font-ssp first-letter:text-5xl first-letter:font-semibold">
                   My Profile
                 </h1>
-                <div
-                  onClick={() => setEditMode(!editMode)}
-                  className="cursor-pointer rounded p-2 flex items-center justify-center gap-2 bg-orange-500 hover:bg-orange-600 active:bg-orange-700 duration-200 text-white font-roboto relative text-xs"
-                >
-                  <i className="fa-solid fa-pen-to-square relative bottom-[2px]" />
-                  <p>Edit Profile</p>
+                <div onClick={() => setEditMode(!editMode)}>
+                  <Btn
+                    text="Edit Profile"
+                    color="orange"
+                    textSize="xs"
+                    icon={
+                      <i className="fa-solid fa-pen-to-square relative bottom-[2px]" />
+                    }
+                  />
                 </div>
               </header>
               {/* main form */}
               <main className="space-y-5">
                 {/* username */}
-                <div className="flex flex-col w-full text-lime-600 font-ssp">
-                  <Input editMode={editMode} type={'text'} id={'Username'} />
-                </div>
+                <Input editMode={editMode} type={'text'} id={'Username'} />
                 {/* tel */}
-                <div className="flex flex-col w-full text-lime-600 font-ssp">
-                  <Input editMode={editMode} type={'tel'} id={'Phone'} />
-                </div>
+                <Input editMode={editMode} type={'tel'} id={'Phone'} />
                 {/* hobby */}
-                <div className="flex flex-col w-full text-lime-600 font-ssp">
-                  <ThreeInput editMode={editMode} />
-                </div>
+                <ThreeInput editMode={editMode} />
               </main>
               <footer>
                 {editMode && (
-                  <div className="cursor-pointer w-full rounded p-2 flex items-center justify-center gap-2 bg-green-500 hover:bg-green-600 active:bg-green-700 uration-200 text-white font-roboto relative text-lg duration-200">
-                    <i className="fa-solid fa-floppy-disk" />
-                    <span>Save Edit</span>
-                  </div>
+                  <Btn
+                    width="100%"
+                    text="Save Changes"
+                    color="green"
+                    textSize="lg"
+                    icon={<i className="fa-solid fa-floppy-disk" />}
+                  />
                 )}
               </footer>
             </section>
