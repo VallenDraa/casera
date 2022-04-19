@@ -22,8 +22,7 @@ const UserSchema = new Schema(
       required: false,
     },
     savedRecipes: {
-      type: Array,
-      default: [],
+      type: [Number],
     },
   },
   { timestamps: true }
