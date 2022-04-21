@@ -35,7 +35,7 @@ export default function Input({ innerRef, editMode, type, id }) {
               onClick={handleShowPassword}
               className="flex items-center justify-center absolute right-2 top-[5px] cursor-pointer"
             >
-              {showPassword === 'password' ? (
+              {showPassword !== 'password' ? (
                 <i className="fa-solid fa-eye" />
               ) : (
                 <i className="fa-solid fa-eye-slash relative right-[-1px]" />

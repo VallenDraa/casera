@@ -1,8 +1,6 @@
 const express = require('express');
 const router = express.Router();
 const {
-  register,
-  login,
   saveRecipe,
   getSavedRecipes,
   removeSavedRecipe,
@@ -10,10 +8,6 @@ const {
 
 // allow json
 router.use(express.json());
-
-// user auth
-router.post('/register', register);
-router.get('/login', login);
 
 // recipe
 router.put('/recipe/save', saveRecipe);

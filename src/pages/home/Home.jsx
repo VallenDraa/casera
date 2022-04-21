@@ -1,10 +1,12 @@
 import Navbar from '../../components/navbar/Navbar';
-import { useRef, useState, useEffect } from 'react';
+import { useRef, useState, useEffect, useContext } from 'react';
 import HomeAside from '../../components/home/homeAside/HomeAside';
 import Slides from '../../components/home/slides/Slides';
 import { fetchCat, fetchArea, fetchIngredients } from '../../fetch/fetchTags';
 import { fetchRecipesByTypes } from '../../fetch/fetchRecipes';
 import Loading from '../../components/loading/Loading';
+import axios from 'axios';
+import { errorContext } from '../../context/Context';
 
 export default function Home() {
   const TYPELIST = ['Categories', 'Area', 'Ingredients'];
@@ -14,6 +16,7 @@ export default function Home() {
   const [activeTag, setActiveTag] = useState(null);
   const [recipes, setRecipes] = useState([]);
   const [loading, setLoading] = useState(true);
+  const error = useContext(errorContext);
 
   useEffect(() => {
     const fetchTagsByType = (fetchFunc) =>
@@ -36,6 +39,9 @@ export default function Home() {
           break;
         case 'Ingredients':
           fetchTagsByType(fetchIngredients);
+          break;
+        default:
+          fetchTagsByType(fetchCat);
           break;
       }
     };

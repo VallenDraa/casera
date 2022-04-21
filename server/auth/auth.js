@@ -27,13 +27,24 @@ const register = async (req, res) => {
         !existingUser
           ? newUser
               .save()
-              .then(() => res.status(200).json({ ok: true, signup: true }))
-              .catch(() => res.status(500).json({ ok: false, signup: false }))
-          : res.status(409).json({ ok: false, signup: false });
+              .then(() =>
+                res.status(200).json({ code: 200, ok: true, signup: true })
+              )
+              .catch(() =>
+                res.status(500).json({ code: 500, ok: false, signup: false })
+              )
+          : res.json({
+              code: 409,
+              ok: false,
+              signup: false,
+              msg: 'User already exist !',
+            });
       })
-      .catch(() => res.status(500).json({ ok: false, signup: false }));
+      .catch(() =>
+        res.status(500).json({ code: 500, ok: false, signup: false })
+      );
   } catch (e) {
-    res.status(500).json({ ok: false, signup: false });
+    res.status(500).json({ code: 500, ok: false, signup: false });
   }
 };
 
@@ -46,18 +57,27 @@ const login = async (req, res) => {
       const { password, ...userData } = user._doc;
       // check if password is correct
       (await bcrypt.compare(loginPassword, user.password))
-        ? res.status(200).json({ ok: true, login: true, userData })
-        : res.status(401).json({ ok: false, login: false });
+        ? res.status(200).json({ code: 200, ok: true, login: true, userData })
+        : res.json({
+            code: 401,
+            ok: false,
+            login: false,
+            msg: 'Password Is Incorrect !',
+          });
     } else {
       // if there are no users with the same name as the requested one
-      res.status(404).json({ ok: false, login: false });
+      res.json({
+        code: 404,
+        ok: false,
+        login: false,
+        msg: "User Doesn't Exist !",
+      });
     }
   } catch (e) {
     //   server error
-    res.status(505).json({ ok: false, login: false });
+    res.status(500).json({ code: 500, ok: false, login: false });
   }
 };
-
 module.exports = {
   register,
   login,

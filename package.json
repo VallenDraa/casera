@@ -7,11 +7,6 @@
     "@testing-library/react": "^12.1.4",
     "@testing-library/user-event": "^13.5.0",
     "axios": "^0.26.1",
-    "bcrypt": "^5.0.1",
-    "dotenv": "^16.0.0",
-    "express": "^4.17.3",
-    "mongoose": "^6.3.0",
-    "path": "^0.12.7",
     "react": "^18.0.0",
     "react-dom": "^18.0.0",
     "react-player": "^2.10.0",
@@ -21,7 +16,6 @@
     "web-vitals": "^2.1.4"
   },
   "scripts": {
-    "devstart": "nodemon ./server/index",
     "start": "react-scripts start",
     "build": "react-scripts build",
     "test": "react-scripts test",
@@ -47,8 +41,8 @@
   },
   "devDependencies": {
     "autoprefixer": "^10.4.4",
-    "nodemon": "^2.0.15",
     "postcss": "^8.4.12",
     "tailwindcss": "^3.0.24"
-  }
+  },
+  "proxy": "http://192.168.1.5:3001"
 }

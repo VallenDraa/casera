@@ -40,8 +40,20 @@ module.exports = {
             transform: 'translateX(20px) scale(0.825)',
           },
         },
+
+        'slide-x': {
+          '0%': {
+            opacity: '.1',
+            transform: 'translateX(100%)',
+          },
+          '100%': {
+            opacity: '1',
+            transform: 'translateX(0)',
+          },
+        },
       },
       animation: {
+        'slide-x': 'slide-x 300ms ease-in-out',
         'blink-right': 'blink-right 2s ease-in-out infinite',
         'green-ball': 'green-ball 2s ease-in-out infinite alternate',
         'orange-ball': 'orange-ball 2s ease-in-out infinite alternate',
