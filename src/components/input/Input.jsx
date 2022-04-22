@@ -1,7 +1,15 @@
 import { useState } from 'react';
 
-export default function Input({ innerRef, editMode, type, id }) {
+export default function Input({
+  innerRef,
+  editMode,
+  type,
+  id,
+  value = '',
+  showLabel = true,
+}) {
   const [showPassword, setShowPassword] = useState('password');
+  const [inputValue, setInputValue] = useState(value);
 
   const handleShowPassword = () =>
     showPassword === 'password'
@@ -10,25 +18,31 @@ export default function Input({ innerRef, editMode, type, id }) {
 
   return (
     <div className="flex flex-col w-full text-lime-600 font-ssp">
-      <label className="text-sm" htmlFor={id}>
-        {id}
-      </label>
+      {showLabel && (
+        <label className="text-sm" htmlFor={id}>
+          {id}
+        </label>
+      )}
       {editMode ? (
         type !== 'password' ? (
           <input
+            onChange={(e) => setInputValue(e.target.value)}
             type={type}
             id={id}
             ref={innerRef}
-            placeholder={id}
+            placeholder={`Add ${id}`}
+            value={inputValue || ``}
             className="mt-1 text-slate-500 disabled:text-slate-400 focus:text-slate-800  disabled:cursor-not-allowed w-full bg-transparent border-b-2 font-roboto border-slate-400 focus:border-lime-500 outline-none duration-200"
           />
         ) : (
           <div className="relative">
             <input
+              onChange={(e) => setInputValue(e.target.value)}
               type={showPassword}
               id={id}
               ref={innerRef}
-              placeholder={id}
+              placeholder={`Add ${id}`}
+              value={inputValue || ``}
               className="mt-1 text-slate-500 disabled:text-slate-400 focus:text-slate-800  disabled:cursor-not-allowed w-full bg-transparent border-b-2 font-roboto border-slate-400 focus:border-lime-500 outline-none duration-200 pr-9"
             />
             <div
@@ -45,10 +59,12 @@ export default function Input({ innerRef, editMode, type, id }) {
         )
       ) : (
         <input
+          onChange={(e) => setInputValue(e.target.value)}
           type={type}
           id={id}
           ref={innerRef}
-          placeholder={id}
+          placeholder={`Add ${id}`}
+          value={inputValue || ``}
           disabled
           className="mt-1 text-slate-500 disabled:text-slate-400 focus:text-slate-800  disabled:cursor-not-allowed w-full bg-transparent border-b-2 font-roboto border-slate-400 focus:border-lime-500 outline-none duration-200"
         />

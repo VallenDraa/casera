@@ -1,6 +1,9 @@
 import { Link } from 'react-router-dom';
-import { useRef, useState } from 'react';
 import SearchBar from './searchbar/SearchBar';
+import { useRef, useState } from 'react';
+import ContextMenu from './contextMenu/ContextMenu';
+import Logo from './logo/Logo';
+import Caret from './caret/Caret';
 
 export default function Navbar() {
   const menu = useRef(null);
@@ -8,7 +11,8 @@ export default function Navbar() {
   const contextBtn = useRef(null);
   const [searchState, setSearchState] = useState(false);
 
-  window.addEventListener('resize', () => {
+  // turn menu into mobile version or desktop version depending on the screen size
+  const morphMenu = () => {
     try {
       window.innerWidth >= 768
         ? (menu.current.style = 'transform:translate(0)')
@@ -16,7 +20,9 @@ export default function Navbar() {
     } catch (e) {
       return;
     }
-  });
+  };
+
+  window.addEventListener('resize', morphMenu);
 
   function handleUserContextMenu() {
     const contextClass = contextMenu.current.classList;
@@ -49,18 +55,10 @@ export default function Navbar() {
         </div>
       )}
       <div className="max-w-screen-xl flex items-center justify-between  mx-auto">
-        {/* logo */}
         <div className="flex justify-between items-center gap-4">
-          <Link to="/" className="text-xl font-bold flex items-center">
-            <i className="inline-block mr-1 fa-solid fa-kitchen-set text-xl"></i>
-            <div className="flex flex-col">
-              <span className="leading-4">casera</span>
-              <p className="text-[8px] text-slate-600 leading-[.4rem] font-normal ">
-                Made By VallenDra While{' '}
-                <i className="ml-[2px] fa-solid fa-utensils" />
-              </p>
-            </div>
-          </Link>
+          {/* logo */}
+          <Logo />
+          {/* search btn */}
           <i
             onClick={() => setSearchState(!searchState)}
             className="cursor-pointer fa-solid fa-magnifying-glass"
@@ -95,33 +93,11 @@ export default function Navbar() {
             onClick={handleUserContextMenu}
             className="cursor-pointer py-1 px-2 rounded duration-200 flex items-center justify-center gap-[5px] "
           >
-            User{' '}
-            <div className="duration-200 border-t-[10px] border-slate-700 border-x-[6px] border-x-transparent transform scale-75 relative top-[1px] w-fit rotate-90"></div>
+            User
+            <Caret />
           </span>
           {/* user context menu */}
-          <ul
-            ref={contextMenu}
-            className="w-full md:w-72 absolute border-t-2 md:border-0 bg-white right-0 md:right-3 md:top-10 md:rounded font-normal transform scale-0 origin-top md:origin-top-right duration-300 z-20 md:shadow-md"
-          >
-            <li className="py-2 px-2 duration-200 hover:bg-slate-100 active:bg-slate-200 hover:rounded">
-              <Link to="/user/123" className="inline-block w-full">
-                Username
-                <i className="pl-2 fa-solid fa-user" />
-              </Link>
-            </li>
-            <li className="py-2 px-2 duration-200 hover:bg-slate-100 active:bg-slate-200">
-              <Link to="/saved" className="inline-block w-full">
-                Saved Recipes
-                <i className="pl-2 fa-solid fa-heart" />
-              </Link>
-            </li>
-            <li className="md:rounded-b border-t-2 border-slate-700 py-2 px-2 duration-200 bg-red-500 hover:bg-red-600 active:bg-red-700 text-slate-50">
-              <Link className="font-semibold w-full inline-block" to="/">
-                Logout
-                <i className="pl-2 fa-solid fa-right-from-bracket" />
-              </Link>
-            </li>
-          </ul>
+          <ContextMenu innerRef={contextMenu} />
         </div>
       </div>
     </nav>

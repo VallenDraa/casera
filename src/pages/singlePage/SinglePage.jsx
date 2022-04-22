@@ -1,16 +1,18 @@
 import axios from 'axios';
-import React, { useEffect, useState } from 'react';
+import React, { useContext, useEffect, useState } from 'react';
 import Navbar from '../../components/navbar/Navbar';
 import ReactPlayer from 'react-player';
 import handleSave from '../../handleSave/handleSave.js';
 import { Link } from 'react-router-dom';
 import Loading from '../../components/loading/Loading';
+import { userContext } from '../../context/Context';
 
 export default function SinglePage({ saved }) {
   const [recipes, setRecipes] = useState([]);
   const [ingredients, setIngredients] = useState([]);
   const [iframeWidth, setIframeWidth] = useState(400);
   const [loading, setLoading] = useState(true);
+  const [userState, dispatch] = useContext(userContext);
   const mealId = window.location.href.split('=')[1];
 
   const iframeWidthChange = () =>
@@ -74,7 +76,7 @@ export default function SinglePage({ saved }) {
                     <div className="text-center sticky top-20 space-y-10">
                       <div className="w-fit mx-auto">
                         <img
-                          className="h-[400px] object-cover rounded-full"
+                          className="h-[400px] object-cover"
                           src={recipe.strMealThumb}
                           alt=""
                         />

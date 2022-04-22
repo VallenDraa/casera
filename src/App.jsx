@@ -6,24 +6,27 @@ import SinglePage from './pages/singlePage/SinglePage';
 import UserPage from './pages/userPage/UserPage';
 import Login from './pages/login/Login';
 import Register from './pages/register/Register';
-import { ContextProvider } from './context/Context';
+import { useContext, useEffect } from 'react';
+import { USERACTIONS } from './context/Actions';
+import { userContext } from './context/Context';
 
 export default function App() {
+  const { dispatch } = useContext(userContext);
+  useEffect(() => dispatch({ type: USERACTIONS.getUserData }), []);
+
   return (
     <>
-      <ContextProvider>
-        <BrowserRouter>
-          <Routes>
-            <Route path="/" element={<Home />} />
-            <Route path="/saved" element={<Saved />} />
-            <Route path="/search" element={<Search />} />
-            <Route path="/recipe/*" element={<SinglePage />} />
-            <Route path="/user/*" element={<UserPage />} />
-            <Route path="/login" element={<Login />} />
-            <Route path="/register" element={<Register />} />
-          </Routes>
-        </BrowserRouter>
-      </ContextProvider>
+      <BrowserRouter>
+        <Routes>
+          <Route path="/" element={<Home />} />
+          <Route path="/saved" element={<Saved />} />
+          <Route path="/search" element={<Search />} />
+          <Route path="/recipe/*" element={<SinglePage />} />
+          <Route path="/user/*" element={<UserPage />} />
+          <Route path="/login" element={<Login />} />
+          <Route path="/register" element={<Register />} />
+        </Routes>
+      </BrowserRouter>
     </>
   );
 }

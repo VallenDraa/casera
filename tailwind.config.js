@@ -51,8 +51,17 @@ module.exports = {
             transform: 'translateX(0)',
           },
         },
+        timer: {
+          '0%': {
+            width: '100%',
+          },
+          '100%': {
+            width: '0',
+          },
+        },
       },
       animation: {
+        timer: 'timer 5s ease-in-out',
         'slide-x': 'slide-x 300ms ease-in-out',
         'blink-right': 'blink-right 2s ease-in-out infinite',
         'green-ball': 'green-ball 2s ease-in-out infinite alternate',

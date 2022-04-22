@@ -1,7 +1,7 @@
 import Input from '../../components/input/Input';
 import Navbar from '../../components/navbar/Navbar';
-import { Link } from 'react-router-dom';
 import { useContext, useRef } from 'react';
+import { Link, useNavigate } from 'react-router-dom';
 import { userContext } from '../../context/Context';
 import { errorContext } from '../../context/Context';
 import StateToast from '../../components/toast/StateToast';
@@ -14,28 +14,37 @@ export default function Login() {
   const { error, setError } = useContext(errorContext);
   const usernameRef = useRef();
   const passwordRef = useRef();
+  const navigate = useNavigate();
 
   const handleLogin = async (e) => {
+    setError(null);
     e.preventDefault();
     const bodyContent = {
-      username: usernameRef.current.value,
-      loginPassword: passwordRef.current.value,
+      username: usernameRef.current.value || null,
+      loginPassword: passwordRef.current.value || null,
     };
 
     try {
-      const { data } = await axios.get('/auth/login', bodyContent);
-      console.log(data);
+      const { data } = await axios.post('/auth/login', bodyContent);
+      if (data.login) {
+        dispatch({ type: USERACTIONS.LoginSuccess, payload: data.userData });
+        navigate('/');
+        console.log(userState);
+      } else {
+        setError(data);
+      }
     } catch (error) {
-      console.log(error);
+      setError({ ok: false, msg: 'Fail To Make Connection !' });
     }
   };
 
   return (
     <>
+      {error && <StateToast payload={error} />}
       <header>
         <Navbar />
       </header>
-      <main className="mt-36 bg-slate-100 flex items-center justify-center px-2 text-slate-800">
+      <main className="h-[calc(100vh-56px)] bg-slate-100 flex items-center justify-center px-2 text-slate-800">
         <section className="mx-auto container flex flex-col justify-center items-center px-3">
           <h1 className="w-fit text-4xl font-ssp font-semibold">Login</h1>
           <form
@@ -64,6 +73,7 @@ export default function Login() {
             </div>
             <div className="space-y-3">
               <Btn
+                onClick={() => setError(null)}
                 width="100%"
                 textSize="lg"
                 text="Login"

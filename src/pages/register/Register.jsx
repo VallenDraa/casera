@@ -1,17 +1,20 @@
 import Input from '../../components/input/Input';
 import Navbar from '../../components/navbar/Navbar';
-import { Link } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 import Btn from '../../components/btn/Btn';
 import { useContext, useRef } from 'react';
+import { userContext } from '../../context/Context';
 import { errorContext } from '../../context/Context';
 import StateToast from '../../components/toast/StateToast';
 import axios from 'axios';
 
 export default function Register() {
+  const { userState } = useContext(userContext);
   const { error, setError } = useContext(errorContext);
   const emailRef = useRef(null);
   const usernameRef = useRef(null);
   const passwordRef = useRef(null);
+  const navigate = useNavigate();
 
   // handle register
   const handleRegister = async (e) => {
@@ -26,18 +29,18 @@ export default function Register() {
     // try to register
     try {
       const { data } = await axios.post('/auth/register', bodyContent);
-      data.signup ? (window.location.href = '/login') : setError(data);
+      data.signup ? navigate('/login') : setError(data);
     } catch (error) {
       setError({ ok: false, msg: 'Fail To Make Connection !' });
     }
   };
   return (
     <>
-      {error && <StateToast payload={error} showToast={true} />}
+      {error && <StateToast payload={error} />}
       <header>
         <Navbar />
       </header>
-      <main className="mt-36 bg-slate-100 flex items-center justify-center px-2 text-slate-800">
+      <main className="h-[calc(100vh-56px)] bg-slate-100 flex items-center justify-center px-2 text-slate-800">
         <section className="mx-auto container flex flex-col justify-center items-center px-3">
           <h1 className="w-fit text-4xl font-ssp font-semibold">Register</h1>
           <form
