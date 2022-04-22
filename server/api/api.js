@@ -1,5 +1,9 @@
 const User = require('../model/User');
 
+const updateUser = async (req, res) => {
+  const { _id, username, phone, hobby } = req.body;
+};
+
 const saveRecipe = async (req, res) => {
   const { _id, idMeal } = req.body;
 

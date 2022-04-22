@@ -19,7 +19,14 @@ const UserSchema = new Schema(
     },
     profilePic: {
       type: Buffer,
-      required: false,
+      default: null,
+    },
+    hobby: {
+      type: [String],
+    },
+    phone: {
+      type: Number,
+      default: null,
     },
     savedRecipes: {
       type: [Number],

@@ -3,6 +3,16 @@ const bcrypt = require('bcrypt');
 
 const register = async (req, res) => {
   const { username, email, password } = req.body;
+
+  if (!username || !email || !password) {
+    return res.json({
+      code: 404,
+      ok: false,
+      login: false,
+      msg: 'Make Sure Register Form Is Not Empty !',
+    });
+  }
+
   try {
     // get datas from the body
     const newUser = new User({
@@ -50,6 +60,17 @@ const register = async (req, res) => {
 
 const login = async (req, res) => {
   const { username, loginPassword } = req.body;
+
+  // make sure the request body is not empty
+  if ((!username, !loginPassword)) {
+    return res.json({
+      code: 404,
+      ok: false,
+      login: false,
+      msg: 'Make Sure Login Form Is Not Empty !',
+    });
+  }
+
   try {
     //   check if there is a user with the same name as the requested one
     const user = await User.findOne({ username });
@@ -78,6 +99,7 @@ const login = async (req, res) => {
     res.status(500).json({ code: 500, ok: false, login: false });
   }
 };
+
 module.exports = {
   register,
   login,
