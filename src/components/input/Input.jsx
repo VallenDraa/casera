@@ -7,6 +7,7 @@ export default function Input({
   id,
   value = '',
   showLabel = true,
+  forAuth = false,
 }) {
   const [showPassword, setShowPassword] = useState('password');
   const [inputValue, setInputValue] = useState(value);
@@ -29,10 +30,10 @@ export default function Input({
             onChange={(e) => setInputValue(e.target.value)}
             type={type}
             id={id}
+            placeholder={forAuth ? id : `Add ${id}`}
             ref={innerRef}
-            placeholder={`Add ${id}`}
             value={inputValue || ``}
-            className="mt-1 text-slate-500 disabled:text-slate-400 focus:text-slate-800  disabled:cursor-not-allowed w-full bg-transparent border-b-2 font-roboto border-slate-400 focus:border-lime-500 outline-none duration-200"
+            className="mt-1 text-slate-500 text-sm placeholder:text-xs placeholder:font-light placeholder:italic disabled:text-slate-400 focus:text-slate-800  disabled:cursor-not-allowed w-full bg-transparent border-b-2 font-roboto border-slate-400 focus:border-lime-500 outline-none duration-200"
           />
         ) : (
           <div className="relative">
@@ -41,9 +42,9 @@ export default function Input({
               type={showPassword}
               id={id}
               ref={innerRef}
-              placeholder={`Add ${id}`}
+              placeholder={forAuth ? id : `Add ${id}`}
               value={inputValue || ``}
-              className="mt-1 text-slate-500 disabled:text-slate-400 focus:text-slate-800  disabled:cursor-not-allowed w-full bg-transparent border-b-2 font-roboto border-slate-400 focus:border-lime-500 outline-none duration-200 pr-9"
+              className="mt-1 text-slate-500 text-sm placeholder:text-xs placeholder:font-light placeholder:italic disabled:text-slate-400 focus:text-slate-800  disabled:cursor-not-allowed w-full bg-transparent border-b-2 font-roboto border-slate-400 focus:border-lime-500 outline-none duration-200 pr-9"
             />
             <div
               onClick={handleShowPassword}
@@ -63,10 +64,10 @@ export default function Input({
           type={type}
           id={id}
           ref={innerRef}
-          placeholder={`Add ${id}`}
+          placeholder={forAuth ? id : `Add ${id}`}
           value={inputValue || ``}
           disabled
-          className="mt-1 text-slate-500 disabled:text-slate-400 focus:text-slate-800  disabled:cursor-not-allowed w-full bg-transparent border-b-2 font-roboto border-slate-400 focus:border-lime-500 outline-none duration-200"
+          className="mt-1 text-slate-500 text-sm placeholder:text-xs placeholder:font-light placeholder:italic disabled:text-slate-400 focus:text-slate-800  disabled:cursor-not-allowed w-full bg-transparent border-b-2 font-roboto border-slate-400 focus:border-lime-500 outline-none duration-200"
         />
       )}
     </div>

@@ -8,7 +8,7 @@ export default function Slides({ recipes }) {
     <Swiper
       spaceBetween={30}
       slidesPerView={1}
-      className="w-full h-[650px] cursor-grab"
+      className="w-full h-[650px] cursor-grab rounded-lg"
     >
       {recipes ? (
         recipes.map(
@@ -17,12 +17,14 @@ export default function Slides({ recipes }) {
               <SwiperSlide
                 key={i}
                 className="relative rounded-lg min-w-full max-w-md font-ssp"
-                style={{
-                  backgroundImage: `url('${recipe.strMealThumb}')`,
-                  backgroundSize: 'cover',
-                }}
               >
-                <CardContent saved={true} recipe={recipe} />
+                <img
+                  src={recipe.strMealThumb}
+                  alt={recipe.strMeal}
+                  loading={i !== 0 ? 'lazy' : 'eager'}
+                  className="object-cover w-full h-full rounded-lg"
+                />
+                <CardContent recipe={recipe} />
               </SwiperSlide>
             )
         )

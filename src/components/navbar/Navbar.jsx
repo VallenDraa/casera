@@ -4,6 +4,7 @@ import { useRef, useState } from 'react';
 import ContextMenu from './contextMenu/ContextMenu';
 import Logo from './logo/Logo';
 import Caret from './caret/Caret';
+import { isCompositeComponent } from 'react-dom/test-utils';
 
 export default function Navbar() {
   const menu = useRef(null);
@@ -13,16 +14,30 @@ export default function Navbar() {
 
   // turn menu into mobile version or desktop version depending on the screen size
   const morphMenu = () => {
-    try {
-      window.innerWidth >= 768
-        ? (menu.current.style = 'transform:translate(0)')
-        : (menu.current.style = 'transform:translate(100%)');
-    } catch (e) {
-      return;
-    }
+    if (!menu.current) return;
+
+    window.innerWidth >= 768
+      ? (menu.current.style = 'transform:translate(0)')
+      : (menu.current.style = 'transform:translate(100%)');
   };
 
   window.addEventListener('resize', morphMenu);
+
+  // window.addEventListener('click', (e) => {
+  //   if (!contextMenu.current) return;
+  //   // context menu
+  //   const CMChildrens = [...contextMenu.current.children];
+  //   const target = e.target;
+
+  //   CMChildrens.forEach((child) => {
+  //     if (child.children[0] !== target && target !== contextBtn.current) {
+  //       console.log(
+  //         child.children[0] !== target && target !== contextBtn.current
+  //       );
+  //       handleUserContextMenu();
+  //     }
+  //   });
+  // });
 
   function handleUserContextMenu() {
     const contextClass = contextMenu.current.classList;
@@ -40,7 +55,7 @@ export default function Navbar() {
   }
 
   return (
-    <nav className="p-3 font-ssp">
+    <nav className="px-3 pt-3 font-ssp">
       {/* search bar */}
       {searchState && (
         <div className=" max-w-2xl mx-auto font-roboto">

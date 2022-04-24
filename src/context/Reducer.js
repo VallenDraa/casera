@@ -14,6 +14,10 @@ export const userReducer = (state, { type, payload }) => {
       if (sessionStorage.getItem('user')) {
         return JSON.parse(sessionStorage.getItem('user'));
       }
+      return;
+    case USERACTIONS.updateUser:
+      sessionStorage.setItem('user', JSON.stringify(payload));
+      return payload;
     default:
       return;
   }

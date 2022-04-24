@@ -1,9 +1,6 @@
 const User = require('../model/User');
 
-const updateUser = async (req, res) => {
-  const { _id, username, phone, hobby } = req.body;
-};
-
+// recipe related api
 const saveRecipe = async (req, res) => {
   const { _id, idMeal } = req.body;
 
@@ -33,10 +30,26 @@ const saveRecipe = async (req, res) => {
   }
 };
 
+const isSaved = async (req, res) => {
+  const { username, idMeal } = req.query;
+
+  // return if there is no username of id meal
+  if (!username || !idMeal) return;
+
+  try {
+    const user = await User.findOne({ username });
+    const containIdMeal = user.savedRecipes.includes(idMeal);
+
+    res.status(200).json({ ok: true, code: 200, containIdMeal, idMeal });
+  } catch (e) {
+    res.status(500).json({ ok: false, code: 500 });
+  }
+};
+
 const getSavedRecipes = async (req, res) => {
   try {
-    const user = await User.findById(req.body._id);
-    const { username, savedRecipes } = user._doc;
+    const user = await User.findById(req.query._id);
+    const { username, savedRecipes } = user;
     res
       .status(200)
       .json({ code: 200, ok: true, getRecipe: true, username, savedRecipes });
@@ -87,4 +100,5 @@ module.exports = {
   saveRecipe,
   getSavedRecipes,
   removeSavedRecipe,
+  isSaved,
 };

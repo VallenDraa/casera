@@ -4,17 +4,17 @@ import { userReducer } from './Reducer';
 const user = null;
 
 export const userContext = createContext();
-export const errorContext = createContext();
+export const toastContext = createContext();
 
 export const ContextProvider = ({ children }) => {
   const [userState, dispatch] = useReducer(userReducer, user);
 
-  const [error, setError] = useState(null);
+  const [toastData, setToastData] = useState(null);
   return (
     <userContext.Provider value={{ userState, dispatch }}>
-      <errorContext.Provider value={{ error, setError }}>
+      <toastContext.Provider value={{ toastData, setToastData }}>
         {children}
-      </errorContext.Provider>
+      </toastContext.Provider>
     </userContext.Provider>
   );
 };

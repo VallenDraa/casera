@@ -4,14 +4,13 @@ const {
   saveRecipe,
   getSavedRecipes,
   removeSavedRecipe,
-} = require('../api/api');
-
-// allow json
-router.use(express.json());
+  isSaved,
+} = require('../api/recipe');
 
 // recipe
 router.put('/recipe/save', saveRecipe);
-router.get('/recipe/get_saved_recipes', getSavedRecipes);
-router.delete('/recipe/remove_saved_recipe', removeSavedRecipe);
+router.get('/recipe/gets', getSavedRecipes);
+router.get('/recipe/is_saved', isSaved);
+router.delete('/recipe/remove', removeSavedRecipe);
 
 module.exports = router;

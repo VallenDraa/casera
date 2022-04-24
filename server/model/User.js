@@ -18,7 +18,7 @@ const UserSchema = new Schema(
       required: true,
     },
     profilePic: {
-      type: Buffer,
+      type: String,
       default: null,
     },
     hobby: {

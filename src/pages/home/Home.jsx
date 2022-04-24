@@ -5,8 +5,6 @@ import Slides from '../../components/home/slides/Slides';
 import { fetchCat, fetchArea, fetchIngredients } from '../../fetch/fetchTags';
 import { fetchRecipesByTypes } from '../../fetch/fetchRecipes';
 import Loading from '../../components/loading/Loading';
-import axios from 'axios';
-import { errorContext } from '../../context/Context';
 
 export default function Home() {
   const TYPELIST = ['Categories', 'Area', 'Ingredients'];
@@ -16,7 +14,6 @@ export default function Home() {
   const [activeTag, setActiveTag] = useState(null);
   const [recipes, setRecipes] = useState([]);
   const [loading, setLoading] = useState(true);
-  const error = useContext(errorContext);
 
   useEffect(() => {
     const fetchTagsByType = (fetchFunc) =>
@@ -79,8 +76,8 @@ export default function Home() {
       <header>
         <Navbar />
       </header>
-      <main className="bg-slate-100 ">
-        <div className="relative max-w-screen-xl px-3 mt-10 sm:w-11/12 lg:w-5/6 xl:w-3/4 mx-auto lg:text-left">
+      <main className="bg-slate-100">
+        <div className="relative max-w-screen-xl px-3 mt-10 sm:w-11/12 lg:w-5/6 xl:w-3/4 mx-auto lg:text-left overflow-y-auto md:overflow-hidden">
           <header className="text-center lg:text-left">
             <h1 className="tracking-wide text-4xl font-ssp first-letter:text-5xl first-letter:font-semibold">
               Home
@@ -111,7 +108,7 @@ export default function Home() {
               )}
             </ul>
           </header>
-          <div className="relative pb-5">
+          <div className="relative pb-5 md:pb-3">
             {/* aside */}
             <HomeAside />
             <section className="relative flex lg:m-3 xl:m-5 gap-6 lg:gap-12 flex-col-reverse lg:flex-row">

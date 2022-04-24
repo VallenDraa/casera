@@ -41,7 +41,7 @@ module.exports = {
           },
         },
 
-        'slide-x': {
+        toast: {
           '0%': {
             opacity: '.1',
             transform: 'translateX(100%)',
@@ -62,7 +62,7 @@ module.exports = {
       },
       animation: {
         timer: 'timer 5s ease-in-out',
-        'slide-x': 'slide-x 300ms ease-in-out',
+        toast: 'toast 300ms ease-in-out',
         'blink-right': 'blink-right 2s ease-in-out infinite',
         'green-ball': 'green-ball 2s ease-in-out infinite alternate',
         'orange-ball': 'orange-ball 2s ease-in-out infinite alternate',

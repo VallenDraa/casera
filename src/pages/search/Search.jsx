@@ -29,9 +29,13 @@ export default function Search() {
         </p>
         <article className="mt-16 ">
           <section className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 xl:grid-cols-4 gap-5 pb-5">
-            {recipes.map((recipe) => (
-              <CardWrapper recipe={recipe} saved={true} />
-            ))}
+            {recipes.map((recipe, i) =>
+              i !== 0 ? (
+                <CardWrapper recipe={recipe} saved={true} lazyload={true} />
+              ) : (
+                <CardWrapper recipe={recipe} saved={true} lazyload={false} />
+              )
+            )}
           </section>
         </article>
       </main>

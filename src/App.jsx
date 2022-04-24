@@ -21,7 +21,7 @@ export default function App() {
           <Route path="/" element={<Home />} />
           <Route path="/saved" element={<Saved />} />
           <Route path="/search" element={<Search />} />
-          <Route path="/recipe/*" element={<SinglePage />} />
+          <Route path="/recipe/:idMeal" element={<SinglePage />} />
           <Route path="/user/*" element={<UserPage />} />
           <Route path="/login" element={<Login />} />
           <Route path="/register" element={<Register />} />

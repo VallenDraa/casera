@@ -62,7 +62,7 @@ const login = async (req, res) => {
   const { username, loginPassword } = req.body;
 
   // make sure the request body is not empty
-  if ((!username, !loginPassword)) {
+  if (!username || !loginPassword) {
     return res.json({
       code: 404,
       ok: false,

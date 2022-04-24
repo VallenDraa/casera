@@ -1,8 +1,9 @@
 import axios from 'axios';
 import React, { useContext, useEffect, useState } from 'react';
+import { useParams } from 'react-router-dom';
 import Navbar from '../../components/navbar/Navbar';
 import ReactPlayer from 'react-player';
-import handleSave from '../../handleSave/handleSave.js';
+import { changeToSave, changeToSaved } from '../../handleSave/handleSave.js';
 import { Link } from 'react-router-dom';
 import Loading from '../../components/loading/Loading';
 import { userContext } from '../../context/Context';
@@ -12,20 +13,22 @@ export default function SinglePage({ saved }) {
   const [ingredients, setIngredients] = useState([]);
   const [iframeWidth, setIframeWidth] = useState(400);
   const [loading, setLoading] = useState(true);
-  const [userState, dispatch] = useContext(userContext);
-  const mealId = window.location.href.split('=')[1];
+  const { userState, dispatch } = useContext(userContext);
+  const { idMeal } = useParams();
 
-  const iframeWidthChange = () =>
-    window.innerWidth >= 1024
+  const iframeWidthChange = () => {
+    return window.innerWidth >= 1024
       ? setIframeWidth(400)
       : setIframeWidth((window.innerWidth * 90) / 100);
+  };
 
   window.addEventListener('resize', () => iframeWidthChange());
 
   useEffect(() => {
     function getRecipes() {
+      console.log(idMeal);
       return axios.get(
-        `https://www.themealdb.com/api/json/v1/1/lookup.php?i=${mealId}`
+        `https://www.themealdb.com/api/json/v1/1/lookup.php?i=${idMeal}`
       );
     }
 
@@ -189,7 +192,7 @@ export default function SinglePage({ saved }) {
                           <i className=" fa-regular fa-heart" />
                         )}
                         <div
-                          onClick={(e) => handleSave(e)}
+                          onClick={(e) => changeToSaved(e)}
                           className="absolute z-20 inset-0"
                         ></div>
                         {saved ? <span>Saved</span> : <span>Save Dish</span>}

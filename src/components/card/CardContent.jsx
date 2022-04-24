@@ -1,30 +1,49 @@
+import axios from 'axios';
+import { useEffect, useContext, useState } from 'react';
 import { Link } from 'react-router-dom';
-import handleSave from '../../handleSave/handleSave';
+import { userContext, toastContext } from '../../context/Context';
+import { setStatePro } from '../../utils/utils';
+import SaveRecipeBtn from '../saveRecipeBtn/SaveRecipeBtn';
 
-export default function cardContent({ recipe, saved }) {
-  let firstWord, theRest;
-  [firstWord, ...theRest] = recipe.strMeal.split(' ');
+export default function CardContent({ recipe }) {
+  const [firstWord, ...theRest] = recipe.strMeal.split(' ');
+  const { idMeal } = recipe;
+  const { userState, dispatch } = useContext(userContext);
+  const [saved, setSaved] = useState(true);
+  const { setToastData } = useContext(toastContext);
+
+  useEffect(() => {
+    const isSaved = () => {
+      setStatePro(setToastData, null).finally(async () => {
+        try {
+          const { data } = await axios.get(
+            `/api/recipe/is_saved?username=${userState.username}&idMeal=${idMeal}`
+          );
+          setSaved(data.containIdMeal);
+        } catch (error) {
+          setToastData({ ok: false, msg: 'Fail To Make Connection !' });
+        }
+      });
+    };
+
+    isSaved();
+  }, []);
 
   return (
-    <Link
-      to={`/recipe?id=${recipe.idMeal}`}
-      className="duration-300 shadow-inner absolute inset-0 opacity-0 hover:opacity-100 rounded-lg w-full h-full bg-gradient-to-b from-neutral-500/40 to-neutral-900/60 flex flex-col justify-between font-bold"
-    >
-      <div className=" w-fit rounded-tl-lg rounded-bl-none rounded-br-lg p-2 flex items-center gap-1 bg-red-500 hover:bg-red-600 duration-200 text-white font-roboto relative">
-        {saved ? (
-          <i className=" fa-solid fa-heart" />
-        ) : (
-          <i className=" fa-regular fa-heart" />
-        )}
-        <div
-          onClick={(e) => handleSave(e)}
-          className="absolute z-20 inset-0"
-        ></div>
-        <span className="text-[12px]">{saved ? 'Saved' : 'Save Dish'}</span>
+    <div className="duration-300 shadow-inner absolute inset-0 opacity-0 hover:opacity-100 rounded-lg w-full h-full bg-gradient-to-b from-neutral-500/40 to-neutral-900/60 flex flex-col justify-between font-bold z-20">
+      <div className="relative w-full h-full">
+        <Link
+          to={`/recipe/${idMeal}`}
+          className=" cursor-grab absolute inset-0 "
+        ></Link>
+        <SaveRecipeBtn id={idMeal} saved={saved} />
       </div>
 
       {/* name */}
-      <div className="font-ssp text-slate-100 m-2 border-t-2 border-red-500">
+      <Link
+        to={`/recipe/${idMeal}`}
+        className=" cursor-grab block font-ssp text-slate-100 p-2 border-t-2 border-red-500"
+      >
         <div className="text-lg font-semibold mt-1 p-2 flex items-center justify-between rounded">
           <div>
             <span className="text-2xl font-bold text-slate-200">
@@ -33,7 +52,7 @@ export default function cardContent({ recipe, saved }) {
             {theRest.join(' ')}
           </div>
         </div>
-      </div>
-    </Link>
+      </Link>
+    </div>
   );
 }

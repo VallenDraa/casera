@@ -2,8 +2,12 @@ require('dotenv').config();
 const express = require('express');
 const app = express();
 const mongoose = require('mongoose');
-const apiRouter = require('./routes/apiRoutes');
+const apiRecipeRouter = require('./routes/apiRecipeRoutes');
+const apiUserRouter = require('./routes/apiUserRoutes');
 const authRouter = require('./routes/authRoutes');
+
+// allow json
+app.use(express.json({ limit: '500kb' }));
 
 // connect to database
 mongoose
@@ -11,7 +15,8 @@ mongoose
   .finally(() => console.log('connected to database'));
 
 // api links
-app.use('/api', apiRouter);
+app.use('/api', apiRecipeRouter);
+app.use('/api', apiUserRouter);
 app.use('/auth', authRouter);
 app.get('/test', (req, res) => res.json({ foo: 'bar' }));
 

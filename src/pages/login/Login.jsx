@@ -3,7 +3,7 @@ import Navbar from '../../components/navbar/Navbar';
 import { useContext, useRef } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import { userContext } from '../../context/Context';
-import { errorContext } from '../../context/Context';
+import { toastContext } from '../../context/Context';
 import StateToast from '../../components/toast/StateToast';
 import { USERACTIONS } from '../../context/Actions';
 import axios from 'axios';
@@ -11,13 +11,13 @@ import Btn from '../../components/btn/Btn';
 
 export default function Login() {
   const { userState, dispatch } = useContext(userContext);
-  const { error, setError } = useContext(errorContext);
+  const { toastData, setToastData } = useContext(toastContext);
   const usernameRef = useRef();
   const passwordRef = useRef();
   const navigate = useNavigate();
 
   const handleLogin = async (e) => {
-    setError(null);
+    setToastData(null);
     e.preventDefault();
     const bodyContent = {
       username: usernameRef.current.value || null,
@@ -31,20 +31,20 @@ export default function Login() {
         navigate('/');
         console.log(userState);
       } else {
-        setError(data);
+        setToastData(data);
       }
-    } catch (error) {
-      setError({ ok: false, msg: 'Fail To Make Connection !' });
+    } catch (e) {
+      setToastData({ ok: false, msg: 'Fail To Make Connection !' });
     }
   };
 
   return (
     <>
-      {error && <StateToast payload={error} />}
+      {toastData && <StateToast payload={toastData} />}
       <header>
         <Navbar />
       </header>
-      <main className="h-[calc(100vh-56px)] bg-slate-100 flex items-center justify-center px-2 text-slate-800">
+      <main className="h-[calc(100vh-70px)] bg-slate-100 flex items-center justify-center px-2 text-slate-800">
         <section className="mx-auto container flex flex-col justify-center items-center px-3">
           <h1 className="w-fit text-4xl font-ssp font-semibold">Login</h1>
           <form
@@ -52,6 +52,7 @@ export default function Login() {
             className="w-full mt-16 space-y-10 max-w-md"
           >
             <Input
+              forAuth={true}
               innerRef={usernameRef}
               editMode={true}
               type={'text'}
@@ -65,6 +66,7 @@ export default function Login() {
                 Forgot Password
               </Link>
               <Input
+                forAuth={true}
                 innerRef={passwordRef}
                 editMode={true}
                 type={'password'}
@@ -73,7 +75,8 @@ export default function Login() {
             </div>
             <div className="space-y-3">
               <Btn
-                onClick={() => setError(null)}
+                type="submit"
+                onClick={() => setToastData(null)}
                 width="100%"
                 textSize="lg"
                 text="Login"

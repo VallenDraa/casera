@@ -12,3 +12,12 @@ export const removeDupeObjInArrayByKey = (arr, key) => {
 
   return filtered;
 };
+
+/**
+ *
+ * @param {State} setState React setState function
+ * @param {any} value This parameter will be used as the setState parameter
+ * @returns Will allow promise methods to be used after setting a state for better developer experience when handling react state
+ */
+
+export const setStatePro = async (setState, value) => setState(value);
