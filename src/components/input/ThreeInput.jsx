@@ -2,7 +2,6 @@ import { useState } from 'react';
 import Input from './Input';
 
 export default function ThreeInput({ editMode, innerRef, value, label = '' }) {
-  value = [];
   const [inputValue, setInputValue] = useState(value);
   return (
     <div className="flex flex-col w-full text-lime-600 font-ssp">
@@ -11,6 +10,7 @@ export default function ThreeInput({ editMode, innerRef, value, label = '' }) {
         <Input
           editMode={editMode}
           innerRef={innerRef}
+          value={value[0]}
           id={'Hobby 1'}
           type={'text'}
           showLabel={false}
@@ -18,6 +18,7 @@ export default function ThreeInput({ editMode, innerRef, value, label = '' }) {
         <Input
           editMode={editMode}
           innerRef={innerRef}
+          value={value[1]}
           id={'Hobby 2'}
           type={'text'}
           showLabel={false}
@@ -25,6 +26,7 @@ export default function ThreeInput({ editMode, innerRef, value, label = '' }) {
         <Input
           editMode={editMode}
           innerRef={innerRef}
+          value={value[2]}
           id={'Hobby 3'}
           type={'text'}
           showLabel={false}

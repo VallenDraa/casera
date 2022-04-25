@@ -29,7 +29,7 @@ export default function StateToast({ payload }) {
             <header className="bg-green-400 rounded-t font-roboto text-green-700 flex items-center justify-between gap-2 py-1 px-2 text-sm">
               <div className="flex items-center gap-2 ">
                 <i className="fa-solid fa-square-check " />
-                <p className="font-bold">Success Message !</p>
+                <p className="font-bold">Success !</p>
               </div>
               <i
                 className="fa-solid fa-xmark cursor-pointer p-1 duration-200 hover:text-green-600 active:text-green-900"

@@ -2,13 +2,14 @@ import 'swiper/css';
 import 'swiper/css/pagination';
 import { Swiper, SwiperSlide } from 'swiper/react';
 import CardContent from '../../card/CardContent';
+import Loading from '../../loading/Loading';
 
 export default function Slides({ recipes }) {
   return (
     <Swiper
       spaceBetween={30}
       slidesPerView={1}
-      className="w-full h-[650px] cursor-grab rounded-lg"
+      className="w-full h-[650px] cursor-grab rounded-lg "
     >
       {recipes ? (
         recipes.map(

@@ -1,43 +1,57 @@
 import { useContext, useEffect, useState } from 'react';
 import 'swiper/css';
 import 'swiper/css/pagination';
-import { Swiper, SwiperSlide } from 'swiper/react';
-import { Link } from 'react-router-dom';
 import Navbar from '../../components/navbar/Navbar';
 import Input from '../../components/input/Input';
 import ThreeInput from '../../components/input/ThreeInput';
 import Btn from '../../components/btn/Btn';
-import { toastContext, userContext } from '../../context/Context';
+import {
+  loadingContext,
+  toastContext,
+  userContext,
+} from '../../context/Context';
 import { USERACTIONS } from '../../context/Actions';
 import StateToast from '../../components/toast/StateToast';
 import axios from 'axios';
-import { changeToSave, changeToSaved } from '../../handleSave/handleSave';
 import { setStatePro } from '../../utils/utils';
+import Slides from '../../components/home/slides/Slides';
+import Loading from '../../components/loading/Loading';
 
 export default function UserPage() {
   const [editMode, setEditMode] = useState(false);
   const { userState, dispatch } = useContext(userContext);
   const [profilePic, setProfilePic] = useState(null);
   const { toastData, setToastData } = useContext(toastContext);
-
-  const style = {
-    backgroundSize: 'cover',
-    background: "url('https://source.unsplash.com/random/')",
-    position: 'relative',
-    borderRadius: '8px',
-    minWidth: '100%',
-    maxWidth: '448px',
-    fontFamily: "'Source Serif Pro',serif",
-  };
+  const [recipes, setRecipes] = useState([]);
+  const [loading, setLoading] = useContext(loadingContext);
 
   useEffect(() => {
-    // will fetch profile picture from
-    const getPP = () =>
-      sessionStorage.getItem('user') &&
-      setProfilePic(JSON.parse(sessionStorage.getItem('user')).profilePic);
+    // will fetch profile picture from session storage
+    const getPP = () => {
+      // returns if there is userState is empty
+
+      if (!userState) return;
+      setProfilePic(userState.profilePic);
+    };
+
+    // fetch the saved recipes from the database
+    const fetchSavedRecipes = async () => {
+      // returns if there is userState is empty
+      if (!userState) return;
+
+      const { _id } = userState;
+
+      try {
+        const { data } = await axios.get(`/api/recipe/gets?_id=${_id}`);
+        setRecipes(data.savedRecipes);
+      } catch (e) {
+        setToastData({ ok: false, msg: 'Fail To Make Connection !' });
+      }
+    };
 
     getPP();
-  }, []);
+    fetchSavedRecipes().finally(() => setLoading(false));
+  }, [userState]);
 
   const handleSubmit = async (e) => {
     setToastData(null);
@@ -113,6 +127,7 @@ export default function UserPage() {
 
   return (
     <>
+      {loading && <Loading />}
       {toastData && <StateToast payload={toastData} />}
 
       {userState && (
@@ -137,16 +152,16 @@ export default function UserPage() {
                             htmlFor="img"
                             className="duration-300 p-2 hover:bg-slate-100/30 rounded cursor-pointer flex items-center justify-center gap-3 w-2/3"
                           >
-                            {profilePic ? 'Change Picture' : 'Set Picture'}
                             <i className="fa-solid fa-image" />
+                            {profilePic ? 'Change Picture' : 'Set Picture'}
                           </label>
                           <button
                             type="button"
                             onClick={() => setProfilePic(null)}
                             className="duration-300 p-2 hover:bg-red-300/40 rounded cursor-pointer flex items-center justify-center gap-3 w-2/3"
                           >
-                            Delete Picture
                             <i className="fa-solid fa-trash" />
+                            Delete Picture
                           </button>
                         </div>
                       )}
@@ -238,59 +253,7 @@ export default function UserPage() {
               <h2 className="text-center tracking-wide text-2xl font-ssp first-letter:text-3xl font-semibold mb-2">
                 Saved Preview
               </h2>
-              <Swiper
-                className="w-full h-[650px] cursor-grab"
-                spaceBetween={50}
-                slidesPerView={1}
-              >
-                <SwiperSlide style={style}>
-                  <div
-                    className="duration-300 shadow-inner absolute inset-0 opacity-0 hover:opacity-100 rounded-lg w-full h-full bg-gradient-to-b from-neutral-500/40 to-neutral-900/60 flex flex-col justify-between
-  font-bold"
-                  >
-                    {/* favorite */}
-                    <div className="cursor-pointer w-fit rounded-tl-lg rounded-bl-none rounded-br-lg p-2 flex items-center gap-1 bg-red-500 hover:bg-red-600 duration-200 text-white font-roboto relative">
-                      <i className=" fa-regular fa-heart" />
-                      <div
-                        onClick={(e) => changeToSaved(e)}
-                        className="absolute z-20 inset-0"
-                      ></div>
-                      <span className="text-[12px]">Save Dish</span>
-                    </div>
-                    {/* category */}
-                    <ul className="relative ml-2 space-y-2 w-fit text-slate-100 text-sm text-left">
-                      {/* meal type */}
-                      <li className="flex items-center gap-3 rounded-full">
-                        <i className="fa-solid fa-bowl-rice  h-3 w-3" />
-                        <span className="font-light">Vegetarian</span>
-                      </li>
-                      {/* origin */}
-                      <li className="flex items-center gap-3 rounded-full">
-                        <i className="fa-solid fa-map-location h-3 w-3" />
-                        <span className="font-light">Italian</span>
-                      </li>
-                    </ul>
-                    {/* name */}
-                    <div className="font-ssp text-slate-100 mx-2 border-t-2 border-red-500">
-                      <Link
-                        to="/recipe/1234"
-                        className="text-lg font-semibold mt-1 p-2 flex items-center justify-between duration-200 rounded hover:bg-slate-400/50"
-                      >
-                        <div>
-                          <span className="text-2xl font-bold text-slate-200">
-                            Spicy
-                          </span>{' '}
-                          Arrabiata Penne
-                        </div>
-                        <i className="fa-solid fa-ellipsis-vertical" />
-                      </Link>
-                      <p className="text-xs font-light italic px-2 mt-1 mb-3 text-slate-300 font-roboto">
-                        Pasta, Curry
-                      </p>
-                    </div>
-                  </div>
-                </SwiperSlide>
-              </Swiper>
+              <Slides recipes={recipes} />
             </div>
           </footer>
         </>

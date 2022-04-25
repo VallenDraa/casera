@@ -6,13 +6,13 @@ import ReactPlayer from 'react-player';
 import { changeToSave, changeToSaved } from '../../handleSave/handleSave.js';
 import { Link } from 'react-router-dom';
 import Loading from '../../components/loading/Loading';
-import { userContext } from '../../context/Context';
+import { loadingContext, userContext } from '../../context/Context';
 
 export default function SinglePage({ saved }) {
   const [recipes, setRecipes] = useState([]);
   const [ingredients, setIngredients] = useState([]);
   const [iframeWidth, setIframeWidth] = useState(400);
-  const [loading, setLoading] = useState(true);
+  const [loading, setLoading] = useContext(loadingContext);
   const { userState, dispatch } = useContext(userContext);
   const { idMeal } = useParams();
 
@@ -25,6 +25,7 @@ export default function SinglePage({ saved }) {
   window.addEventListener('resize', () => iframeWidthChange());
 
   useEffect(() => {
+    setLoading(true);
     function getRecipes() {
       console.log(idMeal);
       return axios.get(

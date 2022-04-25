@@ -5,6 +5,8 @@ import Slides from '../../components/home/slides/Slides';
 import { fetchCat, fetchArea, fetchIngredients } from '../../fetch/fetchTags';
 import { fetchRecipesByTypes } from '../../fetch/fetchRecipes';
 import Loading from '../../components/loading/Loading';
+import { loadingContext, toastContext } from '../../context/Context';
+import StateToast from '../../components/toast/StateToast';
 
 export default function Home() {
   const TYPELIST = ['Categories', 'Area', 'Ingredients'];
@@ -13,7 +15,8 @@ export default function Home() {
   const activeTagList = useRef(null);
   const [activeTag, setActiveTag] = useState(null);
   const [recipes, setRecipes] = useState([]);
-  const [loading, setLoading] = useState(true);
+  const [loading, setLoading] = useContext(loadingContext);
+  const { toastData } = useContext(toastContext);
 
   useEffect(() => {
     const fetchTagsByType = (fetchFunc) =>
@@ -72,6 +75,7 @@ export default function Home() {
 
   return (
     <>
+      {toastData && <StateToast payload={toastData} />}
       {loading && <Loading />}
       <header>
         <Navbar />

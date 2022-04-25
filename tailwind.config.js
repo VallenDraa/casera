@@ -40,7 +40,6 @@ module.exports = {
             transform: 'translateX(20px) scale(0.825)',
           },
         },
-
         toast: {
           '0%': {
             opacity: '.1',
@@ -49,6 +48,14 @@ module.exports = {
           '100%': {
             opacity: '1',
             transform: 'translateX(0)',
+          },
+        },
+        'fade-out': {
+          '0%': {
+            opacity: '1',
+          },
+          '100%': {
+            opacity: '0',
           },
         },
         timer: {
@@ -62,6 +69,7 @@ module.exports = {
       },
       animation: {
         timer: 'timer 5s ease-in-out',
+        'fade-out': 'fade-out 2s ease-in-out',
         toast: 'toast 300ms ease-in-out',
         'blink-right': 'blink-right 2s ease-in-out infinite',
         'green-ball': 'green-ball 2s ease-in-out infinite alternate',

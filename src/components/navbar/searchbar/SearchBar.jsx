@@ -1,5 +1,3 @@
-import React from 'react';
-
 export default function SearchBar() {
   function handleSearch(e) {
     e.preventDefault();
@@ -17,7 +15,7 @@ export default function SearchBar() {
           type="text"
           id="search-bar"
           className="focus:outline-none w-full px-1 font-light"
-          autofocus
+          autoFocus
           placeholder="Search For Recipes"
         />
         <button type="submit" className="">
