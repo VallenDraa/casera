@@ -12,7 +12,6 @@ export default function Btn({
   if (color === '') {
     color = 'slate';
   }
-  console.log(style);
 
   return (
     <>

@@ -21,6 +21,22 @@ const updateUser = async (req, res) => {
   }
 };
 
+const getUser = async (req, res) => {
+  console.log(req.query);
+  const { username } = req.query;
+
+  try {
+    const [user] = await User.where('username').equals(username).limit(1);
+
+    const { password, email, ...userData } = user._doc;
+
+    res.status(200).json({ code: 200, ok: true, userGet: true, userData });
+  } catch (err) {
+    res.status(500).json({ code: 500, ok: false, userGet: false });
+  }
+};
+
 module.exports = {
   updateUser,
+  getUser,
 };

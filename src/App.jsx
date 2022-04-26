@@ -23,7 +23,7 @@ export default function App() {
           <Route path="/saved" element={<Saved />} />
           <Route path="/search" element={<Search />} />
           <Route path="/recipe/:idMeal" element={<SinglePage />} />
-          <Route path="/user/*" element={<UserPage />} />
+          <Route path="/user/:username" element={<UserPage />} />
           <Route path="/login" element={<Login />} />
           <Route path="/register" element={<Register />} />
           <Route path="*" element={<PageNotFound />} />

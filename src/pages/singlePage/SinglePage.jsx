@@ -36,7 +36,6 @@ export default function SinglePage({ saved }) {
     setLoading(true);
     // get recipe datas
     const getRecipes = () => {
-      console.log(idMeal);
       return axios.get(
         `https://www.themealdb.com/api/json/v1/1/lookup.php?i=${idMeal}`
       );

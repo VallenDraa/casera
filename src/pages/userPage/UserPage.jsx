@@ -1,8 +1,11 @@
 import { useContext, useEffect, useState } from 'react';
+import { useParams } from 'react-router-dom';
 import 'swiper/css';
 import 'swiper/css/pagination';
 import Navbar from '../../components/navbar/Navbar';
 import Input from '../../components/input/Input';
+import Field from '../../components/fields/Field';
+import Lists from '../../components/fields/Lists';
 import ThreeInput from '../../components/input/ThreeInput';
 import Btn from '../../components/btn/Btn';
 import {
@@ -26,23 +29,50 @@ export default function UserPage() {
   const { toastData, setToastData } = useContext(toastContext);
   const [recipes, setRecipes] = useState(null);
   const [loading, setLoading] = useContext(loadingContext);
+  const { username } = useParams(); //get the queried username from the URL parameter
+  const [otherUserData, setOtherUserData] = useState(null);
 
   useEffect(() => {
     setLoading(true);
-    // will fetch profile picture from session storage
-    const getPP = () => {
+
+    const getPPCurrentUser = () => {
       // returns if there is userState is empty
 
       if (!userState) return;
       setProfilePic(userState.profilePic);
     };
 
-    getPP();
-    fetchSavedRecipes(userState, setLoading, true).then((recipes) => {
-      if (!recipes) return setLoading(false);
+    const fetchOtherUser = async (username) => {
+      try {
+        const { data } = await axios.get(`/api/user/get?username=${username}`);
+        return data;
+      } catch (err) {
+        setToastData({ ok: false, msg: 'Fail To Make Connection !' });
+      }
+    };
 
-      setRecipes(recipes);
-    });
+    // check if user logged in
+    if (userState) {
+      const sameUser = username === userState.username;
+
+      // check if the requested user is the same as the current user
+      if (sameUser) {
+        // get data using the current userState
+        getPPCurrentUser();
+        fetchSavedRecipes(userState, setLoading, true).then((recipes) => {
+          if (!recipes) return setLoading(false);
+          setRecipes(recipes);
+        });
+      } else {
+        // get the requested user data
+        fetchOtherUser(username)
+          .then(({ userData }) => {
+            setOtherUserData(userData);
+            setProfilePic(userData.profilePic);
+          })
+          .finally(() => setLoading(false));
+      }
+    }
   }, [userState]);
 
   const handleSubmit = async (e) => {
@@ -127,132 +157,178 @@ export default function UserPage() {
           <header>
             <Navbar />
           </header>
-          <main className="bg-slate-100">
-            <div className="relative max-w-screen-xl px-3 mt-10 sm:w-11/12 lg:w-5/6 xl:w-3/4 mx-auto lg:text-left">
-              {/* user data */}
-              <form
-                className="flex flex-col md:flex-row gap-12 md:gap-20 items-center md:items-start"
-                onSubmit={(e) => handleSubmit(e)}
-              >
-                {/* profile picture */}
-                <section className="md:sticky top-5">
-                  <div className="text-center">
-                    <div className="group relative h-52 w-52">
-                      {editMode && (
-                        <div className="inset-0 absolute rounded-full opacity-0 group-hover:opacity-100 bg-black/50 duration-200 flex flex-col items-center justify-center text-slate-200 font-roboto gap-3 text-sm">
-                          <label
-                            htmlFor="img"
-                            className="duration-300 p-2 hover:bg-slate-100/30 rounded cursor-pointer flex items-center justify-center gap-3 w-2/3"
-                          >
-                            <i className="fa-solid fa-image" />
-                            {profilePic ? 'Change Picture' : 'Set Picture'}
-                          </label>
-                          <button
-                            type="button"
-                            onClick={() => setProfilePic(null)}
-                            className="duration-300 p-2 hover:bg-red-300/40 rounded cursor-pointer flex items-center justify-center gap-3 w-2/3"
-                          >
-                            <i className="fa-solid fa-trash" />
-                            Delete Picture
-                          </button>
-                        </div>
-                      )}
+          {!otherUserData ? (
+            <>
+              <main className="bg-slate-100">
+                <div className="relative max-w-screen-xl px-3 mt-10 sm:w-11/12 lg:w-5/6 xl:w-3/4 mx-auto lg:text-left">
+                  {/* user data */}
+                  <form
+                    className="flex flex-col md:flex-row gap-12 md:gap-20 items-center md:items-start"
+                    onSubmit={(e) => handleSubmit(e)}
+                  >
+                    {/* profile picture */}
+                    <section className="md:sticky top-5">
+                      <div className="text-center">
+                        <div className="group relative h-52 w-52">
+                          {editMode && (
+                            <div className="inset-0 absolute rounded-full opacity-0 group-hover:opacity-100 bg-black/50 duration-200 flex flex-col items-center justify-center text-slate-200 font-roboto gap-3 text-sm">
+                              <label
+                                htmlFor="img"
+                                className="duration-300 p-2 hover:bg-slate-100/30 rounded cursor-pointer flex items-center justify-center gap-3 w-2/3"
+                              >
+                                <i className="fa-solid fa-image" />
+                                {profilePic ? 'Change Picture' : 'Set Picture'}
+                              </label>
+                              <button
+                                type="button"
+                                onClick={() => setProfilePic(null)}
+                                className="duration-300 p-2 hover:bg-red-300/40 rounded cursor-pointer flex items-center justify-center gap-3 w-2/3"
+                              >
+                                <i className="fa-solid fa-trash" />
+                                Delete Picture
+                              </button>
+                            </div>
+                          )}
 
-                      {profilePic ? (
-                        <img
-                          src={profilePic}
-                          alt=""
-                          className="h-52 w-52 rounded-full object-cover"
-                        />
-                      ) : (
-                        <div className="flex justify-center items-center h-52 w-52 rounded-full bg-slate-200">
-                          <i className="fa-solid fa-user text-9xl text-slate-400" />
+                          {profilePic ? (
+                            <img
+                              src={profilePic}
+                              alt=""
+                              className="h-52 w-52 rounded-full object-cover"
+                            />
+                          ) : (
+                            <div className="flex justify-center items-center h-52 w-52 rounded-full bg-slate-200">
+                              <i className="fa-solid fa-user text-9xl text-slate-400" />
+                            </div>
+                          )}
                         </div>
-                      )}
-                    </div>
-                    {editMode && (
-                      <p className="font-roboto text-[10px] text-lime-600 mt-2">
-                        *Picture Max Size 400kb
-                      </p>
-                    )}
-                  </div>
-                  <input
-                    onChange={(e) => handlePP(e.target.files[0])}
-                    id="img"
-                    type="file"
-                    className="hidden"
-                  />
-                </section>
-                {/* data */}
-                <section className="w-full space-y-5">
-                  <header className="flex items-center justify-between">
-                    <h1 className="tracking-wide text-4xl font-ssp first-letter:text-5xl first-letter:font-semibold">
-                      My Profile
-                    </h1>
-                    <div onClick={() => setEditMode(!editMode)}>
-                      <Btn
-                        text="Edit Profile"
-                        color="orange"
-                        textSize="xs"
-                        icon={
-                          <i className="fa-solid fa-pen-to-square relative bottom-[2px]" />
-                        }
+                        {editMode && (
+                          <p className="font-roboto text-[10px] text-lime-600 mt-2">
+                            *Picture Max Size 400kb
+                          </p>
+                        )}
+                      </div>
+                      <input
+                        onChange={(e) => handlePP(e.target.files[0])}
+                        id="img"
+                        type="file"
+                        className="hidden"
                       />
-                    </div>
-                  </header>
-                  {/* main form */}
-                  <main className="space-y-5">
-                    {/* username */}
-                    <Input
-                      editMode={editMode}
-                      type={'text'}
-                      id={'Username'}
-                      value={userState.username}
-                    />
-                    {/* tel */}
-                    <Input
-                      editMode={editMode}
-                      type={'tel'}
-                      id={'Telephone'}
-                      value={userState.phone}
-                    />
-                    {/* hobby */}
-                    <ThreeInput
-                      label={'Hobby'}
-                      editMode={editMode}
-                      value={userState.hobby}
-                    />
-                  </main>
-                  <footer>
-                    {editMode && (
-                      <Btn
-                        type="submit"
-                        width="100%"
-                        text="Save Changes"
-                        color="green"
-                        textSize="lg"
-                        icon={<i className="fa-solid fa-floppy-disk" />}
-                      />
-                    )}
-                  </footer>
-                </section>
-              </form>
-            </div>
-          </main>
-          <footer className=" bg-slate-100">
-            <div className="relative max-w-screen-xl px-3 pt-10 sm:w-11/12 lg:w-5/6 xl:w-3/4 mx-auto lg:text-left">
-              {recipes ? (
-                <div className="pb-5 pt-10 max-w-xl mx-auto text-center space-y-3">
-                  <p className="tracking-wide text-2xl font-ssp first-letter:text-3xl first-letter:font-semibold">
-                    Saved Recipes Preview
-                  </p>
-                  <Slides recipes={recipes} />
+                    </section>
+                    {/* data */}
+                    <section className="w-full space-y-5">
+                      <header className="flex items-center justify-between">
+                        <h1 className="tracking-wide text-4xl font-ssp first-letter:text-5xl first-letter:font-semibold">
+                          My Profile
+                        </h1>
+                        <div onClick={() => setEditMode(!editMode)}>
+                          <Btn
+                            text="Edit Profile"
+                            color="orange"
+                            textSize="xs"
+                            icon={
+                              <i className="fa-solid fa-pen-to-square relative bottom-[2px]" />
+                            }
+                          />
+                        </div>
+                      </header>
+                      {/* main form */}
+                      <main className="space-y-5">
+                        {/* username */}
+                        <Input
+                          editMode={editMode}
+                          type={'text'}
+                          id={'Username'}
+                          value={userState.username}
+                        />
+                        {/* tel */}
+                        <Input
+                          editMode={editMode}
+                          type={'tel'}
+                          id={'Telephone'}
+                          value={userState.phone}
+                        />
+                        {/* hobby */}
+                        <ThreeInput
+                          label={'Hobby'}
+                          editMode={editMode}
+                          value={userState.hobby}
+                        />
+                      </main>
+                      <footer>
+                        {editMode && (
+                          <Btn
+                            type="submit"
+                            width="100%"
+                            text="Save Changes"
+                            color="green"
+                            textSize="lg"
+                            icon={<i className="fa-solid fa-floppy-disk" />}
+                          />
+                        )}
+                      </footer>
+                    </section>
+                  </form>
                 </div>
-              ) : (
-                <EmptySlides msg="You Don't Have Any Saved Recipes" />
-              )}
-            </div>
-          </footer>
+              </main>
+              <footer className=" bg-slate-100">
+                <div className="relative max-w-screen-xl px-3 pt-10 sm:w-11/12 lg:w-5/6 xl:w-3/4 mx-auto lg:text-left">
+                  {recipes ? (
+                    <div className="pb-5 pt-10 max-w-xl mx-auto text-center space-y-3">
+                      <p className="tracking-wide text-2xl font-ssp first-letter:text-3xl first-letter:font-semibold">
+                        Saved Recipes Preview
+                      </p>
+                      <Slides recipes={recipes} />
+                    </div>
+                  ) : (
+                    <EmptySlides msg="You Don't Have Any Saved Recipes" />
+                  )}
+                </div>
+              </footer>
+            </>
+          ) : (
+            <main className="bg-slate-100 flex justify-center items-center h-[calc(100vh-55px)]">
+              <div className="relative max-w-screen-xl px-3 mt-10 sm:w-11/12 lg:w-5/6 xl:w-3/4 mx-auto lg:text-left">
+                {/* user data */}
+                <article className="flex flex-col gap-12 md:gap-20 items-center">
+                  {/* profile picture */}
+                  <section className="md:sticky top-5">
+                    <div className="text-center">
+                      <div className="group relative h-52 w-52 md:h-60 md:w-60">
+                        {profilePic ? (
+                          <img
+                            src={profilePic}
+                            alt=""
+                            className="h-52 w-52 md:h-60 md:w-60 rounded-full object-cover"
+                          />
+                        ) : (
+                          <div className="flex justify-center items-center h-52 w-52 md:h-60 md:w-60 rounded-full bg-slate-200">
+                            <i className="fa-solid fa-user text-9xl text-slate-400" />
+                          </div>
+                        )}
+                      </div>
+                    </div>
+                  </section>
+                  {/* data */}
+                  <section className="w-full space-y-5">
+                    <header className="flex items-center justify-between">
+                      <h1 className="tracking-wide text-4xl font-ssp first-letter:text-5xl first-letter:font-semibold">
+                        {`${otherUserData.username}'s Profile`}
+                      </h1>
+                    </header>
+                    <footer className="space-y-5">
+                      {/* username */}
+                      <Field name="Username" value={userState.username} />
+                      {/* tel */}
+                      <Field name="Telephone" value={userState.phone} />
+                      {/* hobby */}
+                      <Lists name="Hobbies" values={userState.hobby} />
+                    </footer>
+                  </section>
+                </article>
+              </div>
+            </main>
+          )}
         </>
       )}
     </>
