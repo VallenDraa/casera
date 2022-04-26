@@ -20,12 +20,15 @@ const isSaved = async (req, res) => {
 };
 
 const getSavedRecipes = async (req, res) => {
+  const { _id, preview } = req.query;
+
+  console.log(req.query);
   try {
-    const user = await User.findById(req.query._id);
+    const user = await User.findById(_id);
     const { username, savedRecipes } = user;
 
     // get recipes from mealdb
-    fetchFromMealDB(savedRecipes)
+    fetchFromMealDB(savedRecipes, preview)
       .then((savedRecipes) => {
         res.status(200).json({
           code: 200,
@@ -121,12 +124,14 @@ const removeSavedRecipe = async (req, res) => {
 };
 
 // getSavedRecipes supporting function
-const fetchFromMealDB = async (ids) => {
+const fetchFromMealDB = async (ids, preview) => {
   const result = [];
 
   for (let i = 0; i < ids.length; i++) {
     // return if index is more than 4
-    if (i > 5) return result;
+    if (preview === 'true') {
+      if (i > 5) return result;
+    }
 
     try {
       const { data } = await axios({

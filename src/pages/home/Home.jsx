@@ -1,12 +1,13 @@
 import Navbar from '../../components/navbar/Navbar';
 import { useRef, useState, useEffect, useContext } from 'react';
 import HomeAside from '../../components/home/homeAside/HomeAside';
-import Slides from '../../components/home/slides/Slides';
+import Slides from '../../components/slides/Slides';
 import { fetchCat, fetchArea, fetchIngredients } from '../../fetch/fetchTags';
-import { fetchRecipesByTypes } from '../../fetch/fetchRecipes';
+import { fetchRecipesByTypes } from '../../fetch/fetchRecipesFromMealdb';
 import Loading from '../../components/loading/Loading';
 import { loadingContext, toastContext } from '../../context/Context';
 import StateToast from '../../components/toast/StateToast';
+import EmptySlides from '../../components/slides/EmptySlides';
 
 export default function Home() {
   const TYPELIST = ['Categories', 'Area', 'Ingredients'];
@@ -19,12 +20,13 @@ export default function Home() {
   const { toastData } = useContext(toastContext);
 
   useEffect(() => {
+    setLoading(true);
     const fetchTagsByType = (fetchFunc) =>
       fetchFunc().then(({ tags, active }) => {
         setTags(tags);
         setActiveTag(active);
         fetchRecipesByTypes(activeType, active)
-          .then((res) => setRecipes(res))
+          .then((res) => (res.length > 0 ? setRecipes(res) : setRecipes(null)))
           .finally(() => setLoading(false))
           .catch((e) => console.log(e));
       });
@@ -68,7 +70,7 @@ export default function Home() {
 
     // refetch recipes after new tag is activated
     fetchRecipesByTypes(activeType, target)
-      .then((res) => setRecipes(res))
+      .then((res) => (res.length > 0 ? setRecipes(res) : setRecipes(null)))
       .finally(() => setLoading(false))
       .catch((e) => console.error(e));
   }
@@ -77,9 +79,14 @@ export default function Home() {
     <>
       {toastData && <StateToast payload={toastData} />}
       {loading && <Loading />}
+      {/* aside */}
+      <section className="sticky top-[55%]">
+        <HomeAside />
+      </section>
       <header>
         <Navbar />
       </header>
+
       <main className="bg-slate-100">
         <div className="relative max-w-screen-xl px-3 mt-10 sm:w-11/12 lg:w-5/6 xl:w-3/4 mx-auto lg:text-left overflow-y-auto md:overflow-hidden">
           <header className="text-center lg:text-left">
@@ -113,8 +120,6 @@ export default function Home() {
             </ul>
           </header>
           <div className="relative pb-5 md:pb-3">
-            {/* aside */}
-            <HomeAside />
             <section className="relative flex lg:m-3 xl:m-5 gap-6 lg:gap-12 flex-col-reverse lg:flex-row">
               {/* tags */}
               <article className="lg:basis-3/12 w-full lg:w-20 flex flex-col justify-center max-h-[650px] overflow-auto">
@@ -146,7 +151,11 @@ export default function Home() {
               </article>
               {/* food slide show */}
               <article className="lg:basis-9/12 overflow-hidden flex gap-3 items-center">
-                <Slides recipes={recipes} />
+                {recipes ? (
+                  <Slides recipes={recipes} />
+                ) : (
+                  <EmptySlides msg="Recipes Are Missing or Cannot Be Found" />
+                )}
                 {/* pop-up */}
                 <div className="group text-2xl text-lime-500 lg:text-lime-700 absolute right-0 lg:relative">
                   <p className="animate-blink-right relative z-20 cursor-default">

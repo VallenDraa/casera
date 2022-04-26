@@ -14,18 +14,21 @@ import { USERACTIONS } from '../../context/Actions';
 import StateToast from '../../components/toast/StateToast';
 import axios from 'axios';
 import { setStatePro } from '../../utils/utils';
-import Slides from '../../components/home/slides/Slides';
+import Slides from '../../components/slides/Slides';
 import Loading from '../../components/loading/Loading';
+import EmptySlides from '../../components/slides/EmptySlides';
+import { fetchSavedRecipes } from '../../fetch/fetchRecipeFromServer';
 
 export default function UserPage() {
   const [editMode, setEditMode] = useState(false);
   const { userState, dispatch } = useContext(userContext);
   const [profilePic, setProfilePic] = useState(null);
   const { toastData, setToastData } = useContext(toastContext);
-  const [recipes, setRecipes] = useState([]);
+  const [recipes, setRecipes] = useState(null);
   const [loading, setLoading] = useContext(loadingContext);
 
   useEffect(() => {
+    setLoading(true);
     // will fetch profile picture from session storage
     const getPP = () => {
       // returns if there is userState is empty
@@ -34,23 +37,12 @@ export default function UserPage() {
       setProfilePic(userState.profilePic);
     };
 
-    // fetch the saved recipes from the database
-    const fetchSavedRecipes = async () => {
-      // returns if there is userState is empty
-      if (!userState) return;
-
-      const { _id } = userState;
-
-      try {
-        const { data } = await axios.get(`/api/recipe/gets?_id=${_id}`);
-        setRecipes(data.savedRecipes);
-      } catch (e) {
-        setToastData({ ok: false, msg: 'Fail To Make Connection !' });
-      }
-    };
-
     getPP();
-    fetchSavedRecipes().finally(() => setLoading(false));
+    fetchSavedRecipes(userState, setLoading, true).then((recipes) => {
+      if (!recipes) return setLoading(false);
+
+      setRecipes(recipes);
+    });
   }, [userState]);
 
   const handleSubmit = async (e) => {
@@ -247,13 +239,18 @@ export default function UserPage() {
               </form>
             </div>
           </main>
-          <footer className="pb-5 bg-slate-100">
+          <footer className=" bg-slate-100">
             <div className="relative max-w-screen-xl px-3 pt-10 sm:w-11/12 lg:w-5/6 xl:w-3/4 mx-auto lg:text-left">
-              {/* saved preview */}
-              <h2 className="text-center tracking-wide text-2xl font-ssp first-letter:text-3xl font-semibold mb-2">
-                Saved Preview
-              </h2>
-              <Slides recipes={recipes} />
+              {recipes ? (
+                <div className="pb-5 pt-10 max-w-xl mx-auto text-center space-y-3">
+                  <p className="tracking-wide text-2xl font-ssp first-letter:text-3xl first-letter:font-semibold">
+                    Saved Recipes Preview
+                  </p>
+                  <Slides recipes={recipes} />
+                </div>
+              ) : (
+                <EmptySlides msg="You Don't Have Any Saved Recipes" />
+              )}
             </div>
           </footer>
         </>

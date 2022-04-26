@@ -2,7 +2,6 @@ import { useState } from 'react';
 import Input from './Input';
 
 export default function ThreeInput({ editMode, innerRef, value, label = '' }) {
-  const [inputValue, setInputValue] = useState(value);
   return (
     <div className="flex flex-col w-full text-lime-600 font-ssp">
       {label && <label className="text-sm">{label}</label>}

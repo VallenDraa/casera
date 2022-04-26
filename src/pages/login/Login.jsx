@@ -77,7 +77,6 @@ export default function Login() {
               <Btn
                 type="submit"
                 onClick={() => setToastData(null)}
-                width="100%"
                 textSize="lg"
                 text="Login"
                 bold={true}

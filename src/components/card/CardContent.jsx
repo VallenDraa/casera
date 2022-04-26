@@ -6,6 +6,7 @@ import {
   toastContext,
   loadingContext,
 } from '../../context/Context';
+import { isSaved } from '../../fetch/fetchRecipeFromServer';
 import SaveRecipeBtn from '../saveRecipeBtn/SaveRecipeBtn';
 
 export default function CardContent({ recipe }) {
@@ -17,22 +18,9 @@ export default function CardContent({ recipe }) {
   const [saveBtn, setSaveBtn] = useState(null);
 
   useEffect(() => {
-    const isSaved = async () => {
-      setToastData(null);
-      try {
-        const { data } = await axios.get(
-          `/api/recipe/is_saved?username=${userState.username}&idMeal=${idMeal}`
-        );
-        setSaveBtn(
-          <SaveRecipeBtn idMeal={idMeal} initSaved={data.containIdMeal} />
-        );
-      } catch (error) {
-        if (!userState) return;
-        setToastData({ ok: false, msg: 'Fail To Make Connection !' });
-      }
-    };
-
-    isSaved().finally(() => setLoading(false));
+    isSaved(setToastData, userState, idMeal, setSaveBtn, SaveRecipeBtn).finally(
+      () => setLoading(false)
+    );
   }, []);
 
   return (
