@@ -1,5 +1,5 @@
 import Input from '../../components/input/Input';
-import Navbar from '../../components/navbar/Navbar';
+import Header from '../../components/header/Header';
 import { useContext, useRef } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import { userContext } from '../../context/Context';
@@ -41,9 +41,7 @@ export default function Login() {
   return (
     <>
       {toastData && <StateToast payload={toastData} />}
-      <header>
-        <Navbar />
-      </header>
+      <Header />
       <main className="h-[calc(100vh-70px)] bg-slate-100 flex items-center justify-center px-2 text-slate-800">
         <section className="mx-auto container flex flex-col justify-center items-center px-3">
           <h1 className="w-fit text-4xl font-ssp font-semibold">Login</h1>

@@ -1,10 +1,12 @@
 import 'swiper/css';
 import 'swiper/css/pagination';
+import Img from '../img/Img';
+import imgTemp from '../../assets/svg/imgTemp.svg';
 import { Swiper, SwiperSlide } from 'swiper/react';
 import CardContent from '../card/CardContent';
 
 export default function Slides({ recipes }) {
-  console.log(recipes);
+  console.log(imgTemp);
   return (
     <Swiper
       spaceBetween={30}
@@ -18,11 +20,10 @@ export default function Slides({ recipes }) {
               key={i}
               // className="relative rounded-lg min-w-full max-w-md font-ssp"
             >
-              <img
+              <Img
+                lazyload={i !== 0 ? true : false}
                 src={recipe.strMealThumb}
                 alt={recipe.strMeal}
-                loading={i !== 0 ? 'lazy' : 'eager'}
-                className="object-cover w-full h-full rounded-lg"
               />
               <CardContent recipe={recipe} />
             </SwiperSlide>

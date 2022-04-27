@@ -1,9 +1,9 @@
 import Input from '../../components/input/Input';
-import Navbar from '../../components/navbar/Navbar';
+import Header from '../../components/header/Header';
 import { Link, useNavigate } from 'react-router-dom';
 import Btn from '../../components/btn/Btn';
 import { useContext, useRef } from 'react';
-import { userContext, toastContext } from '../../context/Context';
+import { toastContext } from '../../context/Context';
 
 import StateToast from '../../components/toast/StateToast';
 import axios from 'axios';
@@ -36,9 +36,7 @@ export default function Register() {
   return (
     <>
       {toastData && <StateToast payload={toastData} />}
-      <header>
-        <Navbar />
-      </header>
+      <Header />
       <main className="h-[calc(100vh-70px)] bg-slate-100 flex items-center justify-center px-2 text-slate-800">
         <section className="mx-auto container flex flex-col justify-center items-center px-3">
           <h1 className="w-fit text-4xl font-ssp font-semibold">Register</h1>

@@ -1,5 +1,5 @@
-import { Link } from 'react-router-dom';
 import missing404 from '../../assets/svg/missing404.svg';
+import { Link } from 'react-router-dom';
 import Btn from '../btn/Btn';
 
 export default function Missing404({ msg }) {

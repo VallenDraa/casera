@@ -1,6 +1,7 @@
-import Navbar from '../../components/navbar/Navbar';
+import Header from '../../components/header/Header';
 import HomeAside from '../../components/home/homeAside/HomeAside';
 import CardWrapper from '../../components/card/CardWrapper';
+import LoginFirst from '../../components/errorComps/LoginFirst';
 import { fetchSavedRecipes } from '../../fetch/fetchRecipeFromServer';
 import { useContext, useState, useEffect } from 'react';
 import {
@@ -47,14 +48,11 @@ export default function Saved() {
   return (
     <>
       {toastData && <StateToast payload={toastData} />}
-      {loading && <Loading />}
 
       <section className="sticky top-[55%]">
         <HomeAside />
       </section>
-      <header>
-        <Navbar />
-      </header>
+      <Header />
       <main className="bg-slate-100">
         <div className="relative max-w-screen-xl px-3 mt-10 sm:w-11/12 lg:w-5/6 xl:w-3/4 mx-auto lg:text-left">
           <h1 className="tracking-wide text-4xl font-ssp first-letter:text-5xl first-letter:font-semibold">
@@ -63,14 +61,28 @@ export default function Saved() {
           <p className="font-ssp text-lg font-light">
             Cook Your <span className="font-semibold">Favorites !</span>
           </p>
-          <article className="mt-16 ">
-            {cards ? (
-              <section className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 xl:grid-cols-4 gap-5 pb-5">
-                {cards}
-              </section>
-            ) : (
-              <EmptySlides msg="You Don't Have Any Saved Recipes" />
-            )}
+          <article
+            className="mt-16 relative"
+            style={{
+              height: loading ? '500px' : 'auto',
+            }}
+          >
+            {loading && <Loading />}
+
+            {loading ||
+              (userState ? (
+                cards ? (
+                  <section className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 xl:grid-cols-4 gap-5 pb-5">
+                    {cards}
+                  </section>
+                ) : (
+                  <EmptySlides msg="You Don't Have Any Saved Recipes" />
+                )
+              ) : (
+                <div className="max-w-xl mx-auto">
+                  <LoginFirst msg="Login / Register To Save Recipes" />
+                </div>
+              ))}
           </article>
         </div>
       </main>

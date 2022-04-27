@@ -22,7 +22,7 @@ const updateUser = async (req, res) => {
 };
 
 const getUser = async (req, res) => {
-  console.log(req.query);
+  // console.log(req.query);
   const { username } = req.query;
 
   try {

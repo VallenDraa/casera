@@ -4,7 +4,6 @@ import { useRef, useState } from 'react';
 import ContextMenu from './contextMenu/ContextMenu';
 import Logo from './logo/Logo';
 import Caret from './caret/Caret';
-import { isCompositeComponent } from 'react-dom/test-utils';
 
 export default function Navbar() {
   const menu = useRef(null);

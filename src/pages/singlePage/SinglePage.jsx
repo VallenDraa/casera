@@ -1,7 +1,7 @@
 import axios from 'axios';
 import React, { useContext, useEffect, useState } from 'react';
 import { useParams } from 'react-router-dom';
-import Navbar from '../../components/navbar/Navbar';
+import Header from '../../components/header/Header';
 import ReactPlayer from 'react-player';
 import { Link } from 'react-router-dom';
 import Loading from '../../components/loading/Loading';
@@ -10,7 +10,7 @@ import {
   toastContext,
   userContext,
 } from '../../context/Context';
-import Missing404 from '../../components/missing404/Missing404';
+import Missing404 from '../../components/errorComps/Missing404';
 import SaveRecipeBtn from '../../components/saveRecipeBtn/SaveRecipeBtn';
 import { isSaved } from '../../fetch/fetchRecipeFromServer';
 
@@ -79,12 +79,15 @@ export default function SinglePage({ saved }) {
 
   return (
     <>
-      {loading && <Loading />}
-      <header>
-        <Navbar />
-      </header>
+      <Header />
       <main className="bg-slate-100 pb-5">
-        <article className="relative max-w-screen-xl px-3 mt-12 lg:mt-20 mx-auto lg:text-left text-slate-800">
+        <article
+          className="relative max-w-screen-xl px-3 mt-12 lg:mt-20 mx-auto lg:text-left text-slate-800"
+          style={{
+            height: loading ? 'calc(100vh - 150px)' : 'auto',
+          }}
+        >
+          {loading && <Loading />}
           {recipes.map((recipe) =>
             recipes[0] !== 'n/a' ? (
               <section

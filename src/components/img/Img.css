@@ -1,0 +1,17 @@
+.img-alt::after {
+  position: absolute;
+  content: '' attr(alt);
+  inset: 0 0 0 0;
+  background-image: url('../../assets/svg/imgTemp.svg');
+  background-repeat: no-repeat;
+  background-size: 90% 90%;
+  background-position: center;
+  background-color: rgb(226 232 240);
+  display: flex;
+  justify-content: center;
+  place-items: end;
+  color: rgb(100 116 139);
+  padding-bottom: 5.5%;
+  font-weight: 300;
+  text-align: center;
+}

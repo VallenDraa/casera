@@ -31,24 +31,28 @@ export const isSaved = async (
   big = false
 ) => {
   setToastData(null);
-  try {
-    const { data } = await axios.get(
-      `/api/recipe/is_saved?username=${userState.username}&idMeal=${idMeal}`
-    );
-    big
-      ? setSaveBtn(
-          <SaveRecipeBtn
-            idMeal={idMeal}
-            initSaved={data.containIdMeal}
-            big={big}
-          />
-        )
-      : setSaveBtn(
-          <SaveRecipeBtn idMeal={idMeal} initSaved={data.containIdMeal} />
-        );
-  } catch (error) {
-    if (!userState) return;
-    setToastData({ ok: false, msg: 'Fail To Make Connection !' });
+  if (userState) {
+    try {
+      const { data } = await axios.get(
+        `/api/recipe/is_saved?username=${userState.username}&idMeal=${idMeal}`
+      );
+
+      big
+        ? setSaveBtn(
+            <SaveRecipeBtn
+              idMeal={idMeal}
+              initSaved={data.containIdMeal}
+              big={big}
+            />
+          )
+        : setSaveBtn(
+            <SaveRecipeBtn idMeal={idMeal} initSaved={data.containIdMeal} />
+          );
+    } catch (error) {
+      setToastData({ ok: false, msg: 'Fail To Make Connection !' });
+    }
+  } else {
+    setSaveBtn(<SaveRecipeBtn idMeal={idMeal} />);
   }
 };
 

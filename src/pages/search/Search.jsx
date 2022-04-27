@@ -1,4 +1,4 @@
-import Navbar from '../../components/navbar/Navbar';
+import Header from '../../components/header/Header';
 import { useContext, useEffect, useState } from 'react';
 import CardWrapper from '../../components/card/CardWrapper';
 import fetchSearchResult from '../../fetch/fetchSearchResults';
@@ -18,17 +18,25 @@ export default function Search() {
 
   return (
     <>
-      {loading && <Loading />}
-      <header>
-        <Navbar />
-      </header>
+      <Header />
+
       <main className="bg-slate-100">
-        <div className="relative max-w-screen-xl px-3 mt-10 sm:w-11/12 lg:w-5/6 xl:w-3/4 mx-auto lg:text-left pb-5">
+        <div
+          className="relative max-w-screen-xl px-3 mt-10 sm:w-11/12 lg:w-5/6 xl:w-3/4 mx-auto lg:text-left pb-5"
+          style={{ height: loading ? 'calc(100vh - 110px)' : 'auto' }}
+        >
+          {loading && <Loading />}
           <h1 className="tracking-wide text-4xl font-ssp first-letter:text-5xl first-letter:font-semibold">
-            Result for <span className="italic">{query}</span>
+            Results for <span className="italic">{query}</span>
           </h1>
-          <p className="font-ssp text-lg font-light">
-            There are {recipes.length} recipes
+          <p
+            className={`font-ssp text-lg font-light text-slate-500 ${
+              loading && 'animate-pulse'
+            }`}
+          >
+            {loading
+              ? "Hang On It's Almost Done"
+              : `There are ${recipes.length} recipes`}
           </p>
           <article className="mt-16 ">
             <section className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 xl:grid-cols-4 gap-5 pb-5">

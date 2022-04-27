@@ -5,7 +5,11 @@ import { recipeSave, recipeUnsave } from '../../fetch/fetchRecipeFromServer';
 import { changeToSave, changeToSaved } from '../../handleSave/handleSave';
 import { setStatePro } from '../../utils/utils';
 
-export default function SaveRecipeBtn({ idMeal, initSaved, big = false }) {
+export default function SaveRecipeBtn({
+  idMeal,
+  initSaved = false,
+  big = false,
+}) {
   const { userState } = useContext(userContext);
   const { setToastData } = useContext(toastContext);
   const [saved, setSaved] = useState(initSaved);

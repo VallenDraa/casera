@@ -1,4 +1,4 @@
-import Navbar from '../../components/navbar/Navbar';
+import Header from '../../components/header/Header';
 import { useRef, useState, useEffect, useContext } from 'react';
 import HomeAside from '../../components/home/homeAside/HomeAside';
 import Slides from '../../components/slides/Slides';
@@ -28,7 +28,7 @@ export default function Home() {
         fetchRecipesByTypes(activeType, active)
           .then((res) => (res.length > 0 ? setRecipes(res) : setRecipes(null)))
           .finally(() => setLoading(false))
-          .catch((e) => console.log(e));
+          .catch((e) => setRecipes(null));
       });
 
     const fetchTags = () => {
@@ -78,15 +78,12 @@ export default function Home() {
   return (
     <>
       {toastData && <StateToast payload={toastData} />}
-      {loading && <Loading />}
+
       {/* aside */}
       <section className="sticky top-[55%]">
         <HomeAside />
       </section>
-      <header>
-        <Navbar />
-      </header>
-
+      <Header />
       <main className="bg-slate-100">
         <div className="relative max-w-screen-xl px-3 mt-10 sm:w-11/12 lg:w-5/6 xl:w-3/4 mx-auto lg:text-left overflow-y-auto md:overflow-hidden">
           <header className="text-center lg:text-left">
@@ -120,55 +117,65 @@ export default function Home() {
             </ul>
           </header>
           <div className="relative pb-5 md:pb-3">
-            <section className="relative flex lg:m-3 xl:m-5 gap-6 lg:gap-12 flex-col-reverse lg:flex-row">
-              {/* tags */}
-              <article className="lg:basis-3/12 w-full lg:w-20 flex flex-col justify-center max-h-[650px] overflow-auto">
-                <div ref={activeTagList}>
-                  {tags.map((tag) =>
-                    tag === activeTag ? (
-                      <span
-                        key={tag}
-                        onClick={(e) =>
-                          handleActiveTagList(e.target.textContent)
-                        }
-                        className="inline-block py-1 px-2 duration-200 bg-lime-500 text-white rounded font-ssp text-xs cursor-pointer ml-1 mb-1"
-                      >
-                        {tag}
-                      </span>
+            <section
+              className="relative flex lg:m-3 xl:m-5 gap-6 lg:gap-12 flex-col-reverse lg:flex-row"
+              style={{
+                height: loading ? '500px' : 'auto',
+              }}
+            >
+              {loading && <Loading />}
+              {loading || (
+                <>
+                  {/* tags */}
+                  <article className="lg:basis-3/12 w-full lg:w-20 flex flex-col justify-center max-h-[650px] overflow-auto">
+                    <div ref={activeTagList}>
+                      {tags.map((tag) =>
+                        tag === activeTag ? (
+                          <span
+                            key={tag}
+                            onClick={(e) =>
+                              handleActiveTagList(e.target.textContent)
+                            }
+                            className="inline-block py-1 px-2 duration-200 bg-lime-500 text-white rounded font-ssp text-xs cursor-pointer ml-1 mb-1"
+                          >
+                            {tag}
+                          </span>
+                        ) : (
+                          <span
+                            key={tag}
+                            onClick={(e) =>
+                              handleActiveTagList(e.target.textContent)
+                            }
+                            className="inline-block bg-lime-300 py-1 px-2 duration-200 hover:bg-lime-400 active:bg-lime-500 text-lime-700 hover:text-lime-600 active:text-white rounded font-ssp text-xs cursor-pointer ml-1 mb-1"
+                          >
+                            {tag}
+                          </span>
+                        )
+                      )}
+                    </div>
+                  </article>
+                  {/* food slide show */}
+                  <article className="lg:basis-9/12 overflow-hidden flex gap-3 items-center">
+                    {recipes ? (
+                      <Slides recipes={recipes} />
                     ) : (
-                      <span
-                        key={tag}
-                        onClick={(e) =>
-                          handleActiveTagList(e.target.textContent)
-                        }
-                        className="inline-block bg-lime-300 py-1 px-2 duration-200 hover:bg-lime-400 active:bg-lime-500 text-lime-700 hover:text-lime-600 active:text-white rounded font-ssp text-xs cursor-pointer ml-1 mb-1"
-                      >
-                        {tag}
-                      </span>
-                    )
-                  )}
-                </div>
-              </article>
-              {/* food slide show */}
-              <article className="lg:basis-9/12 overflow-hidden flex gap-3 items-center">
-                {recipes ? (
-                  <Slides recipes={recipes} />
-                ) : (
-                  <EmptySlides msg="Recipes Are Missing or Cannot Be Found" />
-                )}
-                {/* pop-up */}
-                <div className="group text-2xl text-lime-500 lg:text-lime-700 absolute right-0 lg:relative">
-                  <p className="animate-blink-right relative z-20 cursor-default">
-                    &raquo;
-                  </p>
-                  <div
-                    className="
+                      <EmptySlides msg="Recipes Are Missing or Cannot Be Found" />
+                    )}
+                    {/* pop-up */}
+                    <div className="group text-2xl text-lime-500 lg:text-lime-700 absolute right-0 lg:relative">
+                      <p className="animate-blink-right relative z-20 cursor-default">
+                        &raquo;
+                      </p>
+                      <div
+                        className="
                 hidden group-hover:block shadow-xl absolute text-[12px] -left-[130px] top-[-4px] rounded bg-lime-400 z-10 p-[6px] font-bold text-lime-700"
-                  >
-                    <p>Swipe For More !</p>
-                  </div>
-                </div>
-              </article>
+                      >
+                        <p>Swipe For More !</p>
+                      </div>
+                    </div>
+                  </article>
+                </>
+              )}
             </section>
           </div>
         </div>

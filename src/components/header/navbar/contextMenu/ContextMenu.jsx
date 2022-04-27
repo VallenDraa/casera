@@ -1,7 +1,7 @@
 import { Link } from 'react-router-dom';
 import { useContext, useEffect } from 'react';
-import { userContext } from '../../../context/Context';
-import { USERACTIONS } from '../../../context/Actions';
+import { userContext } from '../../../../context/Context';
+import { USERACTIONS } from '../../../../context/Actions';
 import { useNavigate } from 'react-router-dom';
 
 export default function ContextMenu({ innerRef }) {

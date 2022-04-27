@@ -26,10 +26,7 @@ export default function CardContent({ recipe }) {
   return (
     <>
       <div className="duration-300 shadow-inner absolute inset-0 opacity-0 hover:opacity-100 rounded-lg w-full h-full bg-gradient-to-b from-neutral-500/40 to-neutral-900/60 flex flex-col justify-between font-bold z-20">
-        <div className="relative w-full h-full">
-          <Link to={`/recipe/${idMeal}`} className="absolute inset-0 "></Link>
-          {loading || saveBtn}
-        </div>
+        <div className="relative w-full h-full">{loading || saveBtn}</div>
 
         {/* name */}
         <Link
