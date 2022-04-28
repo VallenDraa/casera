@@ -3,24 +3,29 @@ import { useContext, useEffect, useState } from 'react';
 import CardWrapper from '../../components/card/CardWrapper';
 import fetchSearchResult from '../../fetch/fetchSearchResults';
 import Loading from '../../components/loading/Loading';
+import HomeAside from '../../components/home/homeAside/HomeAside';
 import { loadingContext } from '../../context/Context';
 
 export default function Search() {
-  const query = window.location.href.split('=')[1];
+  const urlQuery = window.location.href.split('=')[1];
+  const query = urlQuery.includes('%20')
+    ? urlQuery.replace('%20', ' ')
+    : urlQuery;
   const [recipes, setRecipes] = useState([]);
   const [loading, setLoading] = useContext(loadingContext);
+
   useEffect(() => {
     setLoading(true);
-    fetchSearchResult(query)
+    fetchSearchResult(urlQuery)
       .then((res) => setRecipes(res))
       .finally(() => setLoading(false));
-  }, [query]);
+  }, [urlQuery]);
 
   return (
     <>
       <Header />
-
       <main className="bg-slate-100">
+        <HomeAside />
         <div
           className="relative max-w-screen-xl px-3 mt-10 sm:w-11/12 lg:w-5/6 xl:w-3/4 mx-auto lg:text-left pb-5"
           style={{ height: loading ? 'calc(100vh - 110px)' : 'auto' }}

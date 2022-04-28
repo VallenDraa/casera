@@ -17,7 +17,7 @@ export default function ContextMenu({ innerRef }) {
     <ul
       ref={innerRef}
       id="context-menu"
-      className="w-full md:w-72 absolute border-t-2 md:border-0 bg-white right-0 md:right-3 md:top-10 md:rounded font-normal transform scale-0 origin-top md:origin-top-right duration-300 z-20 md:shadow-md font-roboto"
+      className="w-full md:w-72 absolute border-t-2 md:border-0 bg-white right-0 md:right-3 md:top-10 md:rounded font-normal transform scale-0 origin-top md:origin-top-right z-20 md:shadow-md font-roboto"
     >
       {userState ? (
         <>
@@ -46,12 +46,12 @@ export default function ContextMenu({ innerRef }) {
         </>
       ) : (
         <>
-          <li className=" text-lg text-center text-slate-100 hover:text-slate-200 duration-200 bg-lime-500 hover:bg-lime-600 active:bg-lime-700 relative">
+          <li className=" text-lg text-center text-slate-100 hover:text-slate-200 bg-lime-500 hover:bg-lime-600 active:bg-lime-700 relative">
             <Link className="py-2 px-2 inline-block w-full h-full" to="/login">
               Login
             </Link>
           </li>
-          <li className=" text-lg text-center text-slate-100 hover:text-slate-200 duration-200 bg-orange-500 hover:bg-orange-600 active:bg-orange-700 relative">
+          <li className=" text-lg text-center text-slate-100 hover:text-slate-200 bg-orange-500 hover:bg-orange-600 active:bg-orange-700 relative">
             <Link
               className="py-2 px-2 inline-block w-full h-full"
               to="/register"

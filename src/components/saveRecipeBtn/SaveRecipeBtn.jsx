@@ -1,8 +1,6 @@
-import axios from 'axios';
 import { useContext, useEffect, useState } from 'react';
 import { toastContext, userContext } from '../../context/Context';
 import { recipeSave, recipeUnsave } from '../../fetch/fetchRecipeFromServer';
-import { changeToSave, changeToSaved } from '../../handleSave/handleSave';
 import { setStatePro } from '../../utils/utils';
 
 export default function SaveRecipeBtn({
@@ -13,7 +11,6 @@ export default function SaveRecipeBtn({
   const { userState } = useContext(userContext);
   const { setToastData } = useContext(toastContext);
   const [saved, setSaved] = useState(initSaved);
-
   useEffect(() => {
     setToastData(null);
   }, []);
@@ -39,7 +36,10 @@ export default function SaveRecipeBtn({
   return (
     <>
       {!big ? (
-        <div className="w-fit rounded-tl-lg rounded-bl-none rounded-br-lg p-2 flex items-center gap-1 bg-red-500 hover:bg-red-600 duration-200 text-white font-roboto absolute z-40 cursor-pointer">
+        <button
+          type="button"
+          className="w-fit rounded-tl-lg rounded-bl-none rounded-br-lg p-2 flex items-center gap-1 bg-red-500 hover:bg-red-600 focus:bg-red-700 duration-200 text-white hover:text-slate-100 focus:text-slate-200 font-roboto absolute z-40 cursor-pointer"
+        >
           {saved ? (
             <i className="fa-solid fa-heart" />
           ) : (
@@ -50,9 +50,12 @@ export default function SaveRecipeBtn({
             className="absolute z-20 inset-0"
           ></div>
           <span className="text-[12px]">{saved ? 'Saved' : 'Save Dish'}</span>
-        </div>
+        </button>
       ) : (
-        <div className="cursor-pointer h-full w-full rounded p-2 flex items-center justify-center gap-2 bg-red-500 hover:bg-red-600 duration-200 text-white font-roboto relative text-lg">
+        <button
+          type="button"
+          className="cursor-pointer h-full w-full rounded p-2 flex items-center justify-center gap-2 bg-red-500 hover:bg-red-600 focus:bg-red-700 focus:ring-4 focus:ring-red-300 duration-200 text-white hover:text-slate-100 focus:text-slate-200 font-roboto relative text-lg"
+        >
           {saved ? (
             <i className=" fa-solid fa-heart" />
           ) : (
@@ -63,7 +66,7 @@ export default function SaveRecipeBtn({
             className="absolute z-20 inset-0"
           ></div>
           <span className="font-light">{saved ? 'Saved' : 'Save Dish'}</span>
-        </div>
+        </button>
       )}
     </>
   );

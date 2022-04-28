@@ -15,7 +15,6 @@ import {
   userContext,
 } from '../../context/Context';
 import { USERACTIONS } from '../../context/Actions';
-import StateToast from '../../components/toast/StateToast';
 import axios from 'axios';
 import { setStatePro } from '../../utils/utils';
 import Slides from '../../components/slides/Slides';
@@ -27,7 +26,7 @@ export default function UserPage() {
   const [editMode, setEditMode] = useState(false);
   const { userState, dispatch } = useContext(userContext);
   const [profilePic, setProfilePic] = useState(null);
-  const { toastData, setToastData } = useContext(toastContext);
+  const { setToastData } = useContext(toastContext);
   const [recipes, setRecipes] = useState(null);
   const [loading, setLoading] = useContext(loadingContext);
   const { username } = useParams(); //get the queried username from the URL parameter
@@ -184,25 +183,21 @@ export default function UserPage() {
 
   return (
     <>
-      {toastData && <StateToast payload={toastData} />}
-
       <>
         <Header />
-        {loading && (
+        {loading ? (
           <main
             className="relative"
             style={{ height: loading ? 'calc(100vh - 70px)' : 'auto' }}
           >
             <Loading />
           </main>
-        )}
-
-        {!loading && (
-          <>
+        ) : (
+          <main className="animate-fade-in">
             {!otherUserData ? ( // if the requested user is not the current user
               userState ? ( // check if the user is logged in, then render user's own user page
                 <>
-                  <main className="bg-slate-100">
+                  <section className="bg-slate-100">
                     <div className="relative max-w-screen-xl px-3 mt-10 sm:w-11/12 lg:w-5/6 xl:w-3/4 mx-auto lg:text-left">
                       {/* user data */}
                       <form
@@ -277,8 +272,8 @@ export default function UserPage() {
                               />
                             </div>
                           </header>
-                          {/* main form */}
-                          <main className="space-y-5">
+                          {/* form */}
+                          <section className="space-y-5">
                             {/* username */}
                             <Input
                               editMode={editMode}
@@ -299,7 +294,7 @@ export default function UserPage() {
                               editMode={editMode}
                               value={userState.hobby}
                             />
-                          </main>
+                          </section>
                           <footer>
                             {editMode && (
                               <Btn
@@ -315,7 +310,7 @@ export default function UserPage() {
                         </section>
                       </form>
                     </div>
-                  </main>
+                  </section>
                   <footer className=" bg-slate-100">
                     <div className="relative max-w-screen-xl px-3 pt-10 sm:w-11/12 lg:w-5/6 xl:w-3/4 mx-auto lg:text-left">
                       {recipes ? (
@@ -334,14 +329,14 @@ export default function UserPage() {
               ) : (
                 isGuest && (
                   // the user is a guest and trying to access its own user page
-                  <main className="h-[calc(100vh-120px)] relative max-w-screen-xl px-3 mt-10 sm:w-11/12 lg:w-5/6 xl:w-3/4 mx-auto flex justify-center items-center">
+                  <section className="h-[calc(100vh-120px)] relative max-w-screen-xl px-3 mt-10 sm:w-11/12 lg:w-5/6 xl:w-3/4 mx-auto flex justify-center items-center">
                     <LoginFirst msg="Login / Register To See Your User Page !" />
-                  </main>
+                  </section>
                 )
               )
             ) : (
               // if the requested user is the current user
-              <main className="bg-slate-100 flex justify-center items-center h-[calc(100vh-55px)]">
+              <section className="bg-slate-100 flex justify-center items-center h-[calc(100vh-55px)]">
                 <div className="relative max-w-screen-xl px-3 mt-10 w-full sm:w-11/12 lg:w-5/6 xl:w-3/4 mx-auto lg:text-left">
                   {/* user data */}
                   <article className="flex flex-col gap-12 md:gap-20 items-center">
@@ -381,9 +376,9 @@ export default function UserPage() {
                     </section>
                   </article>
                 </div>
-              </main>
+              </section>
             )}
-          </>
+          </main>
         )}
       </>
     </>

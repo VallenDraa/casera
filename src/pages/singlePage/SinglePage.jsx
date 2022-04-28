@@ -4,6 +4,7 @@ import { useParams } from 'react-router-dom';
 import Header from '../../components/header/Header';
 import ReactPlayer from 'react-player';
 import { Link } from 'react-router-dom';
+import HomeAside from '../../components/home/homeAside/HomeAside';
 import Loading from '../../components/loading/Loading';
 import {
   loadingContext,
@@ -14,15 +15,15 @@ import Missing404 from '../../components/errorComps/Missing404';
 import SaveRecipeBtn from '../../components/saveRecipeBtn/SaveRecipeBtn';
 import { isSaved } from '../../fetch/fetchRecipeFromServer';
 
-export default function SinglePage({ saved }) {
+export default function SinglePage() {
   const [recipes, setRecipes] = useState([]);
   const [ingredients, setIngredients] = useState([]);
   const [iframeWidth, setIframeWidth] = useState(400);
   const [loading, setLoading] = useContext(loadingContext);
-  const { userState, dispatch } = useContext(userContext);
+  const { userState } = useContext(userContext);
   const { idMeal } = useParams();
   const [saveBtn, setSaveBtn] = useState(null);
-  const { toastData, setToastData } = useContext(toastContext);
+  const { setToastData } = useContext(toastContext);
 
   // resize iframe according to screen size
   const iframeWidthChange = () => {
@@ -80,6 +81,7 @@ export default function SinglePage({ saved }) {
   return (
     <>
       <Header />
+
       <main className="bg-slate-100 pb-5">
         <article
           className="relative max-w-screen-xl px-3 mt-12 lg:mt-20 mx-auto lg:text-left text-slate-800"
@@ -92,14 +94,14 @@ export default function SinglePage({ saved }) {
             recipes[0] !== 'n/a' ? (
               <section
                 key={recipe.idMeal}
-                className="flex flex-col-reverse lg:flex-row gap-12 lg:gap-10"
+                className="animate-fade-in flex flex-col-reverse lg:flex-row gap-12 lg:gap-10"
               >
                 {/* preview */}
                 <div>
                   <div className="text-center sticky top-20 space-y-10">
                     <div className="w-fit mx-auto">
                       <img
-                        className="h-[400px] object-cover"
+                        className="h-[400px] object-cover animate-fade-in"
                         src={recipe.strMealThumb}
                         alt=""
                       />
@@ -107,7 +109,7 @@ export default function SinglePage({ saved }) {
                         Photo Preview
                       </span>
                     </div>
-                    <div className="w-fit mx-auto">
+                    <div className="w-fit mx-auto animate-fade-in">
                       <ReactPlayer
                         height={400}
                         width={iframeWidth}

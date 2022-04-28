@@ -9,7 +9,7 @@
   background-color: rgb(226 232 240);
   display: flex;
   justify-content: center;
-  place-items: end;
+  place-items: flex-end;
   color: rgb(100 116 139);
   padding-bottom: 5.5%;
   font-weight: 300;

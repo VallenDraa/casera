@@ -15,9 +15,17 @@ export default function Navbar() {
   const morphMenu = () => {
     if (!menu.current) return;
 
+    const menuComp = menu.current;
+
+    // menu will be full screen when the screen size is <=768
     window.innerWidth >= 768
-      ? (menu.current.style = 'transform:translate(0)')
-      : (menu.current.style = 'transform:translate(100%)');
+      ? (menuComp.style = 'transform:translate(0)')
+      : (menuComp.style = 'transform:translate(100%)');
+
+    // remove animation class
+    menuComp.classList.contains('animate-menu-o')
+      ? menuComp.classList.remove('animate-menu-o')
+      : menuComp.classList.remove('animate-menu-c');
   };
 
   window.addEventListener('resize', morphMenu);
@@ -47,6 +55,25 @@ export default function Navbar() {
       ? contextClass.replace('scale-0', 'scale-100')
       : contextClass.replace('scale-100', 'scale-0');
 
+    // context menu is opened and has been closed before
+    if (
+      contextClass.contains('animate-scale-in') &&
+      !contextClass.contains('animate-scale-out')
+    ) {
+      contextClass.replace('animate-scale-in', 'animate-scale-out');
+    }
+    // context menu is closed and has been opened before
+    else if (
+      !contextClass.contains('animate-scale-in') &&
+      contextClass.contains('animate-scale-out')
+    ) {
+      contextClass.replace('animate-scale-out', 'animate-scale-in');
+    }
+    // context menu has never been opened before
+    else {
+      contextClass.add('animate-scale-in');
+    }
+
     // caret handling
     contextBtnClass.contains('rotate-90')
       ? contextBtnClass.remove('rotate-90')
@@ -57,7 +84,7 @@ export default function Navbar() {
     <nav className="px-3 pt-3 font-ssp">
       {/* search bar */}
       {searchState && (
-        <div className=" max-w-2xl mx-auto font-roboto">
+        <div className="max-w-2xl mx-auto font-roboto">
           <span
             onClick={() => setSearchState(false)}
             className="top-4 py-1 px-2 rounded-t text-red-500 cursor-pointer fixed z-50 bg-white text-sm flex items-center gap-2"
@@ -78,20 +105,38 @@ export default function Navbar() {
             className="cursor-pointer fa-solid fa-magnifying-glass"
           />
         </div>
-        {/* buttons */}
+        {/* open menu button */}
         <span
-          onClick={() => (menu.current.style = 'transform:translate(0)')}
+          onClick={() => {
+            menu.current.style = 'transform:translate(0)';
+            menu.current.classList.contains('animate-menu-c')
+              ? menu.current.classList.replace(
+                  'animate-menu-c',
+                  'animate-menu-o'
+                )
+              : menu.current.classList.add('animate-menu-o');
+          }}
           className="pl-3 cursor-pointer"
         >
           <i className="fa-solid fa-ellipsis-vertical block md:hidden text-2xl " />
         </span>
+
+        {/* the menu itself */}
         <div
           ref={menu}
-          className="transform translate-x-full md:translate-x-0 font-roboto top-0 right-0 left-0 sm:left-2/4 h-screen bg-white md:bg-transparent md:h-fit fixed md:static md:flex gap-1 font-extralight items-center text-slate-700 z-30"
+          className="transform translate-x-full md:translate-x-0 font-roboto top-0 right-0 left-0 sm:left-2/4 h-screen bg-white md:bg-transparent md:h-fit fixed md:static md:flex gap-1 font-extralight items-center text-slate-700 z-30 shadow-xl md:shadow-none"
         >
           {/* close menu for smaller screen size */}
           <div
-            onClick={() => (menu.current.style = 'transform:translate(100%)')}
+            onClick={() => {
+              menu.current.style = 'transform:translate(100%)';
+              menu.current.classList.contains('animate-menu-o')
+                ? menu.current.classList.replace(
+                    'animate-menu-o',
+                    'animate-menu-c'
+                  )
+                : menu.current.classList.add('animate-menu-c');
+            }}
             className="flex md:hidden items-center justify-center py-2 px-2 duration-200 bg-red-100 hover:bg-red-200 active:bg-red-300 hover:rounded gap-x-1 text-red-500 font-normal border-b-2 border-red-200 cursor-pointer"
           >
             <p>Close</p>

@@ -1,7 +1,7 @@
 import { useEffect, useRef, useState } from 'react';
 
 export default function StateToast({ payload }) {
-  // console.log(payload);
+  console.log(payload);
   const toast = useRef(null);
   const toastTimerBar = useRef(null);
   const [show, setShow] = useState(true);

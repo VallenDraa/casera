@@ -9,14 +9,17 @@ import Register from './pages/register/Register';
 import PageNotFound from './pages/pageNotFound/PageNotFound';
 import { useContext, useEffect } from 'react';
 import { USERACTIONS } from './context/Actions';
-import { userContext } from './context/Context';
+import { toastContext, userContext } from './context/Context';
+import StateToast from './components/toast/StateToast';
 
 export default function App() {
   const { dispatch } = useContext(userContext);
   useEffect(() => dispatch({ type: USERACTIONS.getUserData }), []);
+  const { toastData } = useContext(toastContext);
 
   return (
     <>
+      {toastData && <StateToast payload={toastData} />}
       <BrowserRouter>
         <Routes>
           <Route path="/" element={<Home />} />

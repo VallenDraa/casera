@@ -4,12 +4,10 @@ import { Link, useNavigate } from 'react-router-dom';
 import Btn from '../../components/btn/Btn';
 import { useContext, useRef } from 'react';
 import { toastContext } from '../../context/Context';
-
-import StateToast from '../../components/toast/StateToast';
 import axios from 'axios';
 
 export default function Register() {
-  const { toastData, setToastData } = useContext(toastContext);
+  const { setToastData } = useContext(toastContext);
   const emailRef = useRef(null);
   const usernameRef = useRef(null);
   const passwordRef = useRef(null);
@@ -35,7 +33,6 @@ export default function Register() {
   };
   return (
     <>
-      {toastData && <StateToast payload={toastData} />}
       <Header />
       <main className="h-[calc(100vh-70px)] bg-slate-100 flex items-center justify-center px-2 text-slate-800">
         <section className="mx-auto container flex flex-col justify-center items-center px-3">

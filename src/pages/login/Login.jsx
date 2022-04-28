@@ -4,14 +4,13 @@ import { useContext, useRef } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import { userContext } from '../../context/Context';
 import { toastContext } from '../../context/Context';
-import StateToast from '../../components/toast/StateToast';
 import { USERACTIONS } from '../../context/Actions';
 import axios from 'axios';
 import Btn from '../../components/btn/Btn';
 
 export default function Login() {
   const { userState, dispatch } = useContext(userContext);
-  const { toastData, setToastData } = useContext(toastContext);
+  const { setToastData } = useContext(toastContext);
   const usernameRef = useRef();
   const passwordRef = useRef();
   const navigate = useNavigate();
@@ -40,7 +39,6 @@ export default function Login() {
 
   return (
     <>
-      {toastData && <StateToast payload={toastData} />}
       <Header />
       <main className="h-[calc(100vh-70px)] bg-slate-100 flex items-center justify-center px-2 text-slate-800">
         <section className="mx-auto container flex flex-col justify-center items-center px-3">

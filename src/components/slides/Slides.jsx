@@ -1,12 +1,10 @@
 import 'swiper/css';
 import 'swiper/css/pagination';
 import Img from '../img/Img';
-import imgTemp from '../../assets/svg/imgTemp.svg';
 import { Swiper, SwiperSlide } from 'swiper/react';
 import CardContent from '../card/CardContent';
 
 export default function Slides({ recipes }) {
-  console.log(imgTemp);
   return (
     <Swiper
       spaceBetween={30}

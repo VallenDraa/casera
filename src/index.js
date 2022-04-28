@@ -6,9 +6,9 @@ import './index.css';
 
 const root = document.getElementById('root');
 createRoot(root).render(
-  <StrictMode>
-    <ContextProvider>
-      <App />
-    </ContextProvider>
-  </StrictMode>
+  // <StrictMode>
+  <ContextProvider>
+    <App />
+  </ContextProvider>
+  // </StrictMode>
 );

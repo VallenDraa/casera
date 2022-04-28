@@ -52,7 +52,9 @@ export const isSaved = async (
       setToastData({ ok: false, msg: 'Fail To Make Connection !' });
     }
   } else {
-    setSaveBtn(<SaveRecipeBtn idMeal={idMeal} />);
+    big
+      ? setSaveBtn(<SaveRecipeBtn idMeal={idMeal} big={big} />)
+      : setSaveBtn(<SaveRecipeBtn idMeal={idMeal} />);
   }
 };
 
