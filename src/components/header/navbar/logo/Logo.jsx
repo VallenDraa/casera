@@ -2,7 +2,7 @@ import { Link } from 'react-router-dom';
 
 export default function Logo() {
   return (
-    <div className="flex justify-between items-center gap-4">
+    <div className="flex justify-between items-center gap-4 text-slate-700">
       <Link to="/" className="text-xl font-bold flex items-center">
         <i className="inline-block mr-1 fa-solid fa-kitchen-set text-xl"></i>
         <div className="flex flex-col">

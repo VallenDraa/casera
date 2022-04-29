@@ -25,12 +25,19 @@ export default function CardContent({ recipe }) {
   return (
     <>
       <div className="duration-300 shadow-inner absolute inset-0 opacity-0 hover:opacity-100 rounded-lg w-full h-full bg-gradient-to-b from-neutral-500/50 to-neutral-900/70 flex flex-col justify-between font-bold z-20">
-        <div className="relative w-full h-full">{loading || saveBtn}</div>
+        <div className="relative w-full h-full">
+          {loading || saveBtn}
 
+          {/* rating */}
+          <div className="absolute bottom-2 inset-x-0 text-center font-light text-yellow-400 font-ssp text-sm">
+            <i className="pr-1 fa-solid fa-star" />
+            <span>4.5/5{`  (100+)`}</span>
+          </div>
+        </div>
         {/* name */}
         <Link
           to={`/recipe/${idMeal}`}
-          className=" duration-300 group block font-ssp text-slate-100 p-2 border-t-2 border-red-500"
+          className="duration-300 group block font-ssp text-slate-100 p-2 border-t-2 border-red-500"
         >
           <div className="text-lg font-semibold mt-1 p-2 flex items-center justify-between rounded relative">
             {theRest.join(' ').length > 40 ? (

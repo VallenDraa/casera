@@ -1,7 +1,7 @@
 import Navbar from './navbar/Navbar';
 export default function Header() {
   return (
-    <header>
+    <header className="relative">
       <Navbar />
     </header>
   );

@@ -102,7 +102,7 @@ export default function Navbar() {
           {/* search btn */}
           <i
             onClick={() => setSearchState(!searchState)}
-            className="cursor-pointer fa-solid fa-magnifying-glass"
+            className="text-slate-700 cursor-pointer fa-solid fa-magnifying-glass"
           />
         </div>
         {/* open menu button */}

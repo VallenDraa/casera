@@ -1,42 +1,49 @@
-function Employee(name) {
-  this.name = name;
-  this.sayHello = () => console.log('Hello My Name Is ' + this.name);
-}
+// function Employee(name) {
+//   this.name = name;
+//   this.sayHello = () => console.log('Hello My Name Is ' + this.name);
+// }
 
-function Manager(name) {
-  Employee.call(this, name);
+// function Manager(name) {
+//   Employee.call(this, name);
 
-  this.sayHello = () =>
-    console.log(
-      'Hello My Name Is ' + this.name + " And I'm The Manager In Here"
-    );
-  this.giveCash = () => console.log(this.name + ' Gave Cash To Everybody');
-}
+//   this.sayHello = () =>
+//     console.log(
+//       'Hello My Name Is ' + this.name + " And I'm The Manager In Here"
+//     );
+//   this.giveCash = () => console.log(this.name + ' Gave Cash To Everybody');
+// }
 
-class Junior {
-  constructor(name) {
-    this.name = name;
-  }
+// class Junior {
+//   constructor(name) {
+//     this.name = name;
+//   }
 
-  sayHello() {
-    console.log('Hello My Name Is ' + this.name + " And I'm the Junior Dev");
-  }
-}
+//   sayHello() {
+//     console.log('Hello My Name Is ' + this.name + " And I'm the Junior Dev");
+//   }
+// }
 
-class Senior extends Junior {
-  constructor(name) {
-    super(name);
-  }
+// class Senior extends Junior {
+//   constructor(name) {
+//     super(name);
+//   }
 
-  sayHello() {
-    console.log('Hello My Name Is ' + this.name + " And I'm the Senior Dev");
-  }
-}
-const david = new Senior('david');
-
-david.sayHello();
+//   sayHello() {
+//     console.log('Hello My Name Is ' + this.name + " And I'm the Senior Dev");
+//   }
+// }
+// const david = new Senior('david');
+// console.log(david instanceof Junior);
+// david.sayHello();
 
 // const steve = new Employee('vallen');
 // const jack = new Manager('jack');
 
 // console.log(Manager);
+
+// class Player {
+//   constructor(name) {
+//     this.name = name;
+//     this.level = 1;
+//   }
+// }

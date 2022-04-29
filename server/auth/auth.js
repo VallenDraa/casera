@@ -22,7 +22,7 @@ const register = async (req, res) => {
     });
 
     // find existing user
-    User.findOne({
+    User.exists({
       $or: [
         {
           email: newUser.email,

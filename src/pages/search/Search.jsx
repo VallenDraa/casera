@@ -31,12 +31,14 @@ export default function Search() {
           style={{ height: loading ? 'calc(100vh - 110px)' : 'auto' }}
         >
           {loading && <Loading />}
-          <h1 className="tracking-wide text-4xl font-ssp first-letter:text-5xl first-letter:font-semibold">
+          <h1 className="tracking-wide text-4xl font-ssp first-letter:text-5xl first-letter:font-semibold text-slate-700">
             Results for <span className="italic">{query}</span>
           </h1>
           <p
-            className={`font-ssp text-lg font-light text-slate-500 ${
-              loading && 'animate-pulse'
+            className={`font-ssp text-lg font-light ${
+              loading
+                ? 'animate-pulse text-slate-500'
+                : 'animate-fade-in text-slate-600'
             }`}
           >
             {loading

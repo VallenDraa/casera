@@ -9,7 +9,7 @@ export default function Slides({ recipes }) {
     <Swiper
       spaceBetween={30}
       slidesPerView={1}
-      className="w-full h-[650px] cursor-grab rounded-lg "
+      className="shadow-lg w-full h-[650px] cursor-grab rounded-lg "
     >
       {recipes.map(
         (recipe, i) =>

@@ -86,11 +86,11 @@ export default function Home() {
       <main className="bg-slate-100">
         <HomeAside />
         <div className="relative max-w-screen-xl px-3 mt-10  lg:w-5/6 xl:w-3/4 mx-auto lg:text-left overflow-y-auto md:overflow-hidden">
-          <header className="text-center lg:text-left">
+          <header className="text-center lg:text-left text-slate-700">
             <h1 className="tracking-wide text-4xl font-ssp first-letter:text-5xl first-letter:font-semibold">
               Home
             </h1>
-            <p className="font-ssp text-lg font-light">
+            <p className="font-ssp text-lg font-light text-slate-600">
               Make Your Next <span className="font-semibold">Dish !</span>
             </p>
             {/* find by type */}
@@ -158,7 +158,9 @@ export default function Home() {
                   {recipes ? (
                     <Slides recipes={recipes} />
                   ) : (
-                    <EmptySlides msg="Recipes Are Missing or Cannot Be Found" />
+                    <div className="h-[100vh - 200px]">
+                      <EmptySlides msg="Recipes Are Missing or Cannot Be Found" />
+                    </div>
                   )}
                   {/* pop-up */}{' '}
                   {recipes && (

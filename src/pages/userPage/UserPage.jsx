@@ -234,10 +234,10 @@ export default function UserPage() {
                                 <img
                                   src={profilePic}
                                   alt=""
-                                  className="h-52 w-52 rounded-full object-cover"
+                                  className="h-52 w-52 rounded-full shadow-md object-cover"
                                 />
                               ) : (
-                                <div className="flex justify-center items-center h-52 w-52 rounded-full bg-slate-200">
+                                <div className="flex justify-center items-center h-52 w-52 rounded-full bg-slate-200 shadow-md">
                                   <i className="fa-solid fa-user text-9xl text-slate-400" />
                                 </div>
                               )}
@@ -348,10 +348,10 @@ export default function UserPage() {
                             <img
                               src={profilePic}
                               alt=""
-                              className="h-52 w-52 md:h-60 md:w-60 rounded-full object-cover"
+                              className="h-52 w-52 md:h-60 md:w-60 rounded-full object-cover shadow-md"
                             />
                           ) : (
-                            <div className="flex justify-center items-center h-52 w-52 md:h-60 md:w-60 rounded-full bg-slate-200">
+                            <div className="flex justify-center items-center h-52 w-52 md:h-60 md:w-60 rounded-full bg-slate-200 shadow-md">
                               <i className="fa-solid fa-user text-9xl text-slate-400" />
                             </div>
                           )}

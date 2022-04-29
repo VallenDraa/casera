@@ -1,6 +1,6 @@
 .img-alt::after {
   position: absolute;
-  content: '' attr(alt);
+  content: '' attr(data-value);
   inset: 0 0 0 0;
   background-image: url('../../assets/svg/imgTemp.svg');
   background-repeat: no-repeat;
@@ -8,6 +8,8 @@
   background-position: center;
   background-color: rgb(226 232 240);
   display: flex;
+  border-radius: 0.5rem;
+  border: 2px solid rgb(203 213 225);
   justify-content: center;
   place-items: flex-end;
   color: rgb(100 116 139);

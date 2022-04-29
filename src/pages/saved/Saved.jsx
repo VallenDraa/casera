@@ -49,11 +49,11 @@ export default function Saved() {
       <Header />
       <main className="bg-slate-100">
         <HomeAside />
-        <div className="relative max-w-screen-xl px-3 mt-10 sm:w-11/12 lg:w-5/6 xl:w-3/4 mx-auto lg:text-left">
+        <div className="relative max-w-screen-xl px-3 mt-10 sm:w-11/12 lg:w-5/6 xl:w-3/4 mx-auto lg:text-left text-slate-700">
           <h1 className="tracking-wide text-4xl font-ssp first-letter:text-5xl first-letter:font-semibold">
             Saved
           </h1>
-          <p className="font-ssp text-lg font-light">
+          <p className="font-ssp text-lg font-light text-slate-600">
             Cook Your <span className="font-semibold">Favorites !</span>
           </p>
           <article
