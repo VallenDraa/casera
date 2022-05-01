@@ -131,6 +131,7 @@ export default function UserPage() {
       const { data } = await axios.put('/api/user/update', bodyContent);
       dispatch({ type: USERACTIONS.updateUser, payload: data.userData });
       // console.log(data);
+      setEditMode(false);
       setToastData({ ok: true, msg: 'Profile Updated !' });
     } catch (e) {
       setToastData({ ok: false, msg: 'Fail To Make Connection !' });

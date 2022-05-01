@@ -37,12 +37,13 @@ const register = async (req, res) => {
         !existingUser
           ? newUser
               .save()
-              .then(() =>
-                res.status(200).json({ code: 200, ok: true, signup: true })
-              )
-              .catch(() =>
-                res.status(500).json({ code: 500, ok: false, signup: false })
-              )
+              .then(() => {
+                res.status(200).json({ code: 200, ok: true, signup: true });
+              })
+              .catch((err) => {
+                console.log(err);
+                res.status(500).json({ code: 500, ok: false, signup: false });
+              })
           : res.json({
               code: 409,
               ok: false,
@@ -50,9 +51,10 @@ const register = async (req, res) => {
               msg: 'User already exist !',
             });
       })
-      .catch(() =>
-        res.status(500).json({ code: 500, ok: false, signup: false })
-      );
+      .catch(() => {
+        console.log('a');
+        res.status(500).json({ code: 500, ok: false, signup: false });
+      });
   } catch (e) {
     res.status(500).json({ code: 500, ok: false, signup: false });
   }

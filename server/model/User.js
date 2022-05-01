@@ -9,12 +9,7 @@ const UserSchema = new Schema(
     profilePic: { type: String, default: null },
     hobby: { type: [String] },
     phone: { type: Number, default: null },
-    ratingsByUser: [
-      {
-        idMeal: { type: Number, required: true, unique: true },
-        rating: { type: Number, required: true },
-      },
-    ],
+    ratingsByUser: { type: [Object] },
     savedRecipes: { type: [Number] },
   },
   { timestamps: true }
