@@ -1,18 +1,39 @@
-const axios = require('axios').default;
 const Rating = require('../model/Rating');
 const User = require('../model/User');
 
 const getRating = async (req, res) => {
-  const { idMeal } = req.query;
-  try {
-    const mealRatingData = await Rating.findById(Number(idMeal)).select(
-      'totalRating'
-    );
+  const { idMeals } = req.query;
+  const queryId = idMeals.split(',');
+  const mealRatingData = [];
+  for (let i = 0; i < queryId.length; i++) {
+    try {
+      const fetchRes = await Rating.findById(Number(queryId[i])).select([
+        'totalRating',
+        'byWho',
+      ]);
 
-    res.status(200).json({ ok: true, getRating: true, mealRatingData });
-  } catch (err) {
-    res.status(500).json({ code: 500, ok: false, getRating: false });
+      if (fetchRes) {
+        const { totalRating, byWho } = fetchRes;
+        const fetchedratingData = {
+          totalRating,
+          byHowMany: byWho.length,
+          idMeal: queryId[i],
+        };
+        mealRatingData.push(fetchedratingData);
+      } else {
+        const fetchedratingData = {
+          totalRating: null,
+          byHowMany: null,
+          idMeal: queryId[i],
+        };
+        mealRatingData.push(fetchedratingData);
+      }
+    } catch (err) {
+      console.log(err);
+      res.status(500).json({ code: 500, ok: false, getRating: false });
+    }
   }
+  res.status(200).json({ ok: true, getRating: true, mealRatingData });
 };
 
 const addToRating = async (req, res) => {
@@ -34,11 +55,12 @@ const addToRating = async (req, res) => {
     // rating with the current meal id doesn't exist
     if (!existingMealRating) {
       // create new instance of Rating with the data input, then save
-      const newMealRating = new Rating({
+      const newMealRatingData = {
         _id: idMeal,
         totalRating: newUserRating,
         byWho: [newByWho],
-      });
+      };
+      const newMealRating = new Rating(newMealRatingData);
       await newMealRating.save();
 
       //   push the idMeal to the ratingsByUser array, then save
@@ -47,7 +69,16 @@ const addToRating = async (req, res) => {
 
       // send back new ratingsByUser data to the client
       const { ratingsByUser } = user._doc;
-      res.status(200).json({ ok: true, addToRating: true, ratingsByUser });
+      res.status(200).json({
+        ok: true,
+        addToRating: true,
+        ratingsByUser,
+        mealRatingData: {
+          _id: newMealRatingData._id,
+          totalRating: newMealRatingData.totalRating,
+          byHowMany: newMealRatingData.byWho.length,
+        },
+      });
     }
     // rating with the current meal id exists
     else {
@@ -60,10 +91,10 @@ const addToRating = async (req, res) => {
       for (const input of byWho) {
         newTotalRating = newTotalRating + input.rating;
       }
-      newTotalRating = newTotalRating / byWho.length;
+      newTotalRating = parseFloat((newTotalRating / byWho.length).toFixed(2));
 
       // set the new total rating
-      existingMealRating.totalRating = parseFloat(newTotalRating.toFixed(2));
+      existingMealRating.totalRating = newTotalRating;
       await existingMealRating.save();
 
       // push the idMeal to the ratingsByUser array, then save
@@ -72,10 +103,19 @@ const addToRating = async (req, res) => {
 
       // send back new ratingsByUser data to the client
       const { ratingsByUser } = user._doc;
-      res.status(200).json({ ok: true, addToRating: true, ratingsByUser });
+      res.status(200).json({
+        ok: true,
+        addToRating: true,
+        ratingsByUser,
+        mealRatingData: {
+          _id: idMeal,
+          totalRating: newTotalRating,
+          byHowMany: byWho.length,
+        },
+      });
     }
   } catch (err) {
-    // console.log(err);
+    console.log(err);
     res.status(500).json({ code: 500, ok: false, addToRating: false });
   }
 };
@@ -133,7 +173,7 @@ const updateRating = async (req, res) => {
       ok: true,
       code: 200,
       updateRating: true,
-      mealRatingData: { totalRating, _id },
+      mealRatingData: { _id, totalRating, byHowMany: byWho.length },
       ratingsByUser,
     });
   } catch (error) {

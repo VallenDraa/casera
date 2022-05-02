@@ -7,7 +7,7 @@ const RatingSchema = new Schema(
     totalRating: { type: Number, required: true, max: 5 },
     byWho: [
       {
-        username: { type: String, required: true, unique: true },
+        username: { type: String, required: true },
         rating: { type: Number, required: true, max: 5 },
       },
     ],

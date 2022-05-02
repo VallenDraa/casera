@@ -8,7 +8,6 @@ import Loading from '../../components/loading/Loading';
 import { loadingContext } from '../../context/Context';
 import EmptySlides from '../../components/slides/EmptySlides';
 import Popup from '../../components/notice/Popup';
-import { setStatePro } from '../../utils/utils';
 
 export default function Home() {
   const TYPELIST = ['Categories', 'Area', 'Ingredients'];
@@ -28,14 +27,12 @@ export default function Home() {
         setTags(tags);
         setActiveTag(active);
         fetchRecipesByTypes(activeType, active)
-          // .then(() => )
           .then((res) => (res.length > 0 ? setRecipes(res) : setRecipes(null)))
-          .finally(() => setLoading(false))
-          .catch((e) => setRecipes(null));
+          .catch((e) => setRecipes(null))
+          .finally(() => setLoading(false));
       });
 
     const fetchTags = () => {
-      // console.log
       switch (activeType) {
         case 'Categories':
           fetchTagsByType(fetchCat);
@@ -51,7 +48,7 @@ export default function Home() {
           break;
       }
     };
-    console.log('a');
+
     fetchTags();
   }, [activeType]);
 
@@ -158,7 +155,7 @@ export default function Home() {
                   {recipes ? (
                     <Slides recipes={recipes} />
                   ) : (
-                    <div className="h-[100vh - 200px]">
+                    <div className="h-[500px] w-full flex justify-center items-center">
                       <EmptySlides msg="Recipes Are Missing or Cannot Be Found" />
                     </div>
                   )}

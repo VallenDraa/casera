@@ -8,7 +8,8 @@ import {
 import { isSaved } from '../../fetch/fetchRecipeFromServer';
 import SaveRecipeBtn from '../saveRecipeBtn/SaveRecipeBtn';
 
-export default function CardContent({ recipe }) {
+// this render 3 times because of rating, please fix it
+export default function CardContent({ recipe, rating }) {
   const [firstWord, ...theRest] = recipe.strMeal.split(' ');
   const { idMeal } = recipe;
   const { userState } = useContext(userContext);
@@ -31,7 +32,12 @@ export default function CardContent({ recipe }) {
           {/* rating */}
           <div className="absolute bottom-2 inset-x-0 text-center font-light text-yellow-400 font-ssp text-sm">
             <i className="pr-1 fa-solid fa-star" />
-            <span>4.5/5{`  (100+)`}</span>
+            <span>
+              {rating && rating.totalRating && rating.byHowMany
+                ? `${rating.totalRating} / 5  
+                  (${rating.byHowMany <= 100 ? `${rating.byHowMany}` : `100+`})`
+                : 'Not Rated'}
+            </span>
           </div>
         </div>
         {/* name */}

@@ -14,18 +14,32 @@ import Missing404 from '../../components/errorComps/Missing404';
 import SaveRecipeBtn from '../../components/saveRecipeBtn/SaveRecipeBtn';
 import { isSaved } from '../../fetch/fetchRecipeFromServer';
 import { setStatePro } from '../../utils/utils';
+import {
+  addRating,
+  fetchTotalRating,
+  updateRating,
+} from '../../fetch/fetchRatingsFromServer';
+import { USERACTIONS } from '../../context/Actions';
 
 export default function SinglePage() {
   const [recipes, setRecipes] = useState([]);
   const [ingredients, setIngredients] = useState([]);
   const [iframeWidth, setIframeWidth] = useState(400);
   const [loading, setLoading] = useContext(loadingContext);
-  const { userState } = useContext(userContext);
+  const { userState, dispatch } = useContext(userContext);
   const { idMeal } = useParams();
   const [saveBtn, setSaveBtn] = useState(null);
   const { setToastData } = useContext(toastContext);
   const ratingStars = useRef(null);
-  const [currentRating, setCurrentRating] = useState(null);
+  const [userHasRated, setUserHasRated] = useState();
+  const [totalRating, setTotalRating] = useState(null);
+  const RATING_MESSAGES = [
+    '🤮 Bad',
+    '😕 Meh',
+    '🙂 Ok',
+    '😋 Good',
+    '🤩 Delicious',
+  ];
 
   // resize iframe according to screen size
   const iframeWidthChange = () => {
@@ -47,35 +61,54 @@ export default function SinglePage() {
 
       // determine the user rating
       const target = e.target;
+      if (!target.classList.contains('fa-star')) return;
       const stars = [...ratingStars.current.children];
-
       const newUserRating = stars.includes(target) && stars.indexOf(target) + 1;
-
-      // check if there is a user rating before continuing
-      if (!newUserRating) return;
-      // check if the new rating is the same as the current one, if so return
-      // if (stars[newUserRating - 1].classList.contains('fa-solid')) return;
-
-      // turn the empty stars into filled ones according to the newUserRating value
       for (const i in stars) {
         i < newUserRating
           ? stars[i].classList.replace('fa-regular', 'fa-solid')
           : stars[i].classList.replace('fa-solid', 'fa-regular');
       }
 
-      addRating(newUserRating);
-    });
-  };
+      // check if there is a user rating before continuing
+      if (!newUserRating) return;
 
-  const addRating = async (newUserRating) => {
-    const { username } = userState;
-    const bodyContent = { idMeal, username, newUserRating };
-    try {
-      const { data } = await axios.post('/api/rating/add', bodyContent);
-      console.log(data);
-    } catch (err) {
-      return setToastData({ ok: false, msg: 'Fail To Make Connection !' });
-    }
+      // turn the empty stars into filled ones according to the newUserRating value
+
+      const ratingByUserExists = userState.ratingsByUser.find(
+        (rating) => rating.idMeal === idMeal
+      );
+
+      ratingByUserExists
+        ? updateRating(newUserRating, userState, idMeal)
+            .then((data) => {
+              setTotalRating(data.mealRatingData);
+              const newUserData = JSON.parse(sessionStorage.getItem('user'));
+              newUserData.ratingsByUser = data.ratingsByUser;
+              dispatch({ type: USERACTIONS.updateUser, payload: newUserData });
+            })
+            .catch(() => {
+              setToastData({
+                code: 500,
+                ok: false,
+                msg: 'Fail To Make Connection !',
+              });
+            })
+        : addRating(newUserRating, userState, idMeal)
+            .then((data) => {
+              setTotalRating(data.mealRatingData);
+              const newUserData = JSON.parse(sessionStorage.getItem('user'));
+              newUserData.ratingsByUser = data.ratingsByUser;
+              dispatch({ type: USERACTIONS.updateUser, payload: newUserData });
+            })
+            .catch(() => {
+              setToastData({
+                code: 500,
+                ok: false,
+                msg: 'Fail To Make Connection !',
+              });
+            });
+    });
   };
 
   useEffect(() => {
@@ -121,8 +154,50 @@ export default function SinglePage() {
           true
         ).finally(() => setLoading(false));
       });
-    iframeWidthChange();
   }, []);
+
+  useEffect(iframeWidthChange, []);
+
+  useEffect(() => {
+    fetchTotalRating(idMeal)
+      .then((res) => {
+        res.getRating
+          ? setTotalRating(res.mealRatingData[0])
+          : setTotalRating(null);
+      })
+      .catch(() => {
+        setToastData({
+          code: 500,
+          ok: false,
+          msg: 'Fail To Make Connection !',
+        });
+      });
+  }, []);
+
+  useEffect(() => {
+    const changeStarValue = (rating, stars) => {
+      for (const i in stars) {
+        i < rating
+          ? stars[i].classList.replace('fa-regular', 'fa-solid')
+          : stars[i].classList.replace('fa-solid', 'fa-regular');
+      }
+    };
+
+    // check if user rated the current meal
+    if (userState) {
+      const { ratingsByUser } = userState;
+      const ratingData = ratingsByUser.find((rtng) => rtng.idMeal == idMeal);
+      if (!ratingData) return;
+      const { rating } = ratingData;
+
+      console.log({ rated: true, rating });
+      setUserHasRated({ rated: true, rating });
+      setTimeout(() => {
+        const stars = [...ratingStars.current.children];
+        changeStarValue(rating, stars);
+      }, 600);
+    }
+  }, [userState]);
 
   return (
     <>
@@ -130,7 +205,7 @@ export default function SinglePage() {
 
       <main className="bg-slate-100 pb-5">
         <article
-          className="relative max-w-screen-xl px-3 mt-12 lg:mt-20 mx-auto lg:text-left text-slate-800"
+          className="relative max-w-screen-xl  mt-12 lg:mt-20 mx-auto lg:text-left text-slate-800"
           style={{
             height: loading ? 'calc(100vh - 150px)' : 'auto',
           }}
@@ -140,7 +215,7 @@ export default function SinglePage() {
             recipes[0] !== 'n/a' ? (
               <section key={recipe.idMeal} className="animate-fade-in ">
                 {/* body */}
-                <main className="px-2 mt-10 flex flex-col-reverse lg:flex-row gap-12 lg:gap-10">
+                <main className="px-3 xl:px-0 mt-10 flex flex-col-reverse lg:flex-row gap-12 lg:gap-10">
                   {/* preview */}
                   <section>
                     <div className="text-center sticky top-20 space-y-10">
@@ -197,8 +272,15 @@ export default function SinglePage() {
                         </div>
                         {/* rating */}
                         <div className="bg-slate-700 rounded sm:px-2 py-1 w-full sm:w-fit font-light text-yellow-400 font-ssp text-sm">
-                          <i class="pr-1 fa-solid fa-star" />
-                          <span>4.5/5{`  (100+)`}</span>
+                          <i className="pr-1 fa-solid fa-star" />
+                          <span>
+                            {totalRating &&
+                            totalRating.totalRating &&
+                            totalRating.byHowMany
+                              ? `${totalRating.totalRating} / 5  
+                                (${`${totalRating.byHowMany}`})`
+                              : 'Not Rated'}
+                          </span>
                         </div>
                       </div>
                       {/* tags */}
@@ -264,15 +346,21 @@ export default function SinglePage() {
                         <div
                           ref={ratingStars}
                           onClick={(e) => handleRate(e)}
-                          className="space-x-1 text-xl mb-1 cursor-pointer"
+                          className="space-x-1 text-xl mb-1 cursor-pointer w-fit mx-auto"
                         >
-                          <i id="1" class="fa-regular fa-star" />
-                          <i id="2" class="fa-regular fa-star" />
-                          <i id="3" class="fa-regular fa-star" />
-                          <i id="4" class="fa-regular fa-star" />
-                          <i id="5" class="fa-regular fa-star" />
+                          <i id="1" className="fa-regular fa-star" />
+                          <i id="2" className="fa-regular fa-star" />
+                          <i id="3" className="fa-regular fa-star" />
+                          <i id="4" className="fa-regular fa-star" />
+                          <i id="5" className="fa-regular fa-star" />
                         </div>
-                        <p className="text-xs">Rate This Recipe !</p>
+                        <p className="text-sm pt-1">
+                          {userHasRated
+                            ? `${RATING_MESSAGES[userHasRated.rating - 1]} (${
+                                userHasRated.rating
+                              } / 5)`
+                            : 'Rate This Recipe !'}
+                        </p>
                       </div>
                     </footer>
                   </section>

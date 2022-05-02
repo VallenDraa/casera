@@ -28,7 +28,6 @@ export default function Login() {
       if (data.login) {
         dispatch({ type: USERACTIONS.LoginSuccess, payload: data.userData });
         navigate('/');
-        console.log(userState);
       } else {
         setToastData(data);
       }
