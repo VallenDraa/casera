@@ -31,11 +31,11 @@ export default function UserPage() {
   const [loading, setLoading] = useContext(loadingContext);
   const { username } = useParams(); //get the queried username from the URL parameter
   const [otherUserData, setOtherUserData] = useState(null);
-  const [isGuest, setIsGuest] = useState(null);
   const navigate = useNavigate();
 
   useEffect(() => {
     setLoading(true);
+    otherUserData && setOtherUserData(null);
 
     const getPPCurrentUser = () => {
       // returns if there is userState is empty
@@ -71,7 +71,10 @@ export default function UserPage() {
           if (!recipes) return setLoading(false);
           setRecipes(recipes);
         })
-        .finally(() => setLoading(false));
+        .finally(() => {
+          setOtherUserData(false);
+          setLoading(false);
+        });
     };
 
     const funcsForNotSameUser = () => {
@@ -80,34 +83,30 @@ export default function UserPage() {
           setOtherUserData(userData);
           setProfilePic(userData.profilePic);
         })
-        .finally(() => setLoading(false));
+        .finally(() => {
+          setTimeout(() => setLoading(false), 1500);
+        });
     };
 
-    setStatePro(setOtherUserData, null).finally(() => {
-      setStatePro(setIsGuest, userState ? false : true).finally(() => {
-        // check if user logged in
-        if (!isGuest) {
-          if (!userState) return;
-
-          redirectIfLoggedIn(username)
-            // get user data using the current userState because the code redirects the page to the current user's page
-            .then(() => funcsForSameUser())
-            // no redirect. Check if the requested user is the same as the current logged in user
-            .catch(() => {
-              userState.username === username
-                ? funcsForSameUser()
-                : funcsForNotSameUser();
-            });
-        }
-        // the user is a guest
-        else {
-          // check if a URL parameter is provided
-          username ? funcsForNotSameUser() : setIsGuest(true);
-          return setLoading(false);
-        }
-      });
-    });
-  }, [userState]);
+    // check if user logged in
+    if (userState) {
+      redirectIfLoggedIn(username)
+        // get user data using the current userState because the code redirects the page to the current user's page
+        .then(() => funcsForSameUser())
+        // no redirect. Check if the requested user is the same as the current logged in user
+        .catch(() => {
+          userState.username === username
+            ? funcsForSameUser()
+            : funcsForNotSameUser();
+        });
+    }
+    // the user is a guest
+    else {
+      // check if a URL parameter is provided
+      username && funcsForNotSameUser();
+      return setLoading(false);
+    }
+  }, [userState, username]);
 
   const handleSubmit = async (e) => {
     setToastData(null);
@@ -328,12 +327,10 @@ export default function UserPage() {
                   </footer>
                 </>
               ) : (
-                isGuest && (
-                  // the user is a guest and trying to access its own user page
-                  <section className="h-[calc(100vh-120px)] relative max-w-screen-xl px-3 mt-10 sm:w-11/12 lg:w-5/6 xl:w-3/4 mx-auto flex justify-center items-center">
-                    <LoginFirst msg="Login / Register To See Your User Page !" />
-                  </section>
-                )
+                // the user is a guest and trying to access its own user page
+                <section className="h-[calc(100vh-120px)] relative max-w-screen-xl px-3 mt-10 sm:w-11/12 lg:w-5/6 xl:w-3/4 mx-auto flex justify-center items-center">
+                  <LoginFirst msg="Login / Register To See Your User Page !" />
+                </section>
               )
             ) : (
               // if the requested user is the current user

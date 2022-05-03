@@ -1,25 +1,65 @@
 import Header from '../../components/header/Header';
 import { useContext, useEffect, useState } from 'react';
-import CardWrapper from '../../components/card/CardWrapper';
-import fetchSearchResult from '../../fetch/fetchSearchResults';
+import RecipeCardWrapper from '../../components/card/Recipe/RecipeCardWrapper';
+import {
+  fetchRecipeResults,
+  fetchUserResults,
+} from '../../fetch/fetchSearchResults';
 import Loading from '../../components/loading/Loading';
 import HomeAside from '../../components/home/homeAside/HomeAside';
-import { loadingContext } from '../../context/Context';
+import { loadingContext, userContext } from '../../context/Context';
+import { useLocation } from 'react-router-dom';
+import UserCard from '../../components/card/User/UserCard';
 
 export default function Search() {
-  const urlQuery = window.location.href.split('=')[1];
+  const { search } = useLocation();
+  const searchType = search.split('=')[0];
+  const urlQuery = search.split('=')[1];
   const query = urlQuery.includes('%20')
     ? urlQuery.replace('%20', ' ')
     : urlQuery;
-  const [recipes, setRecipes] = useState([]);
+  const [results, setResults] = useState([]);
   const [loading, setLoading] = useContext(loadingContext);
+  const { userState } = useContext(userContext);
 
   useEffect(() => {
     setLoading(true);
-    fetchSearchResult(urlQuery)
-      .then((res) => setRecipes(res))
-      .finally(() => setLoading(false));
-  }, [urlQuery]);
+
+    switch (searchType) {
+      case '?r':
+        fetchRecipeResults(urlQuery)
+          .then((res) => setResults(res))
+          .finally(() => setLoading(false));
+        break;
+      case '?u':
+        fetchUserResults(urlQuery)
+          .then((res) => setResults(res))
+          .finally(() => setLoading(false));
+        break;
+      default:
+        break;
+    }
+  }, []);
+
+  const RenderResults = ({ searchType, results }) => {
+    switch (searchType) {
+      case '?r':
+        return results.map((recipe, i) =>
+          i !== 0 ? (
+            <RecipeCardWrapper key={i} recipe={recipe} lazyload={true} />
+          ) : (
+            <RecipeCardWrapper key={i} recipe={recipe} lazyload={false} />
+          )
+        );
+      case '?u':
+        return results.map(({ username, profilePic }, i) => {
+          return <UserCard key={i} username={username} picture={profilePic} />;
+        });
+
+      default:
+        return;
+    }
+  };
 
   return (
     <>
@@ -27,7 +67,7 @@ export default function Search() {
       <main className="bg-slate-100">
         <HomeAside />
         <div
-          className="relative max-w-screen-xl px-3 mt-10 sm:w-11/12 lg:w-5/6 xl:w-3/4 mx-auto lg:text-left pb-5"
+          className="relative max-w-screen-xl px-3 mt-10 sm:w-11/12 lg:w-5/6 xl:w-3/4 mx-auto pb-5"
           style={{ height: loading ? 'calc(100vh - 110px)' : 'auto' }}
         >
           {loading && <Loading />}
@@ -43,17 +83,11 @@ export default function Search() {
           >
             {loading
               ? "Hang On It's Almost Done"
-              : `There are ${recipes.length} recipes`}
+              : `There are ${results.length} results`}
           </p>
           <article className="mt-16 ">
             <section className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 xl:grid-cols-4 gap-5 pb-5">
-              {recipes.map((recipe, i) =>
-                i !== 0 ? (
-                  <CardWrapper key={i} recipe={recipe} lazyload={true} />
-                ) : (
-                  <CardWrapper key={i} recipe={recipe} lazyload={false} />
-                )
-              )}
+              <RenderResults searchType={searchType} results={results} />
             </section>
           </article>
         </div>

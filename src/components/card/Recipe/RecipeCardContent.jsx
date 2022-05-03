@@ -4,9 +4,9 @@ import {
   userContext,
   toastContext,
   loadingContext,
-} from '../../context/Context';
-import { isSaved } from '../../fetch/fetchRecipeFromServer';
-import SaveRecipeBtn from '../saveRecipeBtn/SaveRecipeBtn';
+} from '../../../context/Context';
+import { isSaved } from '../../../fetch/fetchRecipeFromServer';
+import SaveRecipeBtn from '../../saveRecipeBtn/SaveRecipeBtn';
 
 // this render 3 times because of rating, please fix it
 export default function CardContent({ recipe, rating }) {

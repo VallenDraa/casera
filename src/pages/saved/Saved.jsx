@@ -1,6 +1,6 @@
 import Header from '../../components/header/Header';
 import HomeAside from '../../components/home/homeAside/HomeAside';
-import CardWrapper from '../../components/card/CardWrapper';
+import CardWrapper from '../../components/card/Recipe/RecipeCardWrapper';
 import LoginFirst from '../../components/errorComps/LoginFirst';
 import { fetchSavedRecipes } from '../../fetch/fetchRecipeFromServer';
 import { useContext, useState, useEffect } from 'react';
@@ -49,7 +49,7 @@ export default function Saved() {
       <Header />
       <main className="bg-slate-100">
         <HomeAside />
-        <div className="relative max-w-screen-xl px-3 mt-10 sm:w-11/12 lg:w-5/6 xl:w-3/4 mx-auto lg:text-left text-slate-700">
+        <div className="relative max-w-screen-xl px-3 mt-10 sm:w-11/12 lg:w-5/6 xl:w-3/4 mx-auto text-center md:text-left text-slate-700">
           <h1 className="tracking-wide text-4xl font-ssp first-letter:text-5xl first-letter:font-semibold">
             Saved
           </h1>

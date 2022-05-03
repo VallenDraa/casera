@@ -11,7 +11,7 @@ import Popup from '../../components/notice/Popup';
 
 export default function Home() {
   const TYPELIST = ['Categories', 'Area', 'Ingredients'];
-  const [activeType, setActiveType] = useState(null);
+  const [activeType, setActiveType] = useState(TYPELIST[0]);
   const [tags, setTags] = useState([]);
   const activeTagList = useRef(null);
   const [activeTag, setActiveTag] = useState(null);

@@ -41,7 +41,7 @@ export default function ContextMenu({ innerRef }) {
             className="md:rounded-b border-t-2 border-slate-700 py-2 px-2 duration-200 bg-red-500 hover:bg-red-600 active:bg-red-700 text-slate-50 font-semibold"
           >
             Logout
-            <i className="pl-2 fa-solid fa-right-from-bracket" />
+            <i className="pl-2 fa-solid fa-right-to-bracket" />
           </li>
         </>
       ) : (

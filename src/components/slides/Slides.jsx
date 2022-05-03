@@ -2,7 +2,7 @@ import 'swiper/css';
 import 'swiper/css/pagination';
 import Img from '../img/Img';
 import { Swiper, SwiperSlide } from 'swiper/react';
-import CardContent from '../card/CardContent';
+import CardContent from '../card/Recipe/RecipeCardContent';
 import { useContext, useEffect, useState } from 'react';
 import { fetchTotalRating } from '../../fetch/fetchRatingsFromServer';
 import { toastContext } from '../../context/Context';

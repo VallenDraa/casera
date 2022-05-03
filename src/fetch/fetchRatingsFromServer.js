@@ -27,7 +27,11 @@ export const updateRating = async (newUserRating, userState, idMeal) => {
   const bodyContent = { idMeal, username, newUserRating };
   try {
     const { data } = await axios.put('/api/rating/update', bodyContent);
-    return data;
+    if (data.updateRating) {
+      return data;
+    } else {
+      throw Error('Fail To Make Connection');
+    }
   } catch (err) {
     throw Error(err);
   }

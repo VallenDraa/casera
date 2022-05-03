@@ -30,22 +30,6 @@ export default function Navbar() {
 
   window.addEventListener('resize', morphMenu);
 
-  // window.addEventListener('click', (e) => {
-  //   if (!contextMenu.current) return;
-  //   // context menu
-  //   const CMChildrens = [...contextMenu.current.children];
-  //   const target = e.target;
-
-  //   CMChildrens.forEach((child) => {
-  //     if (child.children[0] !== target && target !== contextBtn.current) {
-  //       console.log(
-  //         child.children[0] !== target && target !== contextBtn.current
-  //       );
-  //       handleUserContextMenu();
-  //     }
-  //   });
-  // });
-
   function handleUserContextMenu() {
     const contextClass = contextMenu.current.classList;
     const contextBtnClass = contextBtn.current.children[0].classList;

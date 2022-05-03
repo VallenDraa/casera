@@ -22,7 +22,7 @@ const isSaved = async (req, res) => {
 const getSavedRecipes = async (req, res) => {
   const { _id, preview } = req.query;
 
-  console.log(req.query);
+  // console.log(req.query);
   try {
     const user = await User.findById(_id);
     const { username, savedRecipes } = user;

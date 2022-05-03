@@ -1,8 +1,8 @@
-import CardContent from './CardContent';
-import Img from '../img/Img';
+import CardContent from './RecipeCardContent';
+import Img from '../../img/Img';
 import { useContext, useEffect, useState } from 'react';
-import { toastContext } from '../../context/Context';
-import { fetchTotalRating } from '../../fetch/fetchRatingsFromServer';
+import { toastContext } from '../../../context/Context';
+import { fetchTotalRating } from '../../../fetch/fetchRatingsFromServer';
 
 export default function CardWrapper({ recipe, lazyload = false }) {
   const [rating, setRating] = useState([]);

@@ -30,13 +30,30 @@ const getUser = async (req, res) => {
 
     const { password, email, ...userData } = user._doc;
 
-    res.status(200).json({ code: 200, ok: true, userGet: true, userData });
+    res.status(200).json({ code: 200, ok: true, getUser: true, userData });
   } catch (err) {
-    res.status(500).json({ code: 500, ok: false, userGet: false });
+    res.status(500).json({ code: 500, ok: false, getUser: false });
+  }
+};
+const getUserPreview = async (req, res) => {
+  const { username } = req.query;
+
+  try {
+    const users = await User.where('username')
+      .equals({ $regex: username, $options: 'i' })
+      .select(['username', 'profilePic']);
+
+    console.log(users);
+    res
+      .status(200)
+      .json({ code: 200, ok: true, getUserPreview: true, usersPreview: users });
+  } catch (err) {
+    res.status(500).json({ code: 500, ok: false, getUserPreview: false });
   }
 };
 
 module.exports = {
   updateUser,
   getUser,
+  getUserPreview,
 };

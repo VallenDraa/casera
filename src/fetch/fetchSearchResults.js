@@ -1,7 +1,7 @@
 import axios from 'axios';
 import { removeDupeObjInArrayByKey } from '../utils/utils';
 
-export default async function fetchSearchResult(query) {
+export async function fetchRecipeResults(query) {
   const recipes = [];
   const searchRes = await axios.get(
     `https://www.themealdb.com/api/json/v1/1/search.php?s=${query}`
@@ -37,5 +37,19 @@ export default async function fetchSearchResult(query) {
 
       targetArray.push(data);
     }
+  }
+}
+
+export async function fetchUserResults(query) {
+  try {
+    const { data } = await axios.get(`/api/user/getPreview?username=${query}`);
+    if (data.getUserPreview) {
+      const { usersPreview } = data;
+      return usersPreview;
+    } else {
+      throw Error('Fail To Make Connection !');
+    }
+  } catch (err) {
+    throw Error(err);
   }
 }

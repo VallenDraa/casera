@@ -160,9 +160,27 @@ module.exports = {
             transform: 'translateX(100%)',
           },
         },
+        'search-caret-o': {
+          '0%': {
+            'padding-top': '0',
+          },
+          '100%': {
+            'padding-top': '0.25rem',
+          },
+        },
+        'search-caret-c': {
+          '0%': {
+            'padding-top': '0.25rem',
+          },
+          '100%': {
+            'padding-top': '0',
+          },
+        },
       },
       animation: {
         timer: 'timer 5s ease-in-out',
+        'search-caret-o': 'search-caret-o 200ms ease-in-out',
+        'search-caret-c': 'search-caret-c 200ms ease-in-out',
         'menu-o': 'menu-o 500ms ease-in-out',
         'menu-c': 'menu-c 500ms ease-in-out',
         'scale-in': 'scale-in 300ms ease-in-out',
