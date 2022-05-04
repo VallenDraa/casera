@@ -16,7 +16,7 @@ const updateUser = async (req, res) => {
     // send back the updated user data
     res.status(200).json({ code: 200, ok: true, userUpdated: true, userData });
   } catch (e) {
-    console.log(e);
+    // console.log(e);
     res.status(500).json({ code: 500, ok: false, userUpdated: true });
   }
 };
@@ -43,7 +43,7 @@ const getUserPreview = async (req, res) => {
       .equals({ $regex: username, $options: 'i' })
       .select(['username', 'profilePic']);
 
-    console.log(users);
+    // console.log(users);
     res
       .status(200)
       .json({ code: 200, ok: true, getUserPreview: true, usersPreview: users });

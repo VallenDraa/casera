@@ -17,7 +17,6 @@ export default function Home() {
   const [activeTag, setActiveTag] = useState(null);
   const [recipes, setRecipes] = useState([]);
   const [loading, setLoading] = useContext(loadingContext);
-  const x = 'Categories';
 
   useEffect(() => {
     setLoading(true);

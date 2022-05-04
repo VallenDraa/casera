@@ -12,13 +12,13 @@ import { useEffect, useState } from 'react';
 
 export default function BgAnim() {
   const [activeBg, setActiveBg] = useState(null);
-  const BgSets = [Bg1, Bg2, Bg3, Bg4, Bg5, Bg6, Bg7, Bg8, Bg9, Bg10];
+  const BG_SETS = [Bg1, Bg2, Bg3, Bg4, Bg5, Bg6, Bg7, Bg8, Bg9, Bg10];
 
   useEffect(() => {
     const activeIndex = Math.floor(Math.random() * 10);
 
-    setActiveBg(BgSets[activeIndex]);
-  });
+    setActiveBg(BG_SETS[activeIndex]);
+  }, []);
 
   return (
     <div className="fixed h-screen w-screen">

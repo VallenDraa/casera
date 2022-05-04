@@ -7,7 +7,7 @@ import {
 } from '../../fetch/fetchSearchResults';
 import Loading from '../../components/loading/Loading';
 import HomeAside from '../../components/home/homeAside/HomeAside';
-import { loadingContext, userContext } from '../../context/Context';
+import { loadingContext } from '../../context/Context';
 import { useLocation } from 'react-router-dom';
 import UserCard from '../../components/card/User/UserCard';
 
@@ -20,7 +20,6 @@ export default function Search() {
     : urlQuery;
   const [results, setResults] = useState([]);
   const [loading, setLoading] = useContext(loadingContext);
-  const { userState } = useContext(userContext);
 
   useEffect(() => {
     setLoading(true);

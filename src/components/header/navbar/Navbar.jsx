@@ -27,12 +27,41 @@ export default function Navbar() {
       ? menuComp.classList.remove('animate-menu-o')
       : menuComp.classList.remove('animate-menu-c');
   };
-
   window.addEventListener('resize', morphMenu);
+
+  // handle menu auto-close
+  window.addEventListener('click', (e) => {
+    if (!contextMenu.current || !contextBtn.current) return;
+    const ctxMenu = contextMenu.current;
+    const ctxBtn = contextBtn.current;
+    const ctxMenuItems = [...contextMenu.current.children];
+
+    // check if the clicked target is related to the context menu
+    if (
+      ctxMenuItems.includes(e.target) ||
+      e.target === ctxMenu ||
+      e.target === ctxBtn
+    ) {
+      return;
+    } else {
+      const ctxMenuClasses = ctxMenu.classList;
+      const caret = ctxBtn.children[0].classList;
+
+      // check if the context menu is already closed, if yes then return
+      if (ctxMenuClasses.contains('scale-0')) return;
+
+      // scale down the context menu
+      ctxMenuClasses.replace('scale-100', 'scale-0');
+      // add closing animation
+      ctxMenuClasses.replace('animate-scale-in', 'animate-scale-out');
+      // rotate caret
+      caret.add('rotate-90');
+    }
+  });
 
   function handleUserContextMenu() {
     const contextClass = contextMenu.current.classList;
-    const contextBtnClass = contextBtn.current.children[0].classList;
+    const caret = contextBtn.current.children[0].classList;
 
     // open context menu
     contextClass.contains('scale-0')
@@ -59,9 +88,9 @@ export default function Navbar() {
     }
 
     // caret handling
-    contextBtnClass.contains('rotate-90')
-      ? contextBtnClass.remove('rotate-90')
-      : contextBtnClass.add('rotate-90');
+    caret.contains('rotate-90')
+      ? caret.remove('rotate-90')
+      : caret.add('rotate-90');
   }
 
   return (

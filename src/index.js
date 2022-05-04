@@ -1,4 +1,3 @@
-import { StrictMode } from 'react';
 import { createRoot } from 'react-dom/client';
 import { ContextProvider } from './context/Context';
 import App from './App';
@@ -10,12 +9,8 @@ createRoot(root).render(
   <>
     {/* background animation */}
     <BgAnim />
-
-    {/* <StrictMode> */}
     <ContextProvider>
       <App />
     </ContextProvider>
-
-    {/* </StrictMode> */}
   </>
 );

@@ -186,7 +186,9 @@ export default function SinglePage() {
     // check if user rated the current meal
     if (userState) {
       const { ratingsByUser } = userState;
-      const ratingData = ratingsByUser.find((rtng) => rtng.idMeal == idMeal);
+      const ratingData = ratingsByUser.find(
+        (rtng) => Number(rtng.idMeal) === Number(idMeal)
+      );
       if (!ratingData) return;
       const { rating } = ratingData;
 

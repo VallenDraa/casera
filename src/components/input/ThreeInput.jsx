@@ -1,4 +1,3 @@
-import { useState } from 'react';
 import Input from './Input';
 
 export default function ThreeInput({ editMode, innerRef, value, label = '' }) {

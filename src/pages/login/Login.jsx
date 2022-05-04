@@ -9,7 +9,7 @@ import axios from 'axios';
 import Btn from '../../components/btn/Btn';
 
 export default function Login() {
-  const { userState, dispatch } = useContext(userContext);
+  const { dispatch } = useContext(userContext);
   const { setToastData } = useContext(toastContext);
   const usernameRef = useRef();
   const passwordRef = useRef();
