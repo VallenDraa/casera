@@ -46,19 +46,18 @@ export default function ContextMenu({ innerRef }) {
         </>
       ) : (
         <>
-          <li className=" text-lg text-center text-slate-100 hover:text-slate-200 bg-lime-500 hover:bg-lime-600 active:bg-lime-700 relative">
-            <Link className="py-2 px-2 inline-block w-full h-full" to="/login">
-              Login
-            </Link>
-          </li>
-          <li className=" text-lg text-center text-slate-100 hover:text-slate-200 bg-orange-500 hover:bg-orange-600 active:bg-orange-700 relative">
-            <Link
-              className="py-2 px-2 inline-block w-full h-full"
-              to="/register"
-            >
-              Register
-            </Link>
-          </li>
+          <Link
+            className="py-2 px-2 inline-block w-full h-full text-lg text-center text-slate-100 hover:text-slate-200 bg-lime-500 hover:bg-lime-600 active:bg-lime-700 relative"
+            to="/login"
+          >
+            Login
+          </Link>
+          <Link
+            className="py-2 px-2 inline-block w-full h-full text-lg text-center text-slate-100 hover:text-slate-200 bg-orange-500 hover:bg-orange-600 active:bg-orange-700 relative"
+            to="/register"
+          >
+            Register
+          </Link>
         </>
       )}
     </div>

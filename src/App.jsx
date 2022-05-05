@@ -14,7 +14,7 @@ import StateToast from './components/toast/StateToast';
 
 export default function App() {
   const { dispatch } = useContext(userContext);
-  useEffect(() => dispatch({ type: USERACTIONS.getUserData }), []);
+  useEffect(() => dispatch({ type: USERACTIONS.getUserData }), [dispatch]);
   const { toastData } = useContext(toastContext);
 
   return (

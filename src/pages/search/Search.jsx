@@ -38,7 +38,7 @@ export default function Search() {
       default:
         break;
     }
-  }, []);
+  }, [searchType, setLoading, urlQuery]);
 
   const RenderResults = ({ searchType, results }) => {
     switch (searchType) {
@@ -63,7 +63,7 @@ export default function Search() {
   return (
     <>
       <Header />
-      <main className="bg-slate-100">
+      <main>
         <HomeAside />
         <div
           className="relative max-w-screen-xl px-3 mt-10 sm:w-11/12 lg:w-5/6 xl:w-3/4 mx-auto pb-5"

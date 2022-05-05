@@ -5,6 +5,7 @@ import Header from '../../components/header/Header';
 import ReactPlayer from 'react-player';
 import { Link } from 'react-router-dom';
 import Loading from '../../components/loading/Loading';
+import RatingBtn from '../../components/ratingBtn/RatingBtn';
 import {
   loadingContext,
   toastContext,
@@ -33,13 +34,6 @@ export default function SinglePage() {
   const ratingStars = useRef(null);
   const [userHasRated, setUserHasRated] = useState();
   const [totalRating, setTotalRating] = useState(null);
-  const RATING_MESSAGES = [
-    '🤮 Bad',
-    '😕 Meh',
-    '🙂 Ok',
-    '😋 Good',
-    '🤩 Delicious',
-  ];
 
   // resize iframe according to screen size
   const iframeWidthChange = () => {
@@ -154,7 +148,7 @@ export default function SinglePage() {
           true
         ).finally(() => setLoading(false));
       });
-  }, []);
+  }, [idMeal, setLoading, setToastData, userState]);
 
   useEffect(iframeWidthChange, []);
 
@@ -172,7 +166,7 @@ export default function SinglePage() {
           msg: 'Fail To Make Connection !',
         });
       });
-  }, []);
+  }, [idMeal, setToastData]);
 
   useEffect(() => {
     const changeStarValue = (rating, stars) => {
@@ -192,20 +186,20 @@ export default function SinglePage() {
       if (!ratingData) return;
       const { rating } = ratingData;
 
-      console.log({ rated: true, rating });
+      // console.log({ rated: true, rating });
       setUserHasRated({ rated: true, rating });
       setTimeout(() => {
         const stars = [...ratingStars.current.children];
         changeStarValue(rating, stars);
       }, 600);
     }
-  }, [userState]);
+  }, [userState, idMeal]);
 
   return (
     <>
       <Header />
 
-      <main className="bg-slate-100 pb-5">
+      <main className="pb-5">
         <article
           className="relative max-w-screen-xl  mt-12 lg:mt-20 mx-auto lg:text-left text-slate-800"
           style={{
@@ -344,26 +338,11 @@ export default function SinglePage() {
                     <footer className="mt-10">
                       {/* save dish */}
                       {saveBtn}
-                      <div className="bg-slate-700 text-center rounded sm:px-2 py-1 w-full font-light text-yellow-400 font-ssp mt-3">
-                        <div
-                          ref={ratingStars}
-                          onClick={(e) => handleRate(e)}
-                          className="space-x-1 text-xl mb-1 cursor-pointer w-fit mx-auto"
-                        >
-                          <i id="1" className="fa-regular fa-star" />
-                          <i id="2" className="fa-regular fa-star" />
-                          <i id="3" className="fa-regular fa-star" />
-                          <i id="4" className="fa-regular fa-star" />
-                          <i id="5" className="fa-regular fa-star" />
-                        </div>
-                        <p className="text-sm pt-1">
-                          {userHasRated
-                            ? `${RATING_MESSAGES[userHasRated.rating - 1]} (${
-                                userHasRated.rating
-                              } / 5)`
-                            : 'Rate This Recipe !'}
-                        </p>
-                      </div>
+                      <RatingBtn
+                        ratingStars={ratingStars}
+                        handleRate={handleRate}
+                        userHasRated={userHasRated}
+                      />
                     </footer>
                   </section>
                 </main>

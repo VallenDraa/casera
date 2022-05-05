@@ -27,7 +27,7 @@ export default function Home() {
         setActiveTag(active);
         fetchRecipesByTypes(activeType, active)
           .then((res) => (res.length > 0 ? setRecipes(res) : setRecipes(null)))
-          .catch((e) => setRecipes(null))
+          .catch(() => setRecipes(null))
           .finally(() => setLoading(false));
       });
 
@@ -49,7 +49,7 @@ export default function Home() {
     };
 
     fetchTags();
-  }, [activeType]);
+  }, [activeType, setLoading]);
 
   // handle the lime no bg food type buttons
   function handleTypeList(target) {
@@ -79,7 +79,7 @@ export default function Home() {
       {/* aside */}
 
       <Header />
-      <main className="bg-slate-100">
+      <main>
         <HomeAside />
         <div className="relative max-w-screen-xl px-3 mt-10  lg:w-5/6 xl:w-3/4 mx-auto lg:text-left overflow-y-auto md:overflow-hidden">
           <header className="text-center lg:text-left text-slate-700">

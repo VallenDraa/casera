@@ -42,12 +42,12 @@ export default function Saved() {
         }
       })
       .finally(() => setLoading(false));
-  }, [userState]);
+  }, [userState, setLoading, setToastData]);
 
   return (
     <>
       <Header />
-      <main className="bg-slate-100">
+      <main>
         <HomeAside />
         <div className="relative max-w-screen-xl px-3 mt-10 sm:w-11/12 lg:w-5/6 xl:w-3/4 mx-auto text-center md:text-left text-slate-700">
           <h1 className="tracking-wide text-4xl font-ssp first-letter:text-5xl first-letter:font-semibold">

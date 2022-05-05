@@ -144,6 +144,16 @@ module.exports = {
             opacity: '1',
           },
         },
+        'fade-out-left-homeAside': {
+          '0%': {
+            transform: 'translateX(0px) rotate(-90deg)',
+            opacity: '1',
+          },
+          '100%': {
+            transform: 'translateX(-15px) rotate(-90deg)',
+            opacity: '0',
+          },
+        },
         'menu-o': {
           '0%': {
             transform: 'translateX(100%)',
@@ -188,6 +198,7 @@ module.exports = {
         'fade-in': 'fade-in 300ms ease-in-out',
         'fade-out': 'fade-out 300ms ease-in-out',
         'fade-in-left-homeAside': 'fade-in-left-homeAside 300ms ease-in-out',
+        'fade-out-left-homeAside': 'fade-out-left-homeAside 300ms ease-in-out',
         'fade-in-bottom': 'fade-in-bottom 300ms ease-in-out',
         'fade-out-bottom': 'fade-out-bottom 300ms ease-in-out',
         'fade-in-left': 'fade-in-left 300ms ease-in-out',

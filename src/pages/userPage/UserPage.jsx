@@ -197,7 +197,7 @@ export default function UserPage() {
             {!otherUserData ? ( // if the requested user is not the current user
               userState ? ( // check if the user is logged in, then render user's own user page
                 <>
-                  <section className="bg-slate-100">
+                  <section className="">
                     <div className="relative max-w-screen-xl px-3 mt-10 sm:w-11/12 lg:w-5/6 xl:w-3/4 mx-auto lg:text-left">
                       {/* user data */}
                       <form
@@ -311,7 +311,7 @@ export default function UserPage() {
                       </form>
                     </div>
                   </section>
-                  <footer className=" bg-slate-100">
+                  <footer>
                     <div className="relative max-w-screen-xl px-3 pt-10 sm:w-11/12 lg:w-5/6 xl:w-3/4 mx-auto lg:text-left">
                       {recipes ? (
                         <div className="pb-5 pt-10 max-w-xl mx-auto text-center space-y-3">
@@ -334,7 +334,7 @@ export default function UserPage() {
               )
             ) : (
               // if the requested user is the current user
-              <section className="bg-slate-100 flex justify-center items-center h-[calc(100vh-55px)]">
+              <section className=" flex justify-center items-center h-[calc(100vh-55px)]">
                 <div className="relative max-w-screen-xl px-3 mt-10 w-full sm:w-11/12 lg:w-5/6 xl:w-3/4 mx-auto lg:text-left">
                   {/* user data */}
                   <article className="flex flex-col gap-12 md:gap-20 items-center">
