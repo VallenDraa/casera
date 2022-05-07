@@ -36,7 +36,6 @@ export default function Navbar() {
     const ctxBtn = contextBtn.current;
     const ctxMenuItems = [...contextMenu.current.children];
 
-    console.log(ctxMenuItems);
     // check if the clicked target is related to the context menu
     if (
       ctxMenuItems.includes(e.target) ||
