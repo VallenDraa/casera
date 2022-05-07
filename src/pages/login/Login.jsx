@@ -24,7 +24,7 @@ export default function Login() {
     };
 
     try {
-      const { data } = await axios.post('/auth/login', bodyContent);
+      const { data } = await axios.post('/api/auth/login', bodyContent);
       if (data.login) {
         dispatch({ type: USERACTIONS.LoginSuccess, payload: data.userData });
         navigate('/');

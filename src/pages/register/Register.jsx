@@ -25,7 +25,7 @@ export default function Register() {
 
     // try to register
     try {
-      const { data } = await axios.post('/auth/register', bodyContent);
+      const { data } = await axios.post('/api/auth/register', bodyContent);
       data.signup ? navigate('/login') : setToastData(data);
     } catch (e) {
       setToastData({ ok: false, msg: 'Fail To Make Connection !' });
