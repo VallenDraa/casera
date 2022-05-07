@@ -21,7 +21,6 @@ app.use('/api', apiRecipeRouter);
 app.use('/api', apiUserRouter);
 app.use('/api', apiRatingRouter);
 app.use('/auth', authRouter);
-app.get('/test', (req, res) => res.json({ foo: 'bar' }));
 // console.log(https);
 
 app.listen(process.env.PORT || 3001, () => console.log('listening on 3001'));

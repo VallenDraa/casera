@@ -77,7 +77,7 @@ const login = async (req, res) => {
     //   check if there is a user with the same name as the requested one
     const user = await User.findOne({ username });
     if (user) {
-      const { password, ...userData } = user._doc;
+      const { password, email, ...userData } = user._doc;
       // check if password is correct
       (await bcrypt.compare(loginPassword, user.password))
         ? res.status(200).json({ code: 200, ok: true, login: true, userData })

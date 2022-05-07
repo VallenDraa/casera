@@ -36,6 +36,7 @@ export default function Navbar() {
     const ctxBtn = contextBtn.current;
     const ctxMenuItems = [...contextMenu.current.children];
 
+    console.log(ctxMenuItems);
     // check if the clicked target is related to the context menu
     if (
       ctxMenuItems.includes(e.target) ||
@@ -137,7 +138,7 @@ export default function Navbar() {
         {/* the menu itself */}
         <div
           ref={menu}
-          className="transform translate-x-full md:translate-x-0 font-roboto top-0 right-0 left-0 sm:left-2/4 h-screen bg-white md:bg-transparent md:h-fit fixed md:static md:flex gap-1 font-extralight items-center text-slate-700 z-30 shadow-xl md:shadow-none"
+          className="z-100 transform translate-x-full md:translate-x-0 font-roboto top-0 right-0 left-0 sm:left-2/4 h-screen bg-white md:bg-transparent md:h-fit fixed md:static md:flex gap-1 font-extralight items-center text-slate-700 z-30 shadow-xl md:shadow-none"
         >
           {/* close menu for smaller screen size */}
           <div

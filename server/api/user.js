@@ -10,7 +10,7 @@ const updateUser = async (req, res) => {
     user.phone = phone;
     user.hobby = hobby;
 
-    const { password, ...userData } = user._doc;
+    const { password, email, ...userData } = user._doc;
     await user.save();
 
     // send back the updated user data

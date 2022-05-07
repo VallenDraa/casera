@@ -36,13 +36,14 @@ export default function ContextMenu({ innerRef }) {
             Saved Recipes
             <i className="pl-2 fa-solid fa-heart" />
           </Link>
-          <div
+          <button
+            type="button"
             onClick={logout}
-            className="md:rounded-b border-t-2 border-slate-700 py-2 px-2 duration-200 bg-red-500 hover:bg-red-600 active:bg-red-700 text-slate-50 font-semibold"
+            className="text-left block w-full md:rounded-b border-t-2 border-slate-700 py-2 px-2 duration-200 bg-red-500 hover:bg-red-600 active:bg-red-700 text-slate-50 font-semibold"
           >
             Logout
             <i className="pl-2 fa-solid fa-right-to-bracket" />
-          </div>
+          </button>
         </>
       ) : (
         <>
