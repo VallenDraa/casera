@@ -1,26 +1,26 @@
-import 'swiper/css';
-import 'swiper/css/pagination';
-import LoginFirst from '../../components/errorComps/LoginFirst';
-import Header from '../../components/header/Header';
-import Input from '../../components/input/Input';
-import Field from '../../components/fields/Field';
-import Lists from '../../components/fields/Lists';
-import ThreeInput from '../../components/input/ThreeInput';
-import Btn from '../../components/btn/Btn';
-import { useContext, useEffect, useState } from 'react';
-import { useParams, useNavigate } from 'react-router-dom';
+import "swiper/css";
+import "swiper/css/pagination";
+import LoginFirst from "../../components/errorComps/LoginFirst";
+import Header from "../../components/header/Header";
+import Input from "../../components/input/Input";
+import Field from "../../components/fields/Field";
+import Lists from "../../components/fields/Lists";
+import ThreeInput from "../../components/input/ThreeInput";
+import Btn from "../../components/btn/Btn";
+import { useContext, useEffect, useState } from "react";
+import { useParams, useNavigate } from "react-router-dom";
 import {
   loadingContext,
   toastContext,
   userContext,
-} from '../../context/Context';
-import { USERACTIONS } from '../../context/Actions';
-import axios from 'axios';
-import { setStatePro } from '../../utils/utils';
-import Slides from '../../components/slides/Slides';
-import Loading from '../../components/loading/Loading';
-import EmptySlides from '../../components/slides/EmptySlides';
-import { fetchSavedRecipes } from '../../fetch/fetchRecipeFromServer';
+} from "../../context/Context";
+import { USERACTIONS } from "../../context/Actions";
+import { setStatePro } from "../../utils/utils";
+import Slides from "../../components/slides/Slides";
+import Loading from "../../components/loading/Loading";
+import EmptySlides from "../../components/slides/EmptySlides";
+import { fetchSavedRecipes } from "../../fetch/fetchRecipeFromServer";
+import api from "../../fetch/apiAxios";
 
 export default function UserPage() {
   const [editMode, setEditMode] = useState(false);
@@ -46,10 +46,10 @@ export default function UserPage() {
 
     const fetchOtherUser = async (username) => {
       try {
-        const { data } = await axios.get(`/api/user/get?username=${username}`);
+        const { data } = await api.get(`/api/user/get?username=${username}`);
         return data;
       } catch (err) {
-        setToastData({ ok: false, msg: 'Fail To Make Connection !' });
+        setToastData({ ok: false, msg: "Fail To Make Connection !" });
       }
     };
 
@@ -59,7 +59,7 @@ export default function UserPage() {
         if (!urlParam) {
           res(navigate(`/user/${userState.username}`));
         } else {
-          rej('the user provided a url parameter');
+          rej("the user provided a url parameter");
         }
       });
     };
@@ -114,7 +114,7 @@ export default function UserPage() {
 
     // get the inputs
     const [, name, phone, hob1, hob2, hob3] =
-      e.target.querySelectorAll('input');
+      e.target.querySelectorAll("input");
 
     // set the body content
     const bodyContent = {
@@ -127,22 +127,22 @@ export default function UserPage() {
 
     // update user in database
     try {
-      const { data } = await axios.put('/api/user/update', bodyContent);
+      const { data } = await api.put("/api/user/update", bodyContent);
       dispatch({ type: USERACTIONS.updateUser, payload: data.userData });
       // console.log(data);
       setEditMode(false);
-      setToastData({ ok: true, msg: 'Profile Updated !' });
+      setToastData({ ok: true, msg: "Profile Updated !" });
     } catch (e) {
-      setToastData({ ok: false, msg: 'Fail To Make Connection !' });
+      setToastData({ ok: false, msg: "Fail To Make Connection !" });
     }
   };
 
   // handle file type
   const checkFileType = (type) => {
     switch (type) {
-      case 'image/png':
+      case "image/png":
         return true;
-      case 'image/jpeg':
+      case "image/jpeg":
         return true;
       default:
         return false;
@@ -163,7 +163,7 @@ export default function UserPage() {
         if (img.size > 300000)
           return setToastData({
             ok: false,
-            msg: 'The Picture is > 400kb, Please Choose Another Picture !',
+            msg: "The Picture is > 400kb, Please Choose Another Picture !",
           });
 
         // set img to the file reader
@@ -175,7 +175,7 @@ export default function UserPage() {
       } else {
         return setToastData({
           ok: false,
-          msg: 'The File Type Must Be (.PNG, .JPG, or .JPEG)',
+          msg: "The File Type Must Be (.PNG, .JPG, or .JPEG)",
         });
       }
     });
@@ -188,7 +188,7 @@ export default function UserPage() {
         {loading ? (
           <main
             className="relative"
-            style={{ height: loading ? 'calc(100vh - 70px)' : 'auto' }}
+            style={{ height: loading ? "calc(100vh - 70px)" : "auto" }}
           >
             <Loading />
           </main>
@@ -216,8 +216,8 @@ export default function UserPage() {
                                   >
                                     <i className="fa-solid fa-image" />
                                     {profilePic
-                                      ? 'Change Picture'
-                                      : 'Set Picture'}
+                                      ? "Change Picture"
+                                      : "Set Picture"}
                                   </label>
                                   <button
                                     type="button"
@@ -277,20 +277,20 @@ export default function UserPage() {
                             {/* username */}
                             <Input
                               editMode={editMode}
-                              type={'text'}
-                              id={'Username'}
+                              type={"text"}
+                              id={"Username"}
                               value={userState.username}
                             />
                             {/* tel */}
                             <Input
                               editMode={editMode}
-                              type={'tel'}
-                              id={'Telephone'}
+                              type={"tel"}
+                              id={"Telephone"}
                               value={userState.phone}
                             />
                             {/* hobby */}
                             <ThreeInput
-                              label={'Hobby'}
+                              label={"Hobby"}
                               editMode={editMode}
                               value={userState.hobby}
                             />

@@ -1,12 +1,12 @@
-import Input from '../../components/input/Input';
-import Header from '../../components/header/Header';
-import { useContext, useRef } from 'react';
-import { Link, useNavigate } from 'react-router-dom';
-import { userContext } from '../../context/Context';
-import { toastContext } from '../../context/Context';
-import { USERACTIONS } from '../../context/Actions';
-import axios from 'axios';
-import Btn from '../../components/btn/Btn';
+import Input from "../../components/input/Input";
+import Header from "../../components/header/Header";
+import { useContext, useRef } from "react";
+import { Link, useNavigate } from "react-router-dom";
+import { userContext } from "../../context/Context";
+import { toastContext } from "../../context/Context";
+import { USERACTIONS } from "../../context/Actions";
+import Btn from "../../components/btn/Btn";
+import api from "../../fetch/apiAxios";
 
 export default function Login() {
   const { dispatch } = useContext(userContext);
@@ -24,15 +24,15 @@ export default function Login() {
     };
 
     try {
-      const { data } = await axios.post('/api/auth/login', bodyContent);
+      const { data } = await api.post("/api/auth/login", bodyContent);
       if (data.login) {
         dispatch({ type: USERACTIONS.LoginSuccess, payload: data.userData });
-        navigate('/');
+        navigate("/");
       } else {
         setToastData(data);
       }
     } catch (e) {
-      setToastData({ ok: false, msg: 'Fail To Make Connection !' });
+      setToastData({ ok: false, msg: "Fail To Make Connection !" });
     }
   };
 
@@ -50,8 +50,8 @@ export default function Login() {
               forAuth={true}
               innerRef={usernameRef}
               editMode={true}
-              type={'text'}
-              id={'Username'}
+              type={"text"}
+              id={"Username"}
             />
             <div className="relative">
               <Link
@@ -64,8 +64,8 @@ export default function Login() {
                 forAuth={true}
                 innerRef={passwordRef}
                 editMode={true}
-                type={'password'}
-                id={'Password'}
+                type={"password"}
+                id={"Password"}
               />
             </div>
             <div className="space-y-3">

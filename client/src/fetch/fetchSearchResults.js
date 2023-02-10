@@ -1,5 +1,6 @@
-import axios from 'axios';
-import { removeDupeObjInArrayByKey } from '../utils/utils';
+import axios from "axios";
+import { removeDupeObjInArrayByKey } from "../utils/utils";
+import api from "./apiAxios";
 
 export async function fetchRecipeResults(query) {
   const recipes = [];
@@ -22,7 +23,7 @@ export async function fetchRecipeResults(query) {
   insertItem(areaRes.data.meals, recipes);
 
   // filter duplicate data
-  const finalRecipes = removeDupeObjInArrayByKey(recipes, 'strMeal');
+  const finalRecipes = removeDupeObjInArrayByKey(recipes, "strMeal");
   return finalRecipes;
 
   function insertItem(items, targetArray) {
@@ -42,12 +43,12 @@ export async function fetchRecipeResults(query) {
 
 export async function fetchUserResults(query) {
   try {
-    const { data } = await axios.get(`/api/user/getPreview?username=${query}`);
+    const { data } = await api.get(`/api/user/getPreview?username=${query}`);
     if (data.getUserPreview) {
       const { usersPreview } = data;
       return usersPreview;
     } else {
-      throw Error('Fail To Make Connection !');
+      throw Error("Fail To Make Connection !");
     }
   } catch (err) {
     throw Error(err);

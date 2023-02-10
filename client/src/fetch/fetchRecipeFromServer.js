@@ -1,4 +1,4 @@
-import axios from 'axios';
+import api from "./apiAxios";
 
 // fetch the saved recipes from the database
 export const fetchSavedRecipes = async (
@@ -12,13 +12,13 @@ export const fetchSavedRecipes = async (
   const { _id } = userState;
 
   try {
-    const { data } = await axios.get(
+    const { data } = await api.get(
       `/api/recipe/gets?_id=${_id}&preview=${preview}`
     );
     if (data.savedRecipes.length === 0) return;
     return data.savedRecipes;
   } catch (e) {
-    setToastData({ ok: false, msg: 'Fail To Make Connection !' });
+    setToastData({ ok: false, msg: "Fail To Make Connection !" });
   }
 };
 
@@ -33,7 +33,7 @@ export const isSaved = async (
   setToastData(null);
   if (userState) {
     try {
-      const { data } = await axios.get(
+      const { data } = await api.get(
         `/api/recipe/is_saved?username=${userState.username}&idMeal=${idMeal}`
       );
 
@@ -49,7 +49,7 @@ export const isSaved = async (
             <SaveRecipeBtn idMeal={idMeal} initSaved={data.containIdMeal} />
           );
     } catch (error) {
-      setToastData({ ok: false, msg: 'Fail To Make Connection !' });
+      setToastData({ ok: false, msg: "Fail To Make Connection !" });
     }
   } else {
     big
@@ -60,22 +60,22 @@ export const isSaved = async (
 
 export const recipeSave = (setToastData, setSaved, bodyContent) => {
   setSaved(true);
-  axios
-    .put('/api/recipe/save', bodyContent)
+  api
+    .put("/api/recipe/save", bodyContent)
     .then(({ data }) => {
       const { recipeSaved, msg } = data;
 
       recipeSaved || setToastData({ ok: false, msg });
     })
     .catch(() => {
-      setToastData({ ok: false, msg: 'Fail To Make Connection !' });
+      setToastData({ ok: false, msg: "Fail To Make Connection !" });
     });
 };
 
 export const recipeUnsave = (setToastData, setSaved, bodyContent) => {
   setSaved(false);
-  axios
-    .delete('/api/recipe/remove', { data: bodyContent })
+  api
+    .delete("/api/recipe/remove", { data: bodyContent })
     .then(({ data }) => {
       const { recipeRemoved, msg } = data;
 
@@ -83,6 +83,6 @@ export const recipeUnsave = (setToastData, setSaved, bodyContent) => {
     })
     .catch((e) => {
       console.log(e);
-      setToastData({ ok: false, msg: 'Fail To Make Connection !' });
+      setToastData({ ok: false, msg: "Fail To Make Connection !" });
     });
 };
