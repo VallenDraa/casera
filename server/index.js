@@ -5,31 +5,22 @@ if (process.env.NODE_ENV !== "production") {
 const express = require("express");
 const app = express();
 const mongoose = require("mongoose");
+const cors = require("cors");
+
 const apiRecipeRouter = require("./routes/apiRecipeRoutes");
 const apiUserRouter = require("./routes/apiUserRoutes");
 const apiRatingRouter = require("./routes/apiRatingRoute");
 const authRouter = require("./routes/authRoutes");
 
+app.use(
+  cors({
+    origin: "https://casera.vercel.app",
+    credentials: true,
+  })
+);
+
 // allow json
 app.use(express.json({ limit: "500kb" }));
-
-// handle cors
-app.use((req, res, next) => {
-  res.setHeader("Access-Control-Allow-Origin", "https://casera.vercel.app");
-  res.setHeader(
-    "Access-Control-Allow-Methods",
-    "GET, POST, OPTIONS, PUT, PATCH, DELETE"
-  );
-
-  res.setHeader(
-    "Access-Control-Allow-Headers",
-    "X-Requested-With,content-type"
-  );
-
-  res.setHeader("Access-Control-Allow-Credentials", true);
-
-  next();
-});
 
 // connect to database
 mongoose.set("strictQuery", false);
