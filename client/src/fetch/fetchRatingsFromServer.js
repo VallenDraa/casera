@@ -1,4 +1,4 @@
-import api from "./api";
+import api from "./apiAxios";
 
 export const fetchTotalRating = async (idMeals) => {
   const query = typeof idMeals === "object" ? idMeals.join(",") : idMeals; // ==> array is object apparently in JS
