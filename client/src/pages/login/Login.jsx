@@ -24,7 +24,7 @@ export default function Login() {
     };
 
     try {
-      const { data } = await api.post("/api/auth/login", bodyContent);
+      const { data } = await api.post("/auth/login", bodyContent);
       if (data.login) {
         dispatch({ type: USERACTIONS.LoginSuccess, payload: data.userData });
         navigate("/");

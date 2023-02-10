@@ -25,7 +25,7 @@ export default function Register() {
 
     // try to register
     try {
-      const { data } = await api.post("/api/auth/register", bodyContent);
+      const { data } = await api.post("/auth/register", bodyContent);
       data.signup ? navigate("/login") : setToastData(data);
     } catch (e) {
       setToastData({ ok: false, msg: "Fail To Make Connection !" });
